@@ -1475,17 +1475,31 @@ caPalette <- c("#560133", "#C7007C", "#DA00FD", "#7CFFFA", "#005745", "#00306F",
                "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7",
                "#450270", "#FFCCFE", "#5A000F", "#FF5AAF", "#003D30", "#FFAC3B",
                "#00735C")
+caPalette <- c("#560133", "#C7007C", "#DA00FD", "#7CFFFA", "#005745", "#00306F", 
+               "#FF9DC8", "#FFDC3D", "#00B408", "#F60239", "#65019F","#E69F00", 
+               "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7",
+               "#450270", "#FFCCFE", "#5A000F", "#FF5AAF", "#003D30", "#FFAC3B",
+               "#00735C")
 library(ggplot2)
 r2 <- ggplot(data=All_Auxos, aes(x=Aminoacids, y=Auxo, fill=Phylum)) +
   geom_bar(stat="identity") + 
-  ylab("Auxotrophies in HRGM Genomes[%]") +
+  ylab("Auxotrophies [%]") +
   coord_cartesian(ylim = c(1,100)) +
   xlab("Amino acids") +
   theme(panel.background = element_rect(fill="white", colour= "black")) +
   scale_fill_manual(values = caPalette)+
-  ggtitle("Häufigkeiten von Auxotrophien in HRGM Genomen")
+  ggtitle("Abundancies of Amino acid auxotrophies in HRGM genomes")
 r2
 
+r3 <- ggplot(data=All_Auxos, aes(x=Aminoacids, y=Auxo, fill=Phylum)) +
+  geom_bar(stat="identity") + 
+  ylab("Auxotrophien [%]") +
+  coord_cartesian(ylim = c(1,100)) +
+  xlab("Aminosäuren") +
+  theme(panel.background = element_rect(fill="white", colour= "black")) +
+  scale_fill_manual(values = caPalette)+
+  ggtitle("Häufigkeiten von Aminosäure-Auxotrophien")
+r3
 
 
 
