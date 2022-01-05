@@ -81,11 +81,11 @@ is.data.table(auxo_Prod1)
 View(auxo_Prod1)
 
 #delete archaes
-auxo_Prod1 <- Auxotrophy_2 [!(Auxotrophy_2$phylum == "Euryarchaeota" | Auxotrophy_2$phylum == "Thermoplasmatota"), ]
-View(Auxotrophy_2)
+auxo_Prod1<- auxo_Prod1[!(auxo_Prod1$phylum == "Euryarchaeota" | auxo_Prod1$phylum == "Thermoplasmatota"), ]
+View(auxo_Prod1)
 
-#put all Firmicutes to one Firmicutes phylum
 
+#put all Firmicutes phyla to one Firmicutes phylum
 auxo_Prod1$phylum[auxo_Prod1$phylum == "Firmicutes_A"] <- "Firmicutes"
 auxo_Prod1$phylum[auxo_Prod1$phylum == "Firmicutes_B"] <- "Firmicutes"
 auxo_Prod1$phylum[auxo_Prod1$phylum== "Firmicutes_G"] <- "Firmicutes"
