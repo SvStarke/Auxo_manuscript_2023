@@ -6,3 +6,4 @@ library(data.table)
 sybil::SYBIL_SETTINGS("SOLVER","cplexAPI")
 
 models <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models/")
+
