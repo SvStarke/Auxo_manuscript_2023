@@ -475,18 +475,19 @@ sum_no_rxn02890_proto <- 5416 - (nrow(fluxes_beta_dehydroxy_BA_trp_rxn02890_auxo
 sum_no_rxn02890_proto 
 
 #create contigency table
-fisher_rxn02890 <- data.frame("Trp-Auxotrophy" = c(nrow(fluxes_beta_dehydroxy_BA_trp_rxn02890_auxo), sum_no_rxn02890_auxo), 
+fisher_ec1.1.1.52 <- data.frame("Trp-Auxotrophy" = c(nrow(fluxes_beta_dehydroxy_BA_trp_rxn02890_auxo), sum_no_rxn02890_auxo), 
                               "Trp-Prototrophy"= c(nrow(fluxes_beta_dehydroxy_BA_trp_rxn02890_proto), sum_no_rxn02890_proto), 
                               row.names = c(" rxn02890: yes", " rxn02890: no"))
 
-fisher_rxn02890
+fisher_ec1.1.1.52
 #control numbers
 nrow(fluxes_beta_dehydroxy_BA_trp_rxn02890_auxo) + sum_no_rxn02890_auxo + nrow(fluxes_beta_dehydroxy_BA_trp_rxn02890_proto) + sum_no_rxn02890_proto == 5416
 
 #create mosaic plot
-mosaicplot(fisher_rxn02890, color = TRUE, main=" rxn02890 (ec 1.1.1.52) - trp auxotrophic and prototrophic microbiota")
+mosaicplot(fisher_ec1.1.1.52, color = TRUE, main=" rxn02890 (ec 1.1.1.52) - trp auxotrophic and prototrophic microbiota")
 #fisher test
-fisher.test(fisher_rxn02890)
+f1 <- fisher.test(fisher_ec1.1.1.52)
+pvalue_ec1.1.1.52 <- f1$p.value
 
 
 #fisher test/comparison trp auxotrophic and prototrophic
@@ -510,18 +511,28 @@ sum_no_rxn36658_proto <- 5416 - (nrow(fluxes_beta_dehydroxy_BA_trp_rxn36658_auxo
 sum_no_rxn36658_proto 
 
 #create contigency table
-fisher_rxn36658  <- data.frame("Trp-Auxotrophy" = c(nrow(fluxes_beta_dehydroxy_BA_trp_rxn36658_auxo), sum_no_rxn36658_auxo), 
+fisher_ec1.1.1.395  <- data.frame("Trp-Auxotrophy" = c(nrow(fluxes_beta_dehydroxy_BA_trp_rxn36658_auxo), sum_no_rxn36658_auxo), 
                               "Trp-Prototrophy"= c(nrow(fluxes_beta_dehydroxy_BA_trp_rxn36658_proto), sum_no_rxn36658_proto), 
                               row.names = c(" rxn36658 : yes", " rxn36658 : no"))
 
-fisher_rxn36658 
+fisher_ec1.1.1.395
 #control numbers
 nrow(fluxes_beta_dehydroxy_BA_trp_rxn36658_auxo) + sum_no_rxn36658_auxo + nrow(fluxes_beta_dehydroxy_BA_trp_rxn36658_proto) + sum_no_rxn36658_proto == 5416
 
 #create mosaic plot
-mosaicplot(fisher_rxn36658 , color = TRUE, main=" rxn36658  (ec 1.1.1.395) - trp auxotrophic and prototrophic microbiota")
+mosaicplot(fisher_ec1.1.1.395 , color = TRUE, main=" rxn36658  (ec 1.1.1.395) - trp auxotrophic and prototrophic microbiota")
 #fisher test
-fisher.test(fisher_rxn36658)
+fisher.test(fisher_ec1.1.1.395)
+#fisher test
+f2 <- fisher.test(fisher_ec1.1.1.395)
+pvalue_ec1.1.1.395 <- f2$p.value 
+
+if(pvalue_ec1.1.1.395 < 0.05){ 
+print("p <0.05")
+} else {
+  "p > 0.05"
+}
+
 
 #fisher test/comparison trp auxotrophic and prototrophic
 #CAUTION: due to the fact that the number of genomes are the same for every reactions of the enzymes(see to the last ggplot)
@@ -544,19 +555,21 @@ sum_no_rxn41554_proto <- 5416 - (nrow(fluxes_beta_dehydroxy_BA_trp_rxn41554_auxo
 sum_no_rxn41554_proto 
 
 #create contigency table
-fisher_rxn41554   <- data.frame("Trp-Auxotrophy" = c(nrow(fluxes_beta_dehydroxy_BA_trp_rxn41554_auxo), sum_no_rxn41554_auxo), 
+fisher_ec1.3.1.116 <- data.frame("Trp-Auxotrophy" = c(nrow(fluxes_beta_dehydroxy_BA_trp_rxn41554_auxo), sum_no_rxn41554_auxo), 
                                "Trp-Prototrophy"= c(nrow(fluxes_beta_dehydroxy_BA_trp_rxn41554_proto), sum_no_rxn41554_proto), 
                                row.names = c(" rxn41554  : yes", " rxn41554  : no"))
 
-fisher_rxn41554  
+fisher_ec1.3.1.116
 #control numbers
 nrow(fluxes_beta_dehydroxy_BA_trp_rxn41554_auxo) + sum_no_rxn41554_auxo + nrow(fluxes_beta_dehydroxy_BA_trp_rxn41554_proto) + sum_no_rxn41554_proto == 5416
 
 #create mosaic plot
-mosaicplot(fisher_rxn41554  , color = TRUE, main=" rxn41554   (ec 1.3.1.116) - trp auxotrophic and prototrophic microbiota")
+mosaicplot(fisher_ec1.3.1.116  , color = TRUE, main=" rxn41554   (ec 1.3.1.116) - trp auxotrophic and prototrophic microbiota")
 #fisher test
-fisher.test(fisher_rxn41554)
-
+fisher.test(fisher_ec1.3.1.116)
+#pvalue
+f3 <- fisher.test(fisher_ec1.3.1.116)
+pvalue_ec1.3.1.116 <- f3$p.value
 
 #fisher test/comparison trp auxotrophic and prototrophic
 #CAUTION: due to the fact that the number of genomes are the same for every reactions of the enzymes(see to the last ggplot)
@@ -579,11 +592,11 @@ sum_no_rxn43871_proto <- 5416 - (nrow(fluxes_beta_dehydroxy_BA_trp_rxn43871_auxo
 sum_no_rxn43871_proto 
 
 #create contigency table
-fisher_rxn43871    <- data.frame("Trp-Auxotrophy" = c(nrow(fluxes_beta_dehydroxy_BA_trp_rxn43871_auxo), sum_no_rxn43871_auxo), 
+fisher_ec1.3.1.114 <- data.frame("Trp-Auxotrophy" = c(nrow(fluxes_beta_dehydroxy_BA_trp_rxn43871_auxo), sum_no_rxn43871_auxo), 
                                 "Trp-Prototrophy"= c(nrow(fluxes_beta_dehydroxy_BA_trp_rxn43871_proto), sum_no_rxn43871_proto), 
                                 row.names = c(" rxn43871   : yes", " rxn43871   : no"))
 
-fisher_rxn43871   
+fisher_ec1.3.1.114  
 #control numbers
 nrow(fluxes_beta_dehydroxy_BA_trp_rxn43871_auxo) + sum_no_rxn43871_auxo + nrow(fluxes_beta_dehydroxy_BA_trp_rxn43871_proto) + sum_no_rxn43871_proto == 5416
 
@@ -594,6 +607,9 @@ mosaic6 <- mosaicplot(fisher_rxn43871, color = TRUE, main=" rxn43871 (ec 1.3.1.1
 
 #fisher test
 fisher.test(fisher_rxn43871)
+#pvalue
+f4 <- fisher.test(fisher_ec1.3.1.114)
+pvalue_ec1.3.1.114 <- f4$p.value
 
 
 #completeness pathways
@@ -626,13 +642,18 @@ dehydroxy<- t(dehydroxy)
 colnames(dehydroxy) <- "percentage"
 dehydroxy<- data.frame(dehydroxy)
 dehydroxy$new <- rownames(dehydroxy)
+pvalue <- c(pvalue_ec1.1.1.52, pvalue_ec1.1.1.395, pvalue_ec1.3.1.114, pvalue_ec1.3.1.116, 0.05, 0.05, 0.05)
+dehydroxy$pvalues <- pvalue
 
-ggplot (dehydroxy,aes(new, percentage)) +
+ggplot (dehydroxy,aes(new, percentage, label = ifelse(pvalues < 0.05, "*","NS"))) +
   geom_bar(stat = "identity") +
-  ggtitle("Completeness of the beta dehydroxylation pathway in tryptophan auxotrophic microbiota") +
+  ggtitle(expression(atop("Completeness of the beta dehydroxylation pathway in tryptophan auxotrophic microbiota", atop("added results of Fisher exact t-test for comparison to tryptophan prototrophic microbiota")))) +
   xlab("enzymes") +
   ylab("pathway completeness [%]") +
-  ylim(0,100)
+  ylim(0,100) +
+  geom_text(vjust = -1) +
+  labs(caption = "* - statistically significant to trp prototrophy microbiota\n\n NS - not statistically significant to trp protrotrophy microbiota")
+
 
 #percentage completeness pathways
 #found enzymes
@@ -672,8 +693,6 @@ ggplot (beta_dehydroxy_no,aes(new, percentage)) +
   xlab("enzymes") +
   ylab("pathway incompleteness [%]") +
   ylim(0,100)
-
-
 
 #bile acid epimerization
 flu_epimerization_BA <- flux_i$ec == "1.1.1.159" | flux_i$ec == "1.1.1.176" | flux_i$ec == "1.1.1.238" | 
@@ -732,11 +751,14 @@ sum_no_rxn02012_proto <- 5416 - (nrow(fluxes_epimerization_BA_trp_rxn02012_auxo)
 sum_no_rxn02012_proto 
 
 #create contigency table
-fisher_rxn02012    <- data.frame("Trp-Auxotrophy" = c(nrow(fluxes_epimerization_BA_trp_rxn02012_auxo), sum_no_rxn02012_auxo), 
+fisher_ec1.1.1.159 <- data.frame("Trp-Auxotrophy" = c(nrow(fluxes_epimerization_BA_trp_rxn02012_auxo), sum_no_rxn02012_auxo), 
                                  "Trp-Prototrophy"= c(nrow(fluxes_epimerization_BA_trp_rxn02012_proto), sum_no_rxn02012_proto), 
                                  row.names = c(" rxn02012   : yes", " rxn02012   : no"))
 
-fisher_rxn02012   
+fisher_ec1.1.1.159
+#pvalue
+f5 <- fisher.test(fisher_ec1.1.1.159)
+pvalue_ec1.1.1.159 <- f5$p.value
 
 #fisher test/comparison trp auxotrophic and prototrophic
 #CAUTION: due to the fact that the number of genomes are the same for every reactions of the enzymes(see to the last ggplot)
@@ -759,11 +781,11 @@ sum_no_rxn02013_proto <- 5416 - (nrow(fluxes_epimerization_BA_trp_rxn02013_auxo)
 sum_no_rxn02013_proto 
 
 #create contigency table
-fisher_rxn02013    <- data.frame("Trp-Auxotrophy" = c(nrow(fluxes_epimerization_BA_trp_rxn02013_auxo), sum_no_rxn02013_auxo), 
+fisher_ec1.1.1.176   <- data.frame("Trp-Auxotrophy" = c(nrow(fluxes_epimerization_BA_trp_rxn02013_auxo), sum_no_rxn02013_auxo), 
                                  "Trp-Prototrophy"= c(nrow(fluxes_epimerization_BA_trp_rxn02013_proto), sum_no_rxn02013_proto), 
                                  row.names = c(" rxn02013   : yes", " rxn02013   : no"))
 
-fisher_rxn02013   
+fisher_ec1.1.1.176 
 #control numbers
 nrow(fluxes_epimerization_BA_trp_rxn02013_auxo) + sum_no_rxn02013_auxo + nrow(fluxes_epimerization_BA_trp_rxn02013_proto) + sum_no_rxn02013_proto == 5416
 
@@ -771,7 +793,10 @@ nrow(fluxes_epimerization_BA_trp_rxn02013_auxo) + sum_no_rxn02013_auxo + nrow(fl
 mosaic5 <- mosaicplot(fisher_rxn02013, color = TRUE, main=" rxn02013 (ec 1.1.1.176) - trp auxotrophic and prototrophic microbiota")
 
 #fisher test
-fisher.test(fisher_rxn02013)
+fisher.test(fisher_ec1.1.1.176)
+#pvalue
+f6 <- fisher.test(fisher_ec1.1.1.176)
+pvalue_ec1.1.1.176<- f6$p.value
 
 #fisher test/comparison trp auxotrophic and prototrophic
 #CAUTION: due to the fact that the number of genomes are the same for every reactions of the enzymes(see to the last ggplot)
@@ -794,20 +819,22 @@ sum_no_rxn02665_proto <- 5416 - (nrow(fluxes_epimerization_BA_trp_rxn02665_auxo)
 sum_no_rxn02665_proto 
 
 #create contigency table
-fisher_rxn02665    <- data.frame("Trp-Auxotrophy" = c(nrow(fluxes_epimerization_BA_trp_rxn02665_auxo), sum_no_rxn02665_auxo), 
+fisher_ec1.1.1.201 <- data.frame("Trp-Auxotrophy" = c(nrow(fluxes_epimerization_BA_trp_rxn02665_auxo), sum_no_rxn02665_auxo), 
                                  "Trp-Prototrophy"= c(nrow(fluxes_epimerization_BA_trp_rxn02665_proto), sum_no_rxn02665_proto), 
                                  row.names = c(" rxn02665   : yes", " rxn02665   : no"))
 
-fisher_rxn02665   
+fisher_ec1.1.1.201
 #control numbers
 nrow(fluxes_epimerization_BA_trp_rxn02665_auxo) + sum_no_rxn02665_auxo + nrow(fluxes_epimerization_BA_trp_rxn02665_proto) + sum_no_rxn02665_proto == 5416
 
 #create mosaic plot
-mosaic5 <- mosaicplot(fisher_rxn02665, color = TRUE, main=" rxn02665 (ec 1.1.1.201) - trp auxotrophic and prototrophic microbiota")
+mosaic5 <- mosaicplot(fisher_ec1.1.1.201, color = TRUE, main=" rxn02665 (ec 1.1.1.201) - trp auxotrophic and prototrophic microbiota")
 
 #fisher test
-fisher.test(fisher_rxn02665)
-
+fisher.test(fisher_ec1.1.1.201)
+#pvalue
+f7 <- fisher.test(fisher_ec1.1.1.201)
+pvalue_ec1.1.1.201 <- f7$p.value
 
 #fisher test/comparison trp auxotrophic and prototrophic
 #CAUTION: due to the fact that the number of genomes are the same for every reactions of the enzymes(see to the last ggplot)
@@ -830,19 +857,22 @@ sum_no_rxn02890_proto <- 5416 - (nrow(fluxes_epimerization_BA_trp_rxn02890_auxo)
 sum_no_rxn02890_proto 
 
 #create contigency table
-fisher_rxn02890    <- data.frame("Trp-Auxotrophy" = c(nrow(fluxes_epimerization_BA_trp_rxn02890_auxo), sum_no_rxn02890_auxo), 
+fisher_ec1.1.1.52   <- data.frame("Trp-Auxotrophy" = c(nrow(fluxes_epimerization_BA_trp_rxn02890_auxo), sum_no_rxn02890_auxo), 
                                  "Trp-Prototrophy"= c(nrow(fluxes_epimerization_BA_trp_rxn02890_proto), sum_no_rxn02890_proto), 
                                  row.names = c(" rxn02890   : yes", " rxn02890   : no"))
 
-fisher_rxn02890   
+fisher_ec1.1.1.52   
 #control numbers
 nrow(fluxes_epimerization_BA_trp_rxn02890_auxo) + sum_no_rxn02890_auxo + nrow(fluxes_epimerization_BA_trp_rxn02890_proto) + sum_no_rxn02890_proto == 5416
 
 #create mosaic plot
-mosaic5 <- mosaicplot(fisher_rxn02890, color = TRUE, main=" rxn02890 (ec 1.1.1.52) - trp auxotrophic and prototrophic microbiota")
+mosaic5 <- mosaicplot(fisher_ec1.1.1.52, color = TRUE, main=" rxn02890 (ec 1.1.1.52) - trp auxotrophic and prototrophic microbiota")
 
 #fisher test
-fisher.test(fisher_rxn02890)
+fisher.test(fisher_ec1.1.1.52)
+#pvalue
+f8 <- fisher.test(fisher_ec1.1.1.52)
+pvalue_ec1.1.1.52<- f8$p.value
 
 #fisher test/comparison trp auxotrophic and prototrophic
 #CAUTION: due to the fact that the number of genomes are the same for every reactions of the enzymes(see to the last ggplot)
@@ -865,28 +895,33 @@ sum_no_rxn21855_proto <- 5416 - (nrow(fluxes_epimerization_BA_trp_rxn21855_auxo)
 sum_no_rxn21855_proto 
 
 #create contigency table
-fisher_rxn21855    <- data.frame("Trp-Auxotrophy" = c(nrow(fluxes_epimerization_BA_trp_rxn21855_auxo), sum_no_rxn21855_auxo), 
+fisher_ec1.1.1.391 <- data.frame("Trp-Auxotrophy" = c(nrow(fluxes_epimerization_BA_trp_rxn21855_auxo), sum_no_rxn21855_auxo), 
                                  "Trp-Prototrophy"= c(nrow(fluxes_epimerization_BA_trp_rxn21855_proto), sum_no_rxn21855_proto), 
                                  row.names = c(" rxn21855   : yes", " rxn21855   : no"))
 
-fisher_rxn21855   
+fisher_ec1.1.1.391
+
 #control numbers
 nrow(fluxes_epimerization_BA_trp_rxn21855_auxo) + sum_no_rxn21855_auxo + nrow(fluxes_epimerization_BA_trp_rxn21855_proto) + sum_no_rxn21855_proto == 5416
 
 #create mosaic plot
-mosaic5 <- mosaicplot(fisher_rxn21855, color = TRUE, main=" rxn21855 (ec 1.1.1.391) - trp auxotrophic and prototrophic microbiota")
+mosaic5 <- mosaicplot(fisher_ec1.1.1.391, color = TRUE, main=" rxn21855 (ec 1.1.1.391) - trp auxotrophic and prototrophic microbiota")
 
 #fisher test
-fisher.test(fisher_rxn21855)
+fisher.test(fisher_ec1.1.1.391)
+#pvalue
+f9 <- fisher.test(fisher_ec1.1.1.391)
+pvalue_ec1.1.1.391 <- f9$p.value
+
 
 #completeness pathways
 #percentage completeness pathways
 #found enzymes
 ec1.1.1.159 <- nrow(fluxes_epimerization_BA_trp_rxn02012_auxo)/ nrow(numb_auxo) * 100
 ec1.1.1.176 <- nrow(fluxes_epimerization_BA_trp_rxn02013_auxo)/ nrow(numb_auxo) * 100
-ec1.3.1.201 <- nrow(fluxes_epimerization_BA_trp_rxn02665_auxo)/ nrow(numb_auxo) * 100
-ec1.3.1.391 <-  nrow(fluxes_epimerization_BA_trp_rxn21855_auxo)/ nrow(numb_auxo) * 100
-ec1.3.1.52 <- nrow(fluxes_epimerization_BA_trp_rxn02890_auxo)/ nrow(numb_auxo) * 100
+ec1.1.1.201 <- nrow(fluxes_epimerization_BA_trp_rxn02665_auxo)/ nrow(numb_auxo) * 100
+ec1.1.1.391 <-  nrow(fluxes_epimerization_BA_trp_rxn21855_auxo)/ nrow(numb_auxo) * 100
+ec1.1.1.52 <- nrow(fluxes_epimerization_BA_trp_rxn02890_auxo)/ nrow(numb_auxo) * 100
 
 #originally the pathway exists of 6 enzymes, only four are shown in the plot so they are also missing but test
 flu_epimerization_BA <- flux_i$ec == "1.1.1.159" | flux_i$ec == "1.1.1.176" | flux_i$ec == "1.1.1.238" | 
@@ -898,18 +933,22 @@ ec1.1.1.238<- flux_epimerization_BA_all[ec1.1.1.238, ]
 ec1.1.1.238 <- nrow(ec1.1.1.238)
 
 
-epimerization<- data.frame(ec1.1.1.159,ec1.1.1.176,ec1.3.1.201,ec1.3.1.391,ec1.3.1.52, ec1.1.1.238)
+epimerization <- data.frame(ec1.1.1.159,ec1.1.1.176,ec1.3.1.201,ec1.1.1.391,ec1.1.1.52, ec1.1.1.238)
 epimerization <- t(epimerization)
 colnames(epimerization) <- "percentage"
 epimerization  <- data.frame(epimerization)
 epimerization $new <- rownames(epimerization)
+pvalue <- c(pvalue_ec1.1.1.159,pvalue_ec1.1.1.176,pvalue_ec1.1.1.201,pvalue_ec1.1.1.391,pvalue_ec1.1.1.52, 0.05)
+epimerization$pvalues <- pvalue
 
-ggplot (epimerization,aes(new, percentage)) +
+ggplot (epimerization,aes(new, percentage, label = ifelse(pvalues < 0.05, "*","NS"))) +
   geom_bar(stat = "identity") +
-  ggtitle("Completeness of the bile acid epimerization pathway in tryptophan auxotrophic microbiota") +
+  ggtitle(expression(atop("Completeness of the bile acid epimerization pathway in tryptophan auxotrophic microbiota", atop("added results of Fisher exact t-test for comparison to tryptophan prototrophic microbiota")))) +
   xlab("enzymes") +
   ylab("pathway completeness [%]") +
-  ylim(0,100)
+  ylim(0,100) +
+  geom_text(vjust = -1) +
+  labs(caption = "* - statistically significant to trp prototrophy microbiota\n\n NS - not statistically significant to trp protrotrophy microbiota")
 
 
 #found enzymes
@@ -1007,19 +1046,22 @@ sum_no_rxn02890_proto <- 5416 - (nrow(flux_alpha_dehydroxy_BA_all_trp_rxn02890_a
 sum_no_rxn02890_proto 
 
 #create contigency table
-fisher_rxn02890    <- data.frame("Trp-Auxotrophy" = c(nrow(flux_alpha_dehydroxy_BA_all_trp_rxn02890_auxo), sum_no_rxn02890_auxo), 
+fisher_ec1.1.1.52  <- data.frame("Trp-Auxotrophy" = c(nrow(flux_alpha_dehydroxy_BA_all_trp_rxn02890_auxo), sum_no_rxn02890_auxo), 
                                  "Trp-Prototrophy"= c(nrow(flux_alpha_dehydroxy_BA_all_trp_rxn02890_proto), sum_no_rxn02890_proto), 
                                  row.names = c(" rxn02890   : yes", " rxn02890   : no"))
 
-fisher_rxn02890   
+fisher_ec1.1.1.52  
 #control numbers
 nrow(flux_alpha_dehydroxy_BA_all_trp_rxn02890_auxo) + sum_no_rxn02890_auxo + nrow(flux_alpha_dehydroxy_BA_all_trp_rxn02890_proto) + sum_no_rxn02890_proto == 5416
 
 #create mosaic plot
-mosaic5 <- mosaicplot(fisher_rxn02890, color = TRUE, main=" rxn02890 (ec 1.1.1.52) - trp auxotrophic and prototrophic microbiota")
+mosaic5 <- mosaicplot(fisher_ec1.1.1.52, color = TRUE, main=" rxn02890 (ec 1.1.1.52) - trp auxotrophic and prototrophic microbiota")
 
 #fisher test
-fisher.test(fisher_rxn02890)
+fisher.test(fisher_ec1.1.1.52)
+#pvalue
+f10 <- fisher.test(fisher_ec1.1.1.52)
+pvalue_ec1.1.1.52 <- f10$p.value
 
 #fisher test/comparison trp auxotrophic and prototrophic
 #CAUTION: due to the fact that the number of genomes are the same for every reactions of the enzymes(see to the last ggplot)
@@ -1042,19 +1084,23 @@ sum_no_rxn05066_proto <- 5416 - (nrow(flux_alpha_dehydroxy_BA_all_trp_rxn05066_a
 sum_no_rxn05066_proto 
 
 #create contigency table
-fisher_rxn05066    <- data.frame("Trp-Auxotrophy" = c(nrow(flux_alpha_dehydroxy_BA_all_trp_rxn05066_auxo), sum_no_rxn05066_auxo), 
+fisher_ec4.2.1.106   <- data.frame("Trp-Auxotrophy" = c(nrow(flux_alpha_dehydroxy_BA_all_trp_rxn05066_auxo), sum_no_rxn05066_auxo), 
                                  "Trp-Prototrophy"= c(nrow(flux_alpha_dehydroxy_BA_all_trp_rxn05066_proto), sum_no_rxn05066_proto), 
                                  row.names = c(" rxn05066   : yes", " rxn05066   : no"))
 
-fisher_rxn05066   
+fisher_ec4.2.1.106 
 #control numbers
 nrow(flux_alpha_dehydroxy_BA_all_trp_rxn05066_auxo) + sum_no_rxn05066_auxo + nrow(flux_alpha_dehydroxy_BA_all_trp_rxn05066_proto) + sum_no_rxn05066_proto == 5416
 
 #create mosaic plot
-mosaic5 <- mosaicplot(fisher_rxn05066, color = TRUE, main=" rxn05066 (ec 4.2.1.106) - trp auxotrophic and prototrophic microbiota")
+mosaic5 <- mosaicplot(fisher_ec4.2.1.106, color = TRUE, main=" rxn05066 (ec 4.2.1.106) - trp auxotrophic and prototrophic microbiota")
 
 #fisher test
-fisher.test(fisher_rxn05066)
+fisher.test(fisher_ec4.2.1.106)
+
+#pvalue
+f11 <- fisher.test(fisher_ec4.2.1.106)
+pvalue_ec4.2.1.106 <- f11$p.value
 
 #fisher test/comparison trp auxotrophic and prototrophic
 #CAUTION: due to the fact that the number of genomes are the same for every reactions of the enzymes(see to the last ggplot)
@@ -1077,19 +1123,22 @@ sum_no_rxn19220_proto <- 5416 - (nrow(flux_alpha_dehydroxy_BA_all_trp_rxn19220_a
 sum_no_rxn19220_proto 
 
 #create contigency table
-fisher_rxn19220    <- data.frame("Trp-Auxotrophy" = c(nrow(flux_alpha_dehydroxy_BA_all_trp_rxn19220_auxo), sum_no_rxn19220_auxo), 
+fisher_ec1.3.1.115   <- data.frame("Trp-Auxotrophy" = c(nrow(flux_alpha_dehydroxy_BA_all_trp_rxn19220_auxo), sum_no_rxn19220_auxo), 
                                  "Trp-Prototrophy"= c(nrow(flux_alpha_dehydroxy_BA_all_trp_rxn19220_proto), sum_no_rxn19220_proto), 
                                  row.names = c(" rxn19220   : yes", " rxn19220   : no"))
 
-fisher_rxn19220   
+fisher_ec1.3.1.115  
 #control numbers
 nrow(flux_alpha_dehydroxy_BA_all_trp_rxn19220_auxo) + sum_no_rxn19220_auxo + nrow(flux_alpha_dehydroxy_BA_all_trp_rxn19220_proto) + sum_no_rxn19220_proto == 5416
 
 #create mosaic plot
-mosaic5 <- mosaicplot(fisher_rxn19220, color = TRUE, main=" rxn19220 (ec 1.3.1.115) - trp auxotrophic and prototrophic microbiota")
+mosaic5 <- mosaicplot(fisher_ec1.3.1.115, color = TRUE, main=" rxn19220 (ec 1.3.1.115) - trp auxotrophic and prototrophic microbiota")
 
 #fisher test
-fisher.test(fisher_rxn19220)
+fisher.test(fisher_ec1.3.1.115)
+#pvalue
+f12 <- fisher.test(fisher_ec1.3.1.115)
+pvalue_ec1.3.1.115 <- f12$p.value
 
 #fisher test/comparison trp auxotrophic and prototrophic
 #CAUTION: due to the fact that the number of genomes are the same for every reactions of the enzymes(see to the last ggplot)
@@ -1113,19 +1162,21 @@ sum_no_rxn36658_proto <- 5416 - (nrow(flux_alpha_dehydroxy_BA_all_trp_rxn36658_a
 sum_no_rxn36658_proto 
 
 #create contigency table
-fisher_rxn36658    <- data.frame("Trp-Auxotrophy" = c(nrow(flux_alpha_dehydroxy_BA_all_trp_rxn36658_auxo), sum_no_rxn36658_auxo), 
+fisher_ec1.1.1.395   <- data.frame("Trp-Auxotrophy" = c(nrow(flux_alpha_dehydroxy_BA_all_trp_rxn36658_auxo), sum_no_rxn36658_auxo), 
                                  "Trp-Prototrophy"= c(nrow(flux_alpha_dehydroxy_BA_all_trp_rxn36658_proto), sum_no_rxn36658_proto), 
                                  row.names = c(" rxn36658   : yes", " rxn36658   : no"))
-
-fisher_rxn36658   
+fisher_ec1.1.1.395 
 #control numbers
 nrow(flux_alpha_dehydroxy_BA_all_trp_rxn36658_auxo) + sum_no_rxn36658_auxo + nrow(flux_alpha_dehydroxy_BA_all_trp_rxn36658_proto) + sum_no_rxn36658_proto == 5416
 
 #create mosaic plot
-mosaic5 <- mosaicplot(fisher_rxn36658, color = TRUE, main=" rxn36658 (ec 1.1.1.395) - trp auxotrophic and prototrophic microbiota")
+mosaic5 <- mosaicplot(fisher_ec1.1.1.395, color = TRUE, main=" rxn36658 (ec 1.1.1.395) - trp auxotrophic and prototrophic microbiota")
 
 #fisher test
-fisher.test(fisher_rxn36658)
+fisher.test(fisher_ec1.1.1.395)
+#pvalue
+f13 <- fisher.test(fisher_ec1.1.1.395)
+fisher_ec1.1.1.395 <- f13$p.value
 
 #fisher test/comparison trp auxotrophic and prototrophic
 #CAUTION: due to the fact that the number of genomes are the same for every reactions of the enzymes(see to the last ggplot)
@@ -1149,19 +1200,22 @@ sum_no_rxn43871_proto <- 5416 - (nrow(flux_alpha_dehydroxy_BA_all_trp_rxn43871_a
 sum_no_rxn43871_proto 
 
 #create contigency table
-fisher_rxn43871    <- data.frame("Trp-Auxotrophy" = c(nrow(flux_alpha_dehydroxy_BA_all_trp_rxn43871_auxo), sum_no_rxn43871_auxo), 
+fisher_ec1.3.1.114<- data.frame("Trp-Auxotrophy" = c(nrow(flux_alpha_dehydroxy_BA_all_trp_rxn43871_auxo), sum_no_rxn43871_auxo), 
                                  "Trp-Prototrophy"= c(nrow(flux_alpha_dehydroxy_BA_all_trp_rxn43871_proto), sum_no_rxn43871_proto), 
                                  row.names = c(" rxn43871   : yes", " rxn43871   : no"))
 
-fisher_rxn43871   
+fisher_ec1.3.1.114
 #control numbers
 nrow(flux_alpha_dehydroxy_BA_all_trp_rxn43871_auxo) + sum_no_rxn43871_auxo + nrow(flux_alpha_dehydroxy_BA_all_trp_rxn43871_proto) + sum_no_rxn43871_proto == 5416
 
 #create mosaic plot
-mosaic5 <- mosaicplot(fisher_rxn43871, color = TRUE, main=" rxn43871 (ec 1.3.1.114) - trp auxotrophic and prototrophic microbiota")
+mosaic5 <- mosaicplot(fisher_ec1.3.1.114, color = TRUE, main=" rxn43871 (ec 1.3.1.114) - trp auxotrophic and prototrophic microbiota")
 
 #fisher test
-fisher.test(fisher_rxn43871)
+fisher.test(fisher_ec1.3.1.114)
+#pvalue
+f14 <- fisher.test(fisher_ec1.3.1.114)
+fisher_ec1.3.1.114 <- f14$p.value
 
 ##completeness pathways
 #percentage completeness pathways
@@ -1190,13 +1244,17 @@ alpha_dehydroxy <- t(alpha_dehydroxy)
 colnames(alpha_dehydroxy) <- "percentage"
 alpha_dehydroxy <- data.frame(alpha_dehydroxy)
 alpha_dehydroxy$new <- rownames(alpha_dehydroxy)
+pvalue <- c(pvalue_ec1.3.1.114,pvalue_ec1.1.1.395,pvalue_ec1.3.1.115,pvalue_ec1.1.1.52,pvalue_ec4.2.1.106, 0.05, 0.05)
+alpha_dehydroxy$pvalues <- pvalue
 
-ggplot (alpha_dehydroxy,aes(new, percentage)) +
+ggplot (alpha_dehydroxy,aes(new, percentage, label = ifelse(pvalues < 0.05, "*","NS"))) +
   geom_bar(stat = "identity") +
-  ggtitle("Completeness of the bile acid alpha dehydroxylation pathway in tryptophan auxotrophic microbiota") +
+  ggtitle(expression(atop("Completeness of the bile acid alpha dehydroxylation pathway in tryptophan auxotrophic microbiota", atop("added results of Fisher exact t-test for comparison to tryptophan prototrophic microbiota")))) +
   xlab("enzymes") +
   ylab("pathway completeness [%]") +
-  ylim(0,100)
+  ylim(0,100) +
+  geom_text(vjust = -1) +
+  labs(caption = "* - statistically significant to trp prototrophy microbiota\n\n NS - not statistically significant to trp protrotrophy microbiota")
 
 #not found enzymes
 ec1.3.1.114_no <- sum_no_rxn43871_auxo/ nrow(numb_auxo) * 100
