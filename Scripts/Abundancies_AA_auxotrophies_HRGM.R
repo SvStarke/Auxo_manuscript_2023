@@ -23,11 +23,14 @@ names(model.list) <- model.names
 # Oder: (Kurz)
 models <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models/")
 
-
 # Anwendung (Hier Auxotrophies vorhersagen)
+models <- readRDS("/mnt/nuuk/2021/Promotion/R-Scripts_Auxotrophie_Analyse/models.RDS")
 model.auxo <- lapply(models, FUN = predict_auxotrohies)
 
 head(model.auxo)
+
+models <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models/")
+
 
 Metadata <- fread("/mnt/nuuk/2021/HRGM/REPR_Genomes_metadata.tsv")
 
@@ -59,19 +62,6 @@ Auxotrophy_2 <- merge(Auxotrophy_2, Metadata, by.x = "Genomes",
 Auxotrophy_2[, phylum := str_match(`GTDB Taxonomy`, "p__.*;c__")[,1]]
 Auxotrophy_2[, phylum := gsub("p__|;c__","", phylum)]
 Auxotrophy_2[, phylum := gsub("_C$","", phylum)]
-
-Auxotrophy_5 <- data.frame(Auxotrophy_2)
-ggplot(Auxotrophy_2[Prototrophy == 0], aes(Compound, fill = phylum)) +
-  geom_bar()
-
-#delete archaes
-Auxotrophy_2 <- Auxotrophy_2[!(Auxotrophy_2$phylum == "Euryarchaeota" | Auxotrophy_2$phylum == "Thermoplasmatota"), ]
-
-#put all Firmicutes phyla to one Firmicutes phylum
-Auxotrophy_2$phylum[Auxotrophy_2$phylum == "Firmicutes_A"] <- "Firmicutes"
-Auxotrophy_2$phylum[Auxotrophy_2$phylum == "Firmicutes_B"] <- "Firmicutes"
-Auxotrophy_2$phylum[Auxotrophy_2$phylum== "Firmicutes_G"] <- "Firmicutes"
-Auxotrophy_2$phylum[Auxotrophy_2$phylum == "Firmicutes_I"] <- "Firmicutes"
 
 # get abundancies
 #number of genomes with a zero (find number of genomes with an auxotrophy)
@@ -1445,11 +1435,12 @@ All_Auxos
 #merge irrelevant phyla to other
 #others include: Bdellovibrionota, Eluismicrobiota, Eremiobacterota, Halobacterota, Myxococcota, NA, Patescibacteria, Thermoplasmatota
 phylum <- c("Actinobacteriota", "Bacteroidota", "Other", "Campylobacterota",
-            "Cyanobacteria", "Desulfobacterota_A", "Other", "Other",
-            "Euryarchaeota", "Fibrobacterota", "Firmicutes", "Firmicutes", "Firmicutes",
+            "Other", "Other", "Other", "Other",
+            "Euryarchaeota", "Other", "Firmicutes", "Firmicutes", "Firmicutes",
             "Firmicutes", "Firmicutes", "Fusobacteriota", "Other", "Other", 
-            "Other", "Other", "Proteobacteria", "Spirochaetota", "Synergistota",
-            "Other", "Verrucomicrobiota")
+            "Other", "Other", "Proteobacteria", "Other", "Other",
+            "Other", "Other")
+All_Auxos$Phylum <- phylum
 
 #phylum <- c("Actinobacteriota", "Bacteroidota", "Bdellovibrionota", "Campylobacterota",
 #            "Cyanobacteria", "Desulfobacterota_A", "Elusimicrobiota", "Eremiobacterota",
@@ -1457,7 +1448,6 @@ phylum <- c("Actinobacteriota", "Bacteroidota", "Other", "Campylobacterota",
 #            "Firmicutes_G", "Firmicutes_I", "Fusobacteriota", "Halobacterota", "Myxococcota", 
 #           "NA", "Patescibacteria", "Proteobacteria", "Spirochaetota", "Synergistota",
 #            "Thermoplasmatota", "Verrucomicrobiota")
-All_Auxos$Phylum <- phylum
 
 #add a cloumn with the amino acids
 Amino_acids <- rep(c("Ala", "Val", "Met", "Leu", "Ile",
@@ -1466,15 +1456,14 @@ Amino_acids <- rep(c("Ala", "Val", "Met", "Leu", "Ile",
                      "Gly", "Ser", "Cys", "Asn", "Asp", 
                      "Chor"), each = 25)
 All_Auxos$Aminoacids <- Amino_acids
+View(All_Auxos)
+#delete archaes
+All_Auxos <- All_Auxos[!(All_Auxos$Phylum == "Euryarchaeota" | All_Auxos$Phylum == "Thermoplasmatota"), ]
+
 
 All_Auxos
 View(All_Auxos)
 #visualization
-caPalette <- c("#560133", "#C7007C", "#DA00FD", "#7CFFFA", "#005745", "#00306F", 
-               "#FF9DC8", "#FFDC3D", "#00B408", "#F60239", "#65019F","#E69F00", 
-               "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7",
-               "#450270", "#FFCCFE", "#5A000F", "#FF5AAF", "#003D30", "#FFAC3B",
-               "#00735C")
 caPalette <- c("#560133", "#C7007C", "#DA00FD", "#7CFFFA", "#005745", "#00306F", 
                "#FF9DC8", "#FFDC3D", "#00B408", "#F60239", "#65019F","#E69F00", 
                "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7",
