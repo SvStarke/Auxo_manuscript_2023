@@ -1,64 +1,17 @@
-#SCFA production by tryptophan auxotrophic microbiota
-#statistical analysis(Wilcox, Fisher)
+##########   SCFA production by tryptophan auxotrophic microbiota  #############
 
+#get produced metabolites
 model.production <- lapply(models, FUN = get_produced_metabolites)
-
-head(model.production)
-
 
 modprod_DT <- rbindlist(model.production, idcol = "model")
 View(modprod_DT)
-fwrite(modprod_DT, file="modprod_DT.csv")
 
-is.data.frame(modprod_DT)
-
+#get growth rates
 m_gr <- lapply(models, FUN = get_growth)
 head(m_gr)
 m_growth <- data.table(Genome = names(m_gr),
                        Growth = unlist(m_gr))
-fwrite(m_growth, file = "m_growth.csv")
-is.list(m_gr)
-View(m_growth)
 
-# Anwendung (Hier Auxotrophies vorhersagen)
-model.auxo <- lapply(models, FUN = predict_auxotrohies)
-
-head(model.auxo)
-
-Metadata <- fread("/mnt/nuuk/2021/HRGM/REPR_Genomes_metadata.tsv")
-
-#create the first data.frame
-Auxotrophie <- data.frame(model.auxo)
-head(Auxotrophie) 
-summary(Auxotrophie)
-str(Auxotrophie)
-is.data.frame(Auxotrophie)
-
-#column und rows tauschen
-Auxotroph <- t(Auxotrophie)
-
-is.matrix(Auxotroph)
-#data frame erzeugen
-Auxotrophy <- data.frame(Auxotroph)
-is.data.frame(Auxotrophy)
-str(Auxotrophy)
-Auxotrophy
-Genome <- rownames(Auxotrophy)
-Auxotrophy$Genomes <- Genome
-# ----
-Auxotrophy_2 <- as.data.table(Auxotrophy)
-Auxotrophy_2 <- melt(Auxotrophy_2, id.vars = "Genomes",
-                     value.name = "Prototrophy", variable.name = "Compound")
-fwrite(Auxotrophy_2, file = "Info_allGenomes_Auxotrophy_Protrophy_Metadata.csv")
-Auxotrophy_2 <- read.csv("/Users/svenjabusche/Desktop/Info_allGenomes_Auxotrophy_Protrophy_Metadata.csv")
-head(Auxotrophy_2)
-Metadata <- fread("/mnt/nuuk/2021/HRGM/REPR_Genomes_metadata.tsv")
-
-Auxotrophy_2 <- merge(Auxotrophy_2, Metadata, by.x = "Genomes",
-                      by.y = "HRGM name")
-Auxotrophy_2[, phylum := str_match(`GTDB Taxonomy`, "p__.*;c__")[,1]]
-Auxotrophy_2[, phylum := gsub("p__|;c__","", phylum)]
-Auxotrophy_2[, phylum := gsub("_C$","", phylum)]
 #merge the files
 auxo_growth <- merge(Auxotrophy_2, m_growth, by.x = "Genomes",
                      by.y = "Genome", allow.cartesian=TRUE)
@@ -67,9 +20,6 @@ View(auxo_growth)
 
 auxo_Prod1 <- merge(auxo_growth, modprod_DT, by.x = "Genomes",
                     by.y = "model", allow.cartesian=TRUE)
-fwrite(auxo_Prod1, file= "all_Genomes_Production.csv")
-auxo_Prod1 <- read.csv("/Users/svenjabusche/Desktop/all_Genomes_Production.csv")
-View(auxo_Prod1)
 
 #delete archaes
 auxo_Prod1<- auxo_Prod1[!(auxo_Prod1$phylum == "Euryarchaeota" | auxo_Prod1$phylum == "Thermoplasmatota"), ]

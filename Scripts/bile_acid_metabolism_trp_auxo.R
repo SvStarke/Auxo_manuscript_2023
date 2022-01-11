@@ -14,7 +14,6 @@ fwrite(flux_i, file = "flux_i.csv")
 flux_i <- read.csv("/Users/svenjabusche/Desktop/flux_i.csv")
 remove(flux_i)
 
-
 #bei produced metabolites schauen ob Produkte entstanden sind
 #bile acid deconjugation
 #colate, chenodeoxycholate
@@ -23,46 +22,6 @@ flu_deconjug_BA <- flux_i[flu_deconjug_BA, ]
 View(flu_deconjug_BA)
 
 fwrite(flu_deconjug_BA, file="flu_deconjug_BA.csv")
-
-# Anwendung (Hier Auxotrophies vorhersagen)
-model.auxo <- lapply(models, FUN = predict_auxotrohies)
-
-head(model.auxo)
-
-Metadata <- fread("/mnt/nuuk/2021/HRGM/REPR_Genomes_metadata.tsv")
-
-#create the first data.frame
-Auxotrophie <- data.frame(model.auxo)
-head(Auxotrophie) 
-summary(Auxotrophie)
-str(Auxotrophie)
-is.data.frame(Auxotrophie)
-
-#column und rows tauschen
-Auxotroph <- t(Auxotrophie)
-
-is.matrix(Auxotroph)
-#data frame erzeugen
-Auxotrophy <- data.frame(Auxotroph)
-is.data.frame(Auxotrophy)
-str(Auxotrophy)
-Auxotrophy
-Genome <- rownames(Auxotrophy)
-Auxotrophy$Genomes <- Genome
-# ----
-Auxotrophy_2 <- as.data.table(Auxotrophy)
-Auxotrophy_2 <- melt(Auxotrophy_2, id.vars = "Genomes",
-                     value.name = "Prototrophy", variable.name = "Compound")
-head(Auxotrophy_2)
-Auxotrophy_2 <- merge(Auxotrophy_2, Metadata, by.x = "Genomes",
-                      by.y = "HRGM name")
-Auxotrophy_2[, phylum := str_match(`GTDB Taxonomy`, "p__.*;c__")[,1]]
-Auxotrophy_2[, phylum := gsub("p__|;c__","", phylum)]
-Auxotrophy_2[, phylum := gsub("_C$","", phylum)]
-
-Auxotrophy_5 <- data.frame(Auxotrophy_2)
-ggplot(Auxotrophy_2[Prototrophy == 0], aes(Compound, fill = phylum)) +
-  geom_bar()
 
 #delete archaes
 Auxotrophy_2 <- Auxotrophy_2[!(Auxotrophy_2$phylum == "Euryarchaeota" | Auxotrophy_2$phylum == "Thermoplasmatota"), ]

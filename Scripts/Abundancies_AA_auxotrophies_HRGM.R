@@ -1,67 +1,5 @@
-#Creating a plot for the abundance of amino acid auxotrophies in 5400 analyzed Metagenomes
-library(MicrobiomeGS2)
-library(stringr)
-library(ggplot2)
-sybil::SYBIL_SETTINGS("SOLVER","cplexAPI")
+##############      Abundancies of amino acid auxotrophies     ################
 
-# Entweder (lang)
-model.paths <- dir("/mnt/nuuk/2021/HRGM/models/", recursive = T)
-model.paths <- model.paths[grepl("HRGM_Genome_[0-9]{4}\\.RDS$",model.paths)]
-model.paths <- model.paths[1:100]
-
-model.names <- str_match(model.paths, "HRGM_Genome_[0-9]{4}")[,1]
-
-my_func <- function(x) {
-  readRDS(paste0("/mnt/nuuk/2021/HRGM/models/", x))
-}
-
-model.list <- lapply(model.paths, FUN = my_func)
-
-
-names(model.list) <- model.names
-
-# Oder: (Kurz)
-models <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models/")
-
-# Anwendung (Hier Auxotrophies vorhersagen)
-models <- readRDS("/mnt/nuuk/2021/Promotion/R-Scripts_Auxotrophie_Analyse/models.RDS")
-model.auxo <- lapply(models, FUN = predict_auxotrohies)
-
-head(model.auxo)
-
-models <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models/")
-
-
-Metadata <- fread("/mnt/nuuk/2021/HRGM/REPR_Genomes_metadata.tsv")
-
-#create the first data.frame
-Auxotrophie <- data.frame(model.auxo)
-head(Auxotrophie) 
-summary(Auxotrophie)
-str(Auxotrophie)
-is.data.frame(Auxotrophie)
-
-#column und rows tauschen
-Auxotroph <- t(Auxotrophie)
-
-is.matrix(Auxotroph)
-#data frame erzeugen
-Auxotrophy <- data.frame(Auxotroph)
-is.data.frame(Auxotrophy)
-str(Auxotrophy)
-Auxotrophy
-Genome <- rownames(Auxotrophy)
-Auxotrophy$Genomes <- Genome
-# ----
-Auxotrophy_2 <- as.data.table(Auxotrophy)
-Auxotrophy_2 <- melt(Auxotrophy_2, id.vars = "Genomes",
-                     value.name = "Prototrophy", variable.name = "Compound")
-head(Auxotrophy_2)
-Auxotrophy_2 <- merge(Auxotrophy_2, Metadata, by.x = "Genomes",
-                      by.y = "HRGM name")
-Auxotrophy_2[, phylum := str_match(`GTDB Taxonomy`, "p__.*;c__")[,1]]
-Auxotrophy_2[, phylum := gsub("p__|;c__","", phylum)]
-Auxotrophy_2[, phylum := gsub("_C$","", phylum)]
 
 # get abundancies
 #number of genomes with a zero (find number of genomes with an auxotrophy)
@@ -1464,11 +1402,7 @@ All_Auxos <- All_Auxos[!(All_Auxos$Phylum == "Euryarchaeota" | All_Auxos$Phylum 
 All_Auxos
 View(All_Auxos)
 #visualization
-caPalette <- c("#560133", "#C7007C", "#DA00FD", "#7CFFFA", "#005745", "#00306F", 
-               "#FF9DC8", "#FFDC3D", "#00B408", "#F60239", "#65019F","#E69F00", 
-               "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7",
-               "#450270", "#FFCCFE", "#5A000F", "#FF5AAF", "#003D30", "#FFAC3B",
-               "#00735C")
+brewer_palette<- c("#d73027", "#fc8d59", "#fee090", "#ffffbf", "#e0f3f8", "#91bfdb", "#4575b4")
 library(ggplot2)
 r2 <- ggplot(data=All_Auxos, aes(x=Aminoacids, y=Auxo, fill=Phylum)) +
   geom_bar(stat="identity") + 
@@ -1476,7 +1410,7 @@ r2 <- ggplot(data=All_Auxos, aes(x=Aminoacids, y=Auxo, fill=Phylum)) +
   coord_cartesian(ylim = c(1,100)) +
   xlab("Amino acids") +
   theme(panel.background = element_rect(fill="white", colour= "black")) +
-  scale_fill_manual(values = caPalette)+
+  scale_fill_manual(values = brewer_palette)+
   ggtitle("Abundancies of Amino acid auxotrophies in HRGM genomes")
 r2
 
