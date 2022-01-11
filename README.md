@@ -10,19 +10,12 @@ Auxotrophic bacteria are not able for the synthesis of essential nutrients. So t
 ### For getting the scatterplot(Completeness, Number Auxos) as a result
 
 ###### Load models
-
 init_models.R
-
 ###### Predict auxotrophies
-
 predict_auxos.R
-
 ###### Add information about the genomes
-
 auxotable_not_melted.R
-
 ###### Visualize the correlation of Completeness of Genomes and Number of Auxotrophies
-
 Scatterplot_Corr_NumbAuxos_Completeness.R
 
 
@@ -30,19 +23,12 @@ Scatterplot_Corr_NumbAuxos_Completeness.R
 ### Abundancies of amino acid auxotrophies
 
 ###### Load models and filter them to get only the models with a completeness >=90% and a contamination <=2
-
 init_models_filtered.R
-
 ###### Predict auxotrophies 
-
 predict_auxos.R
-
 ###### Add information about the genomes
-
 auxotable_melted_merged.R
-
 ###### Analyze amino acid auxotrophies
-
 Abundancies_AA_auxotrophies_HRGM.R
 
 
@@ -50,19 +36,12 @@ Abundancies_AA_auxotrophies_HRGM.R
 ### SCFA production by trp auxotrophic bacteria
 
 ###### Load models and filter them to get only the models with a completeness >=90% and a contamination <=2
-
 init_models_filtered.R
-
 ###### Predict auxotrophies 
-
 predict_auxos.R
-
 ###### Add information about the genomes
-
 auxotable_melted_merged.R
-
 ###### Analyze SCFA production with statistical analysis
-
 SCFA_production_trp_auxo_statistics.R
 
 
@@ -70,19 +49,12 @@ SCFA_production_trp_auxo_statistics.R
 ### Completeness of bile acid metabolism pathways
 
 ###### Load models and filter them to get only the models with a completeness >=90% and a contamination <=2
-
 init_models_filtered.R
-
 ###### Predict auxotrophies 
-
 predict_auxos.R
-
 ###### Add information about the genomes
-
 auxotable_melted_merged.R
-
 ###### Analyze bile acid metabolism pathways with statistical analysis
-
 bile_acid_metabolism_trp_auxo.R
 
 
@@ -90,19 +62,12 @@ bile_acid_metabolism_trp_auxo.R
 ### H2S Production by trp auxotrophic microbiota
 
 ###### Load models and filter them to get only the models with a completeness >=90% and a contamination <=2
-
 init_models_filtered.R
-
 ###### Predict auxotrophies 
-
 predict_auxos.R
-
 ###### Add information about the genomes
-
 auxotable_melted_merged.R
-
 ###### Analyze bile acid metabolism pathways with statistical analysis
-
 H2S_production_trp_auxo_statistics.R
 
 
