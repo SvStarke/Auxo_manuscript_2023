@@ -10,6 +10,7 @@ SCF <- exchange$name == "Butyrate" | exchange$name == "Propionate" | exchange$na
   exchange$name == "DL-Lactate" | exchange$name == "Formate" | exchange$name == "Fumarate" | 
   exchange$name == "Succinate"
 
+
 SCFAs <- exchange[SCF, ]
 is.data.table(SCFAs)
 View(SCFAs)
