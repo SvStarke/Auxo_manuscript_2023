@@ -67,7 +67,7 @@ stat_BP_x_auxo[, fisher.or.log10 := log10(fisher.or)]
 stat_BP_x_auxo[fisher.padj < 0.05, sign.label := "Padj < 0.05"]
 
 p <- ggplot(stat_BP_x_auxo[auxo.compound != "Gly"], aes(auxo.compound, by.product,
-                                fill = log10(fisher.or))) +
+                                fill = -log10(fisher.or))) +
   geom_tile() +
   geom_point(aes(shape = sign.label), size = 0.5) +
   scale_fill_gradient2(high = "#ca0020", mid = "white", low = "#0571b0") +
@@ -77,8 +77,11 @@ p <- ggplot(stat_BP_x_auxo[auxo.compound != "Gly"], aes(auxo.compound, by.produc
        fill = expression(log[10]~'(odds ratio)')) +
   theme_bw() +
   theme(legend.position = "bottom",
-        legend.box	= "vertical",
+        legend.justification = 	1,
         axis.text.x = element_text(color = "black", angle = 45, hjust = 1),
         axis.text.y = element_text(color = "black")
   )
 p
+
+ggsave("output/plots/Heatmap_auxo-X-byproducts_fisher.pdf", plot = p,
+       width = 5, height = 2.65)
