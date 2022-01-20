@@ -3,8 +3,11 @@ library(MicrobiomeGS2)
 library(ggplot2)
 library(data.table)
 library(MetBrewer)
+library(tidyverse)
+library(rstatix)
+library(ggpubr)
 
-cutoff_prodrate <- 1 # at which mmol/gDW the rate is considered as 'real'production
+cutoff_prodrate <- 0.1  # at which mmol/gDW the rate is considered as 'real'production
 
 exchange <- get_exchanges(models)
 View(exchange)
@@ -40,6 +43,7 @@ for(cpdi in relCompounds) {
   for(auxoi in relAuxos) {
     tmp_cpd <- scfa_prod1[name == cpdi & !is.nan(prod_rate)]
     tmp_axt <- Auxotrophy_2[Compound == auxoi]
+    tmp_axt  <- tmp_axt[complete.cases(tmp_axt[, "Prototrophy"]),]
     tmp <- merge(tmp_cpd, tmp_axt, by.x = "model", by.y = "Genomes")
     
     # Fisher Test
@@ -50,26 +54,37 @@ for(cpdi in relCompounds) {
       test_fish <- fisher.test(cont_tab)
       
       # Wilcoxon test
-      
-      dttmp <- data.table(by.product = cpdi,
+       tmp_cutoff <- tmp[prod_rate > cutoff_prodrate]
+       wilcox <- wilcox_test(prod_rate ~ Prototrophy, data = tmp_cutoff)
+       mean_Proto <- mean(tmp_cutoff$prod_rate[tmp_cutoff$Prototrophy == 1])
+       mean_Auxo <- mean(tmp_cutoff$prod_rate[tmp_cutoff$Prototrophy == 0])
+       FC <- log10(mean_Auxo/mean_Proto)
+
+       dttmp <- data.table(by.product = cpdi,
                           auxo.compound = auxoi,
                           fisher.p = test_fish$p.value,
-                          fisher.or = test_fish$estimate)
+                          fisher.or = test_fish$estimate,
+                          wilcox.p = wilcox$p,
+                          FC.log = FC)
+      
       stat_BP_x_auxo[[k]] <- dttmp
       k <- k + 1
     }
     
   }
 }
+
 stat_BP_x_auxo <- rbindlist(stat_BP_x_auxo)
 stat_BP_x_auxo[, fisher.padj := p.adjust(fisher.p, method = "fdr")]
+stat_BP_x_auxo[, wilcox.padj := p.adjust(wilcox.p, method = "fdr")]
 stat_BP_x_auxo[, fisher.or.log10 := log10(fisher.or)]
-stat_BP_x_auxo[fisher.padj < 0.05, sign.label := "Padj < 0.05"]
+stat_BP_x_auxo[fisher.padj < 0.05, sign.label1 := "Padj < 0.05"]
+stat_BP_x_auxo[wilcox.padj < 0.05, sign.label2 := "Padj < 0.05"]
 
 p <- ggplot(stat_BP_x_auxo[auxo.compound != "Gly"], aes(auxo.compound, by.product,
                                 fill = -log10(fisher.or))) +
   geom_tile() +
-  geom_point(aes(shape = sign.label), size = 0.5) +
+  geom_point(aes(shape = sign.label1), size = 0.5) +
   scale_fill_gradient2(high = "#ca0020", mid = "white", low = "#0571b0") +
   scale_shape_manual(values = 8, na.translate = FALSE) +
   scale_x_discrete(expand = c(0,0)) + scale_y_discrete(expand = c(0,0)) +
@@ -83,5 +98,23 @@ p <- ggplot(stat_BP_x_auxo[auxo.compound != "Gly"], aes(auxo.compound, by.produc
   )
 p
 
-ggsave("output/plots/Heatmap_auxo-X-byproducts_fisher.pdf", plot = p,
+q <- ggplot(stat_BP_x_auxo[auxo.compound != "Gly"], aes(auxo.compound, by.product,
+                                                        fill = FC.log)) +
+  geom_tile() +
+  geom_point(aes(shape = sign.label2), size = 0.5) +
+  scale_fill_gradient2(high = "#ca0020", mid = "white", low = "#0571b0") +
+  scale_shape_manual(values = 8, na.translate = FALSE) +
+  scale_x_discrete(expand = c(0,0)) + scale_y_discrete(expand = c(0,0)) +
+  labs(x = "Auxotrophy", y = "Fermentation\nproduct", shape = "",
+       fill = expression(log[10]~'(Fold Change)')) +
+  theme_bw() +
+  theme(legend.position = "bottom",
+        legend.justification = 	1,
+        axis.text.x = element_text(color = "black", angle = 45, hjust = 1),
+        axis.text.y = element_text(color = "black")
+  )
+
+q
+
+ggsave("output/plots/Heatmap_auxo-X-byproducts_FoldChange_Wilcox.pdf", plot = q,
        width = 5, height = 2.65)
