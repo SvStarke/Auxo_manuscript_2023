@@ -15,12 +15,14 @@ Auxotrophy_2$phylum[Auxotrophy_2$phylum == "Cyanobacteria"] <- "Other"
 Auxotrophy_2$phylum[Auxotrophy_2$phylum == "Desulfobacterota_A"] <- "Other"
 Auxotrophy_2$phylum[Auxotrophy_2$phylum == "Elusimicrobiota"] <- "Other"
 Auxotrophy_2$phylum[Auxotrophy_2$phylum == "Eremiobacterota"] <- "Other"
+Auxotrophy_2$phylum[Auxotrophy_2$phylum == "Fibrobacterota"] <- "Other"
 Auxotrophy_2$phylum[Auxotrophy_2$phylum == "Halobacterota"] <- "Other"
 Auxotrophy_2$phylum[Auxotrophy_2$phylum == "Myxococcota"] <- "Other"
 Auxotrophy_2$phylum[Auxotrophy_2$phylum == "Patescibacteria"] <- "Other"
 Auxotrophy_2$phylum[Auxotrophy_2$phylum == "Synergistota"] <- "Other"
 Auxotrophy_2$phylum[Auxotrophy_2$phylum == "Thermoplasmatota"] <- "Other"
 Auxotrophy_2$phylum[Auxotrophy_2$phylum == "Verrucomicrobiota"] <- "Other"
+Auxotrophy_2$phylum[Auxotrophy_2$phylum == "Fibrobacterota"] <- "Other"
 
 
 relAuxos <- unique(Auxotrophy_2$Compound)
