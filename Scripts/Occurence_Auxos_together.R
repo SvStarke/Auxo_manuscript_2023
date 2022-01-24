@@ -35,12 +35,13 @@ ggplot(occurence2, aes(A1,A2, fill = Freq)) +
   geom_tile()
 
 ###Frequencies in relation to the number of genomes
-ggplot(occurence2, aes(A1,A2, fill = Perc)) +
-  geom_tile()
+ggplot(occurence2, aes(A1,A2)) +
+  geom_point(aes(size = Perc), shape = 19)
 
 ### amino acid auxotrophies occuring together in relation to their sole occurence
-ggplot(occurence2, aes(A1,A2, fill = W)) +
-  geom_tile() 
+ggplot(occurence2, aes(A1,A2)) +
+  geom_point(aes(size = W), shape = 19)
+
 
 
 
