@@ -7,7 +7,7 @@ library(tidyverse)
 library(rstatix)
 library(ggpubr)
 
-cutoff_prodrate <- 0.1  # at which mmol/gDW the rate is considered as 'real'production
+cutoff_prodrate <- 1  # at which mmol/gDW the rate is considered as 'real'production
 
 exchange <- get_exchanges(models)
 View(exchange)
@@ -54,13 +54,16 @@ for(cpdi in relCompounds) {
       test_fish <- fisher.test(cont_tab)
       
       # Wilcoxon test
-       tmp_cutoff <- tmp[prod_rate > cutoff_prodrate]
-       wilcox <- wilcox_test(prod_rate ~ Prototrophy, data = tmp_cutoff)
-       mean_Proto <- mean(tmp_cutoff$prod_rate[tmp_cutoff$Prototrophy == 1])
-       mean_Auxo <- mean(tmp_cutoff$prod_rate[tmp_cutoff$Prototrophy == 0])
-       FC <- log10(mean_Auxo/mean_Proto)
-
-       dttmp <- data.table(by.product = cpdi,
+      tmp_wicoxdat <- copy(tmp)
+      tmp_wicoxdat <- tmp_wicoxdat[, tmp_prod_rate := prod_rate] # neue Spalte erzeugen in der negative werte mit null ersetzt werden sollen
+      tmp_wicoxdat <- tmp_wicoxdat[tmp_prod_rate < 0, tmp_prod_rate := 0] # ersetzen der neg. Werte mit 0
+      
+      wilcox <- wilcox_test(tmp_prod_rate ~ Prototrophy, data = tmp_wicoxdat)
+      mean_Proto <- mean(tmp_wicoxdat$tmp_prod_rate[Prototrophy == 1])
+      mean_Auxo <- mean(tmp_wicoxdat$tmp_prod_rate[Prototrophy == 0])
+      FC <- log2(mean_Auxo/mean_Proto)
+      
+      dttmp <- data.table(by.product = cpdi,
                           auxo.compound = auxoi,
                           fisher.p = test_fish$p.value,
                           fisher.or = test_fish$estimate,
@@ -82,7 +85,7 @@ stat_BP_x_auxo[fisher.padj < 0.05, sign.label1 := "Padj < 0.05"]
 stat_BP_x_auxo[wilcox.padj < 0.05, sign.label2 := "Padj < 0.05"]
 
 p <- ggplot(stat_BP_x_auxo[auxo.compound != "Gly"], aes(auxo.compound, by.product,
-                                fill = -log10(fisher.or))) +
+                                fill = -log2(fisher.or))) +
   geom_tile() +
   geom_point(aes(shape = sign.label1), size = 0.5) +
   scale_fill_gradient2(high = "#ca0020", mid = "white", low = "#0571b0") +
