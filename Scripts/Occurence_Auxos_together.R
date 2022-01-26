@@ -23,10 +23,9 @@ for (i1 in AA) {
 
 occurence <- rbindlist(new)
 occurence2 <- occurence[!(occurence$Var1 == 1 | occurence$Var2 == 1), ]
-#überlegen statt Frequency Prozentwert berechnen
 occurence2$Perc <- ifelse(occurence2$A1 == occurence2$A2, NA, occurence2$Freq/nrow(Auxo) *100)
-occurence2$W <- ifelse(occurence2$A1 == occurence2$A2, NA ,occurence2$Freq/occurence2$perc)
-View(occurence2)
+occurence2$P <- ifelse(occurence2$A1 == occurence2$A2, NA ,occurence2$Freq/occurence2$perc)
+
 ####################      visualization      ###################################
 View(occurence2)
 library(ggplot2)
@@ -35,14 +34,11 @@ ggplot(occurence2, aes(A1,A2, fill = Freq)) +
   geom_tile()
 
 ###Frequencies in relation to the number of genomes
-ggplot(occurence2, aes(A1,A2)) +
-  geom_point(aes(size = Perc), shape = 19)
+ggplot(occurence2, aes(A1,A2, fill = Perc)) +
+  geom_tile()
 
 ### amino acid auxotrophies occuring together in relation to their sole occurence
-ggplot(occurence2, aes(A1,A2)) +
-  geom_point(aes(size = W), shape = 19)
-
-
-
+ggplot(occurence2, aes(A1,A2, fill = P)) +
+  geom_tile()
 
 

@@ -59,8 +59,8 @@ for(cpdi in relCompounds) {
       tmp_wicoxdat <- tmp_wicoxdat[tmp_prod_rate < 0, tmp_prod_rate := 0] # ersetzen der neg. Werte mit 0
       
       wilcox <- wilcox_test(tmp_prod_rate ~ Prototrophy, data = tmp_wicoxdat)
-      mean_Proto <- mean(tmp_wicoxdat$tmp_prod_rate[Prototrophy == 1])
-      mean_Auxo <- mean(tmp_wicoxdat$tmp_prod_rate[Prototrophy == 0])
+      mean_Proto <- mean(tmp_wicoxdat$tmp_prod_rate[tmp_wicoxdat$Prototrophy == 1])
+      mean_Auxo <- mean(tmp_wicoxdat$tmp_prod_rate[tmp_wicoxdat$Prototrophy == 0])
       FC <- log2(mean_Auxo/mean_Proto)
       
       dttmp <- data.table(by.product = cpdi,
@@ -92,14 +92,23 @@ p <- ggplot(stat_BP_x_auxo[auxo.compound != "Gly"], aes(auxo.compound, by.produc
   scale_shape_manual(values = 8, na.translate = FALSE) +
   scale_x_discrete(expand = c(0,0)) + scale_y_discrete(expand = c(0,0)) +
   labs(x = "Auxotrophy", y = "Fermentation\nproduct", shape = "",
-       fill = expression(log[10]~'(odds ratio)')) +
+       fill = expression(log[2]~'(odds ratio)')) +
   theme_bw() +
   theme(legend.position = "bottom",
         legend.justification = 	1,
-        axis.text.x = element_text(color = "black", angle = 45, hjust = 1),
-        axis.text.y = element_text(color = "black")
-  )
-p
+        axis.text.x = element_text(color = "black", angle = 45, hjust = 1, size = 10),
+        axis.text.y = element_text(color = "black", size = 10)) +
+  theme(axis.title.y = element_text(margin = margin(t = 0, r = 20, b= 0, l = 0))) +
+  theme(panel.background = element_blank())
+
+p +theme(plot.margin = unit(c(1,0.5,2,0.5), "cm")) +
+  theme(legend.text = element_text(size=10),
+        legend.title = element_text(size=8))
+
+
+ggsave("output/plots/Heatmap_auxo-X-byproducts_FoldChange_Fisher.pdf", plot = p,
+       width = 6, height = 3.0)
+
 
 q <- ggplot(stat_BP_x_auxo[auxo.compound != "Gly"], aes(auxo.compound, by.product,
                                                         fill = FC.log)) +
@@ -109,15 +118,18 @@ q <- ggplot(stat_BP_x_auxo[auxo.compound != "Gly"], aes(auxo.compound, by.produc
   scale_shape_manual(values = 8, na.translate = FALSE) +
   scale_x_discrete(expand = c(0,0)) + scale_y_discrete(expand = c(0,0)) +
   labs(x = "Auxotrophy", y = "Fermentation\nproduct", shape = "",
-       fill = expression(log[10]~'(Fold Change)')) +
+       fill = expression(log[2]~'(Fold Change)')) +
   theme_bw() +
   theme(legend.position = "bottom",
         legend.justification = 	1,
-        axis.text.x = element_text(color = "black", angle = 45, hjust = 1),
-        axis.text.y = element_text(color = "black")
-  )
+        axis.text.x = element_text(color = "black", angle = 45, hjust = 1, size = 10),
+        axis.text.y = element_text(color = "black", size = 10)) +
+  theme(axis.title.y = element_text(margin = margin(t = 0, r = 20, b= 0, l = 0))) +
+  theme(panel.background = element_blank())
 
-q
+q +theme(plot.margin = unit(c(1,0.5,2,0.5), "cm")) +
+  theme(legend.text = element_text(size=10),
+        legend.title = element_text(size=8))
 
 ggsave("output/plots/Heatmap_auxo-X-byproducts_FoldChange_Wilcox.pdf", plot = q,
-       width = 5, height = 2.65)
+       width = 6, height = 3.0)
