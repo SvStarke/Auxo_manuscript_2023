@@ -56,10 +56,10 @@ pt <- ggplot(numbauxo, aes(AA, perc, fill = Phyla)) +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
   theme(axis.text.x = element_text(size = 14, angle = 45, colour = "black", margin = margin(10,0,0,0))) +
   theme(axis.text.y = element_text(size = 14, colour = "black"))+
-  theme(axis.title.x = element_text(colour = "Black", face = "bold", size = 12, margin = margin(2,0,0,0))) +
-  theme(axis.title.y = element_text(colour = "Black", face = "bold", size = 12, margin = margin(0,10,0,0))) +
-  theme(legend.title = element_text(colour = "black", size = 10, face = "bold",  vjust = 1, margin = margin(10,5,5,0))) +
-  theme(legend.text = element_text(size = 12, colour = "black")) +
+  theme(axis.title.x = element_text(colour = "Black", face = "bold", size = 14, margin = margin(2,0,0,0))) +
+  theme(axis.title.y = element_text(colour = "Black", face = "bold", size = 14, margin = margin(0,10,0,0))) +
+  theme(legend.title = element_text(colour = "black", size = 14, face = "bold",  vjust = 1, margin = margin(10,5,5,0))) +
+  theme(legend.text = element_text(size = 14, colour = "black")) +
   coord_cartesian()+
   scale_fill_manual(values = brewer_palette) +
   theme(plot.margin= margin(0.5,0.5,0.5,0.5, "cm"))
