@@ -23,22 +23,54 @@ for (i1 in AA) {
 
 occurence <- rbindlist(new)
 occurence2 <- occurence[!(occurence$Var1 == 1 | occurence$Var2 == 1), ]
-occurence2$Perc <- ifelse(occurence2$A1 == occurence2$A2, NA, occurence2$Freq/nrow(Auxo) *100)
-occurence2$P <- ifelse(occurence2$A1 == occurence2$A2, NA ,occurence2$Freq/occurence2$perc)
+occurence2$Freq_all <-occurence2$Freq/nrow(Auxo)
+occurence2$Freq_filt <- ifelse(occurence2$A1 == occurence2$A2, NA, occurence2$Freq/nrow(Auxo))
+occurence2$P <- occurence2$Freq/occurence2$perc
 
 ####################      visualization      ###################################
-View(occurence2)
-library(ggplot2)
-###Frequencies
-ggplot(occurence2, aes(A1,A2, fill = Freq)) +
-  geom_tile()
+library(MetBrewer)
 
 ###Frequencies in relation to the number of genomes
-ggplot(occurence2, aes(A1,A2, fill = Perc)) +
-  geom_tile()
+ o <- ggplot(occurence2, aes(A1,A2, fill = Freq_filt)) +
+  geom_tile(color ="white", lwd= 0.5, linetype = 1.5) +
+  scale_fill_gradientn(colors = met.brewer("OKeeffe2"), na.value = "gray94", limits = c(0, 0.4)) +
+  guides(fill = guide_colourbar(barwidth = 15, barheight = 1, title ="Freq",
+                                label = TRUE, ticks = FALSE)) +
+  theme(legend.position = "bottom") +
+  theme(axis.text.x = element_text(colour = "Black", size = 10, angle = 45, vjust = 0.5, hjust=0.5)) +
+  theme(axis.text.y = element_text(colour = "black", size = 10, vjust = 0.5, hjust=0.5)) +
+  theme(axis.title.x = element_text(colour = "Black", face = "bold", size = 12, margin = margin(5,0,0,0))) +
+  theme(axis.title.y = element_text(colour = "Black", face = "bold", size = 12, margin = margin(0,5,0,0))) +
+  theme(legend.title = element_text(colour = "black", size = 12, vjust = 1, margin = margin(0,10,1,0))) +
+  xlab("AA1") +
+  ylab("AA2") + 
+  theme(panel.background = element_blank()) +
+  theme(plot.margin= margin(0.5,0.5,0.5,0.5, "cm"))
+o
 
-### amino acid auxotrophies occuring together in relation to their sole occurence
-ggplot(occurence2, aes(A1,A2, fill = P)) +
-  geom_tile()
+
+ggsave("output/plots/Heatmap_occurence_auxos.pdf", plot = o,
+       width = 5, height = 5)
+
+
+# i <- ggplot(occurence2, aes(A1,A2, fill = P)) +
+#   geom_tile(color ="white", lwd= 0.5, linetype = 1.5) +
+#   scale_fill_gradientn(colors = met.brewer("OKeeffe2"), na.value = "gray94") +
+#   guides(fill = guide_colourbar(barwidth = 15, barheight = 1, title ="Freq",
+#                                 label = TRUE, ticks = FALSE)) +
+#   theme(legend.position = "bottom") +
+#   theme(axis.text.x = element_text(colour = "Black", size = 10, angle = 45, vjust = 0.5, hjust=0.5)) +
+#   theme(axis.text.y = element_text(colour = "black", size = 10, vjust = 0.5, hjust=0.5)) +
+#   theme(axis.title.x = element_text(colour = "Black", face = "bold", size = 12, margin = margin(5,0,0,0))) +
+#   theme(axis.title.y = element_text(colour = "Black", face = "bold", size = 12, margin = margin(0,5,0,0))) +
+#   theme(legend.title = element_text(colour = "black", size = 12, vjust = 1, margin = margin(0,10,1,0))) +
+#   xlab("AA1") +
+#   ylab("AA2") + 
+#   theme(panel.background = element_blank()) +
+#   theme(plot.margin= margin(0.5,0.5,0.5,0.5, "cm"))
+# i
+
+
+
 
 
