@@ -6,24 +6,23 @@ cor.test(Auxotrophy_12$Completeness, Auxotrophy_12$count, method = "spearman", e
 
 ############################ visualization #####################################
 
-ggplot(Auxotrophy_12, aes(Completeness, count)) +
+c <- ggplot(Auxotrophy_12, aes(Completeness, count)) +
   geom_point()+
   geom_smooth() +
   xlab("Completeness [%]") +
-  ylab("Number of Auxotrophies") +
-  ggtitle("Correlation of Number of Auxotrophies and Completeness ") +
+  ylab("Number of Auxotrophies")  +
   theme_minimal() +
   xlim(50,100) +
-  ylim(0,21)
+  ylim(0,21)+
+  theme(axis.title.x = element_text(size=20, colour = "black", margin = margin(10,0,0,0)),
+        axis.title.y = element_text(size = 20, colour = "black", margin = margin(0,10,0,0)),
+        axis.text.x = element_text(size=18, colour="black"),
+        axis.text.y = element_text(size=18, colour="black"))
+c
+
+ggsave("/Users/Svenja/Desktop/Completeness_NumbAuxos.pdf", plot = c,
+              width = 6, height = 5)
 
 
- install.packages("ggpubr")
-library(ggpubr)
-ggscatter(Auxotrophy_12, x="Completeness", y="count",
-          add = "reg.line", conf.int =TRUE,
-          cor.coef = TRUE, cor.method = "spearman",
-          title="Spearman Correlation",
-          xlab="Completeness [%]",
-          ylab = "Number of Auxotrophies",
-          ggtheme = theme_linedraw())
+
 
