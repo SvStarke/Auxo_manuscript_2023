@@ -56,6 +56,23 @@ ggsave("/Users/Svenja/Desktop/barplot_frequence_gut.pdf", plot = a,
 
 
 #################### boxplot with summary of statistical anyslsis ##############
+#standard error
+ r <- ggplot(sumfreq, aes(x=AA, y=x)) + geom_bar(stat="summary", fun="mean", fill = "#fdae6b",colour = "black", width= 1) + 
+  geom_errorbar(stat="summary", fun.data="mean_se") +
+  ylab("Abundance of Auxotrophy")+
+  xlab("Amino Acids") +
+  theme(axis.line = element_line(size=0.2, colour = "black")) +
+  theme(panel.background = element_rect(fill="white", colour= "white")) +
+  theme(axis.title.y = element_text(colour = "black", size = 16, face = "bold", margin = margin(0,10,0,0)))+
+  theme(axis.title.x = element_text(colour = "black", size = 16, face = "bold", margin = margin(10,0,0,0))) +
+  theme(axis.text.x = element_text(size=14, colour = "black", hjust = 1,  angle = 45, margin = margin(10,0,0,0))) +
+  theme(axis.text.y = element_text(size = 14, colour = "black")) +
+  theme(plot.margin= margin(0.5,0.5,0.5,0.5, "cm"))
+  
+ggsave("/Users/Svenja/Desktop/Standarderror_frequency_gut.pdf", plot = r,
+       width = 6, height = 5)
+
+#boxplot
 b <- ggplot(sumfreq, aes(AA, x)) +
   geom_boxplot(outlier.colour = "black", outlier.shape = 16, outlier.size = 1, notch = FALSE) +
   ylab("Abundance of Auxotrophy")+
@@ -68,14 +85,19 @@ b <- ggplot(sumfreq, aes(AA, x)) +
   theme(axis.text.y = element_text(size = 14, colour = "black")) +
   theme(plot.margin= margin(0.5,0.5,0.5,0.5, "cm"))
 
-b
+ggsave("/Users/Svenja/Desktop/boxplot_frequency_gut.pdf", plot = b,
+       width = 6, height = 4)
+
 
 ##add standard deviation
-b + stat_summary(fun = mean, colour = "red", geom = "point") +
+c <- b + stat_summary(fun = mean, colour = "red", geom = "point") +
   stat_summary(fun.min = function(x) mean(x)- sd(x),
                fun.max = function(x) mean(x) + sd(x),
                geom = "errorbar",
                colour = "red",
-               width = .3) +
-  coord_cartesian()
+               width = .3)
+
+ggsave("/Users/Svenja/Desktop/boxplot_standarddeviation_frequency_gut.pdf", plot = c,
+       width = 6, height = 4)
+
 
