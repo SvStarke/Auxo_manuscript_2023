@@ -53,3 +53,29 @@ a
 
 ggsave("/Users/Svenja/Desktop/barplot_frequence_gut.pdf", plot = a,
        width = 6, height = 4)
+
+
+#################### boxplot with summary of statistical anyslsis ##############
+b <- ggplot(sumfreq, aes(AA, x)) +
+  geom_boxplot(outlier.colour = "black", outlier.shape = 16, outlier.size = 1, notch = FALSE) +
+  ylab("Abundance of Auxotrophy")+
+  xlab("Amino Acids") +
+  theme(axis.line = element_line(size=0.2, colour = "black")) +
+  theme(panel.background = element_rect(fill="white", colour= "white")) +
+  theme(axis.title.y = element_text(colour = "black", size = 16, face = "bold", margin = margin(0,10,0,0)))+
+  theme(axis.title.x = element_text(colour = "black", size = 16, face = "bold", margin = margin(10,0,0,0))) +
+  theme(axis.text.x = element_text(size=14, colour = "black", hjust = 1,  angle = 45, margin = margin(10,0,0,0))) +
+  theme(axis.text.y = element_text(size = 14, colour = "black")) +
+  theme(plot.margin= margin(0.5,0.5,0.5,0.5, "cm"))
+
+b
+
+##add standard deviation
+b + stat_summary(fun = mean, colour = "red", geom = "point") +
+  stat_summary(fun.min = function(x) mean(x)- sd(x),
+               fun.max = function(x) mean(x) + sd(x),
+               geom = "errorbar",
+               colour = "red",
+               width = .3) +
+  coord_cartesian()
+
