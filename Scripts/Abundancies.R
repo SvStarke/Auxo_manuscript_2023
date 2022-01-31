@@ -54,7 +54,7 @@ pt <- ggplot(numbauxo, aes(AA, perc, fill = Phyla)) +
   theme(legend.position = "bottom") +
   theme(axis.line = element_line(size=0.2)) +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
-  theme(axis.text.x = element_text(size = 14, angle = 45, colour = "black", margin = margin(10,0,0,0))) +
+  theme(axis.text.x = element_text(size = 14, angle = 45, colour = "black", hjust = 1, margin = margin(10,0,0,0))) +
   theme(axis.text.y = element_text(size = 14, colour = "black"))+
   theme(axis.title.x = element_text(colour = "Black", face = "bold", size = 14, margin = margin(2,0,0,0))) +
   theme(axis.title.y = element_text(colour = "Black", face = "bold", size = 14, margin = margin(0,10,0,0))) +
