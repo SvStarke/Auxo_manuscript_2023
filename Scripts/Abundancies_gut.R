@@ -44,7 +44,7 @@ a <- ggplot( sumfreqAA, aes(Aminoacid, x)) +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
   theme(axis.title.y = element_text(colour = "black", size = 16, face = "bold", margin = margin(0,10,0,0)))+
   theme(axis.title.x = element_text(colour = "black", size = 16, face = "bold", margin = margin(10,0,0,0))) +
-  theme(axis.text.x = element_text(size=14, colour = "black", angle = 45, margin = margin(10,0,0,0))) +
+  theme(axis.text.x = element_text(size=14, colour = "black", hjust = 1,  angle = 45, margin = margin(10,0,0,0))) +
   theme(axis.text.y = element_text(size = 14, colour = "black")) +
   theme(plot.margin= margin(0.5,0.5,0.5,0.5, "cm")) +
   coord_cartesian()
