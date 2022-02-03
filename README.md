@@ -6,7 +6,7 @@ Auxotrophic bacteria are not able for the synthesis of essential nutrients. So t
 
 ## Instructions for running the scripts
 
-For getting the figures as a result, the scripts need to be ran in a specific order. An overview about the running order is given by the flowchart below. Each colorful line represents the order of scripts for every figure. The instructions in the flowchart are given in text below to C+P the code.
+For getting the figures as a result, the scripts need to be ran in a specific order. An overview about the running order is given by the flowchart below. Each colorful line represents the order of scripts for every figure. Detailed instructions are given under the flowchart.
 
 ![click here for an overview of the order for running the scripts](output/plots/Overview_Order_running_scripts.png)
 
