@@ -4,8 +4,7 @@ data <- fread("/Users/Svenja/Downloads/FOCUS_HRGM_abundancies_2")
 #filter for BL
 data <- data[focus.call == "BL"]
 View(data)
-#auxotrophy table
-auxotrophy <- fread("/Users/Svenja/Downloads/Info_allGenomes_Auxotrophy_Protrophy_Metadata.csv")
+
 #filter
 Auxotrophy_2[,c(4:17)] <- NULL
 
