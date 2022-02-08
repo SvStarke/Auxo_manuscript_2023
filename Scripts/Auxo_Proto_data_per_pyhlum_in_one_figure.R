@@ -418,6 +418,8 @@ Chor <- ggplot(prop[AA == "Chor"], aes(phylum,perc, fill = Prototrophy)) +
   theme(title = element_text(size=8, colour = "black", face ="bold"))
 Chor
 
+
+
 plot1 <- ggarrange(Asp, Asn, Glu, Gln,
                    ncol=2, nrow= 2, common.legend = TRUE, legend = "bottom")
 plot1
@@ -427,27 +429,27 @@ ggsave("output/plots/plot1_proportions.pdf", plot = plot1,
 plot2 <- ggarrange(Leu, Ile, Val, Thr,
                    ncol=2, nrow= 2, common.legend = TRUE, legend = "bottom")
 plot2
-ggsave("output/plots/plot1_proportions.pdf", plot = plot2,
+ggsave("output/plots/plot2_proportions.pdf", plot = plot2,
        width = 6, height = 6)
 plot3 <- ggarrange(Chor, Trp, Tyr, Phe,
                    ncol=2, nrow= 2, common.legend = TRUE, legend = "bottom")
 plot3
-ggsave("output/plots/plot1_proportions.pdf", plot = plot3,
+ggsave("output/plots/plot3_proportions.pdf", plot = plot3,
        width = 6, height = 6)
 plot4 <- ggarrange(Ser, Cys,Met,Gly,
                    ncol=2, nrow= 2, common.legend = TRUE, legend = "bottom")
 plot4
-ggsave("output/plots/plot1_proportions.pdf", plot = plot4,
+ggsave("output/plots/plot4_proportions.pdf", plot = plot4,
        width = 6, height = 6)
 plot5 <- ggarrange(Lys, Arg, Pro,
                    ncol=2, nrow= 2, common.legend = TRUE, legend = "bottom")
 plot5
-ggsave("output/plots/plot1_proportions.pdf", plot = plot5,
+ggsave("output/plots/plot5_proportions.pdf", plot = plot5,
        width = 6, height = 6)
 plot6 <- ggarrange(Ala, His,
                    ncol=2, nrow= 1, common.legend = TRUE, legend = "bottom")
 plot6
-ggsave("output/plots/plot1_proportions.pdf", plot = plot6,
+ggsave("output/plots/plot6_proportions.pdf", plot = plot6,
        width = 6, height = 6)
 
 
