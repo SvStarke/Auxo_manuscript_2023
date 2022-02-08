@@ -21,17 +21,13 @@ for (subi in sub) {
       y <- Auxotrophy_2[Compound == AAi]
       z <- merge(x,y, by.x = "model", by.y = "Genomes")
       t <- z[Prototrophy == 0]
-     # t <- table(z$freq. z$Prototrophy))
-      #t$AA <- AAi
-      #t$Subject <- subi
       p[[k]] <- t
       k <- k +1
   }
 }
 
 u <- rbindlist(p) 
-w <- u[freq > 0]
-sumfreq <- aggregate(w$freq, by=list(subject=w$subject, AA=w$Compound), FUN=sum)
+sumfreq <- aggregate(u$freq, by=list(subject=u$subject, AA=u$Compound), FUN=sum)
 sumfreqAA <- aggregate(sumfreq$x, by=list(Aminoacid = sumfreq$AA), FUN=median)
 
 #####################        visualization        ##############################
@@ -73,7 +69,7 @@ ggsave("/Users/Svenja/Desktop/Standarderror_frequency_gut.pdf", plot = r,
 
 #boxplot
 b <- ggplot(sumfreq, aes(AA, x)) +
-  geom_boxplot(outlier.colour = "black", outlier.shape = 16, outlier.size = 1, notch = FALSE) +
+  geom_boxplot( outlier.shape = NA, width = 0.8) +
   ylab("Abundance of Auxotrophy")+
   xlab("Amino Acids") +
   theme(axis.line = element_line(size=0.2, colour = "black")) +
