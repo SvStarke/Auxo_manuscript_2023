@@ -29,13 +29,13 @@ source("Scripts/predict_auxos.R")
 ###### Add information about the genomes
 
 ```R
-source("auxotable_not_melted.R")
+source("Scripts/auxotable_not_melted.R")
 ```
 
 ###### Analyze and then visualize the proportions of auxotrophic to prototrophic MAGs per phylum
 
 ```R
-source("Auxo_Proto_data_per_phylum.R")
+source("Scripts/Auxo_Proto_data_per_phylum.R")
 ```
 
 ### 2) Distribution of the number of auxotrophies per phylum
@@ -54,13 +54,13 @@ source("Scripts/predict_auxos.R")
 ###### Add information about the genomes
 
 ```R
-source("auxotable_not_melted.R")
+source("Scripts/auxotable_not_melted.R")
 ```
 
 ###### Analyze and visualize the distribution of the number of auxotrophies in every phylum
 
 ```R
-source("number_auxo_per_phylum.R")
+source("Scripts/number_auxo_per_phylum.R")
 ```
 
 ### 3) Scatterplot about the correlation of the completeness and the found number of auxotrophies in all genomes
@@ -80,13 +80,13 @@ source("Scripts/predict_auxos.R")
 ###### Add information about the genomes
 
 ```R
-source("auxotable_not_melted.R")
+source("Scripts/auxotable_not_melted.R")
 ```
 
 ###### Visualize the correlation of Completeness of Genomes and Number of Auxotrophies
 
 ```R
-source("Scatterplot_Corr_NumbAuxos_Completeness.R")
+source("Scripts/Scatterplot_Corr_NumbAuxos_Completeness.R")
 ```
 
 ### 4) Abundancies of amino acid auxotrophies
@@ -100,78 +100,78 @@ source("Scripts/init_models_filtered.R")
 ###### Predict auxotrophies
 
 ```R
-source("predict_auxos.R")
+source("Scripts/predict_auxos.R")
 ```
 
 ###### Add information about the genomes
 
 ```R
-source("auxotable_melted_merged.R")
+source("Scripts/auxotable_melted_merged.R")
 ```
 
 ###### Analyze amino acid auxotrophies
 
 ```R
-source("Abundancies.R")
+source("Scripts/Abundancies.R")
 ```
 
 ### 5) Fermentation products(e.g.SCFA)
 
 ###### Load models (completeness >=85% and a contamination <=2)
 ```R
-source("init_models_filtered.R")
+source("Scripts/init_models_filtered.R")
 ```
 ###### Predict auxotrophies 
 ```R
-source("predict_auxos.R")
+source("Scripts/predict_auxos.R")
 ```
 
 ###### Add information about the genomes
 ```R
-source("auxotable_melted_merged.R")
+source("Scripts/auxotable_melted_merged.R")
 ```
 
 ###### Analyze the production of by products with statistical analysis
 ```R
-source("byproduct_production.R")
+source("Scripts/byproduct_production.R")
 ```
 
 ### 6) Abundancies in the gut
 
 ###### Load models (completeness >=85% and a contamination <=2)
 ```R
-source("init_models_filtered.R")
+source("Scripts/init_models_filtered.R")
 ```
 ###### Predict auxotrophies 
 ```R
-source("predict_auxos.R")
+source("Scripts/predict_auxos.R")
 ```
 
 ###### Add information about the genomes
 ```R
-source("auxotable_melted_merged.R")
+source("Scripts/auxotable_melted_merged.R")
 ```
 
 ###### Analyze the abundance of auxotrophies in the gut by data from the FoCus cohorte
 ```R
-source("Abundancies_gut.R")
+source("Scripts/Abundancies_gut.R")
 ```
 
 ### 7) Occurence of Auxotrophies together
 
 ###### Load models() completeness >=85% and a contamination <=2)
 ```R
-source("init_models_filtered.R")
+source("Scripts/init_models_filtered.R")
 ```
 
 ###### Predict auxotrophies 
 ```R
-source("predict_auxos.R")
+source("Scripts/predict_auxos.R")
 ```
 
 ###### Add information about the genomes
 ```R
-source("Occurence_Auxos_together.R")
+source("Scripts/Occurence_Auxos_together.R")
 ```
 
 ### Further scripts that may be used in the future but are yet not displayed in the flowchart
@@ -180,44 +180,44 @@ source("Occurence_Auxos_together.R")
 
 ###### Load models and filter them to get only the models with a completeness >=85% and a contamination <=2
 ```R
-source("init_models_filtered.R")
+source("Scripts/init_models_filtered.R")
 ```
 
 ###### Predict auxotrophies 
 ```R
-source("predict_auxos.R")
+source("Scripts/predict_auxos.R")
 ```
 
 ###### Add information about the genomes
 ```R
-source("auxotable_melted_merged.R")
+source("Scripts/auxotable_melted_merged.R")
 ```
 
 ###### Analyze bile acid metabolism pathways with statistical analysis
 ```R
-source("bile_acid_metabolism_trp_auxo.R")
+source("Scripts/bile_acid_metabolism_trp_auxo.R")
 ```
 
 ### H2S Production by trp auxotrophic microbiota
 
 ###### Load models and filter them to get only the models with a completeness >=85% and a contamination <=2
 ```R
-source("init_models_filtered.R")
+source("Scripts/init_models_filtered.R")
 ```
 
 ###### Predict auxotrophies 
 ```R
-source("predict_auxos.R")
+source("Scripts/predict_auxos.R")
 ```
 
 ###### Add information about the genomes
 ```R
-source("auxotable_melted_merged.R")
+source("Scripts/auxotable_melted_merged.R")
 ```
 
 ###### Analyze H2S production with statistics
 ```R
-source("H2S_production_trp_auxo_statistics.R")
+source("Scripts/H2S_production_trp_auxo_statistics.R")
 ```
 
 
