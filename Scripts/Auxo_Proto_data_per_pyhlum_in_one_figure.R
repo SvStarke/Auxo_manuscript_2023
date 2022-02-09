@@ -78,7 +78,7 @@ Ala <- ggplot(prop[AA == "Ala"], aes(phylum,perc)) +
   geom_bar(stat = "identity", aes(fill = Status)) +
   ylab("Proportion of MAGs") +
   scale_fill_manual(values = c('#fdd0a2','#fdae6b')) +
-  theme(legend.position = "right") +
+  theme(legend.position = "bottom") +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
   theme(axis.text.x = element_text(size = 8, angle = 50, colour = "black", hjust = 1, margin = margin(0,0,0,0))) +
   theme(axis.text.y = element_text(size = 8, colour = "black")) +
@@ -90,7 +90,7 @@ Ala <- ggplot(prop[AA == "Ala"], aes(phylum,perc)) +
   ggtitle("Alanine") +
   theme(title = element_text(size=8, colour = "black", face ="bold"))
 Ala
-Val <- ggplot(prop[AA == "Val"], aes(phylum,perc, fill = Prototrophy)) +
+Val <- ggplot(prop[AA == "Val"], aes(phylum,perc)) +
   geom_bar(stat = "identity", aes(fill = Status)) +
   ylab("Proportion of MAGs") +
   scale_fill_manual(values = c('#fdd0a2','#fdae6b')) +
@@ -107,7 +107,7 @@ Val <- ggplot(prop[AA == "Val"], aes(phylum,perc, fill = Prototrophy)) +
   theme(title = element_text(size=8, colour = "black", face ="bold"))
 Val
 
-Met <- ggplot(prop[AA == "Met"], aes(phylum,perc, fill = Prototrophy)) +
+Met <- ggplot(prop[AA == "Met"], aes(phylum,perc)) +
   geom_bar(stat = "identity", aes(fill = Status)) +
   ylab("Proportion of MAGs") +
   scale_fill_manual(values = c('#fdd0a2','#fdae6b')) +
@@ -123,7 +123,7 @@ Met <- ggplot(prop[AA == "Met"], aes(phylum,perc, fill = Prototrophy)) +
   ggtitle("Methionine") +
   theme(title = element_text(size=8, colour = "black", face ="bold"))
 Met
-Leu <- ggplot(prop[AA == "Leu"], aes(phylum,perc, fill = Prototrophy)) +
+Leu <- ggplot(prop[AA == "Leu"], aes(phylum,perc)) +
   geom_bar(stat = "identity", aes(fill = Status)) +
   ylab("Proportion of MAGs") +
   scale_fill_manual(values = c('#fdd0a2','#fdae6b')) +
@@ -139,7 +139,7 @@ Leu <- ggplot(prop[AA == "Leu"], aes(phylum,perc, fill = Prototrophy)) +
   ggtitle("Leucine") +
   theme(title = element_text(size=8, colour = "black", face ="bold"))
 Leu
-Ile <- ggplot(prop[AA == "Ile"], aes(phylum,perc, fill = Prototrophy)) +
+Ile <- ggplot(prop[AA == "Ile"], aes(phylum,perc)) +
   geom_bar(stat = "identity", aes(fill = Status)) +
   ylab("Proportion of MAGs") +
   scale_fill_manual(values = c('#fdd0a2','#fdae6b')) +
@@ -156,7 +156,7 @@ Ile <- ggplot(prop[AA == "Ile"], aes(phylum,perc, fill = Prototrophy)) +
   theme(title = element_text(size=8, colour = "black", face ="bold"))
 Ile
 
-Pro <- ggplot(prop[AA == "Pro"], aes(phylum,perc, fill = Prototrophy)) +
+Pro <- ggplot(prop[AA == "Pro"], aes(phylum,perc)) +
   geom_bar(stat = "identity", aes(fill = Status)) +
   ylab("Proportion of MAGs") +
   scale_fill_manual(values = c('#fdd0a2','#fdae6b')) +
@@ -172,7 +172,7 @@ Pro <- ggplot(prop[AA == "Pro"], aes(phylum,perc, fill = Prototrophy)) +
   ggtitle("Proline") +
   theme(title = element_text(size=8, colour = "black", face ="bold"))
 
-Trp <- ggplot(prop[AA == "Trp"], aes(phylum,perc, fill = Prototrophy)) +
+Trp <- ggplot(prop[AA == "Trp"], aes(phylum,perc)) +
   geom_bar(stat = "identity", aes(fill = Status)) +
   ylab("Proportion of MAGs") +
   scale_fill_manual(values = c('#fdd0a2','#fdae6b')) +
@@ -190,7 +190,7 @@ Trp <- ggplot(prop[AA == "Trp"], aes(phylum,perc, fill = Prototrophy)) +
 Trp
 
 
-Phe <- ggplot(prop[AA == "Phe"], aes(phylum,perc, fill = Prototrophy)) +
+Phe <- ggplot(prop[AA == "Phe"], aes(phylum,perc)) +
   geom_bar(stat = "identity", aes(fill = Status)) +
   ylab("Proportion of MAGs") +
   scale_fill_manual(values = c('#fdd0a2','#fdae6b')) +
@@ -208,7 +208,7 @@ Phe <- ggplot(prop[AA == "Phe"], aes(phylum,perc, fill = Prototrophy)) +
 
 
 
-Lys <- ggplot(prop[AA == "Lys"], aes(phylum,perc, fill = Prototrophy)) +
+Lys <- ggplot(prop[AA == "Lys"], aes(phylum,perc)) +
   geom_bar(stat = "identity", aes(fill = Status)) +
   ylab("Proportion of MAGs") +
   scale_fill_manual(values = c('#fdd0a2','#fdae6b')) +
@@ -224,7 +224,7 @@ Lys <- ggplot(prop[AA == "Lys"], aes(phylum,perc, fill = Prototrophy)) +
   ggtitle("Lysin") +
   theme(title = element_text(size=8, colour = "black", face ="bold"))
 Lys
-Arg <- ggplot(prop[AA == "Arg"], aes(phylum,perc, fill = Prototrophy)) +
+Arg <- ggplot(prop[AA == "Arg"], aes(phylum,perc)) +
   geom_bar(stat = "identity", aes(fill = Status)) +
   ylab("Proportion of MAGs") +
   scale_fill_manual(values = c('#fdd0a2','#fdae6b')) +
@@ -240,7 +240,7 @@ Arg <- ggplot(prop[AA == "Arg"], aes(phylum,perc, fill = Prototrophy)) +
   ggtitle("Arginine") +
   theme(title = element_text(size=8, colour = "black", face ="bold"))
 
-His <- ggplot(prop[AA == "His"], aes(phylum,perc, fill = Prototrophy)) +
+His <- ggplot(prop[AA == "His"], aes(phylum,perc)) +
   geom_bar(stat = "identity", aes(fill = Status)) +
   ylab("Proportion of MAGs") +
   scale_fill_manual(values = c('#fdd0a2','#fdae6b')) +
@@ -256,7 +256,7 @@ His <- ggplot(prop[AA == "His"], aes(phylum,perc, fill = Prototrophy)) +
   ggtitle("Histidine") +
   theme(title = element_text(size=8, colour = "black", face ="bold"))
 
-Tyr <- ggplot(prop[AA == "Tyr"], aes(phylum,perc, fill = Prototrophy)) +
+Tyr <- ggplot(prop[AA == "Tyr"], aes(phylum,perc)) +
   geom_bar(stat = "identity", aes(fill = Status)) +
   ylab("Proportion of MAGs") +
   scale_fill_manual(values = c('#fdd0a2','#fdae6b')) +
@@ -272,7 +272,7 @@ Tyr <- ggplot(prop[AA == "Tyr"], aes(phylum,perc, fill = Prototrophy)) +
   ggtitle("Tyrosine") +
   theme(title = element_text(size=8, colour = "black", face ="bold"))
 
-Thr <- ggplot(prop[AA == "Thr"], aes(phylum,perc, fill = Prototrophy)) +
+Thr <- ggplot(prop[AA == "Thr"], aes(phylum,perc)) +
   geom_bar(stat = "identity", aes(fill = Status)) +
   ylab("Proportion of MAGs") +
   scale_fill_manual(values = c('#fdd0a2','#fdae6b')) +
@@ -288,7 +288,7 @@ Thr <- ggplot(prop[AA == "Thr"], aes(phylum,perc, fill = Prototrophy)) +
   ggtitle("Threonine") +
   theme(title = element_text(size=8, colour = "black", face ="bold"))
 Thr
-Glu <- ggplot(prop[AA == "Glu"], aes(phylum,perc, fill = Prototrophy)) +
+Glu <- ggplot(prop[AA == "Glu"], aes(phylum,perc)) +
   geom_bar(stat = "identity", aes(fill = Status)) +
   ylab("Proportion of MAGs") +
   scale_fill_manual(values = c('#fdd0a2','#fdae6b')) +
@@ -304,7 +304,7 @@ Glu <- ggplot(prop[AA == "Glu"], aes(phylum,perc, fill = Prototrophy)) +
   ggtitle("Glutamate") +
   theme(title = element_text(size=8, colour = "black", face ="bold"))
 Glu
-Gln <- ggplot(prop[AA == "Gln"], aes(phylum,perc, fill = Prototrophy)) +
+Gln <- ggplot(prop[AA == "Gln"], aes(phylum,perc)) +
   geom_bar(stat = "identity", aes(fill = Status)) +
   ylab("Proportion of MAGs") +
   scale_fill_manual(values = c('#fdd0a2','#fdae6b')) +
@@ -320,7 +320,7 @@ Gln <- ggplot(prop[AA == "Gln"], aes(phylum,perc, fill = Prototrophy)) +
   ggtitle("Glutamine") +
   theme(title = element_text(size=8, colour = "black", face ="bold"))
 Gln
-Gly <- ggplot(prop[AA == "Gly"], aes(phylum,perc, fill = Prototrophy)) +
+Gly <- ggplot(prop[AA == "Gly"], aes(phylum,perc)) +
   geom_bar(stat = "identity", aes(fill = Status)) +
   ylab("Proportion of MAGs") +
   scale_fill_manual(values = c('#fdd0a2','#fdae6b')) +
@@ -336,7 +336,7 @@ Gly <- ggplot(prop[AA == "Gly"], aes(phylum,perc, fill = Prototrophy)) +
   ggtitle("Glycine") +
   theme(title = element_text(size=8, colour = "black", face ="bold"))
 
-Ser <- ggplot(prop[AA == "Ser"], aes(phylum,perc, fill = Prototrophy)) +
+Ser <- ggplot(prop[AA == "Ser"], aes(phylum,perc)) +
   geom_bar(stat = "identity", aes(fill = Status)) +
   ylab("Proportion of MAGs") +
   scale_fill_manual(values = c('#fdd0a2','#fdae6b')) +
@@ -353,7 +353,7 @@ Ser <- ggplot(prop[AA == "Ser"], aes(phylum,perc, fill = Prototrophy)) +
   theme(title = element_text(size=8, colour = "black", face ="bold"))
 Ser
 
-Cys <- ggplot(prop[AA == "Cys"], aes(phylum,perc, fill = Prototrophy)) +
+Cys <- ggplot(prop[AA == "Cys"], aes(phylum,perc)) +
   geom_bar(stat = "identity", aes(fill = Status)) +
   ylab("Proportion of MAGs") +
   scale_fill_manual(values = c('#fdd0a2','#fdae6b')) +
@@ -369,7 +369,7 @@ Cys <- ggplot(prop[AA == "Cys"], aes(phylum,perc, fill = Prototrophy)) +
   ggtitle("Cysteine") +
   theme(title = element_text(size=8, colour = "black", face ="bold"))
 
-Asp <- ggplot(prop[AA == "Asp"], aes(phylum,perc, fill = Prototrophy)) +
+Asp <- ggplot(prop[AA == "Asp"], aes(phylum,perc)) +
   geom_bar(stat = "identity", aes(fill = Status)) +
   ylab("Proportion of MAGs") +
   scale_fill_manual(values = c('#fdd0a2','#fdae6b')) +
@@ -385,7 +385,7 @@ Asp <- ggplot(prop[AA == "Asp"], aes(phylum,perc, fill = Prototrophy)) +
   ggtitle("Aspartate") +
   theme(title = element_text(size=8, colour = "black", face ="bold"))
 Asp
-Asn <- ggplot(prop[AA == "Asn"], aes(phylum,perc, fill = Prototrophy)) +
+Asn <- ggplot(prop[AA == "Asn"], aes(phylum,perc)) +
   geom_bar(stat = "identity", aes(fill = Status)) +
   ylab("Proportion of MAGs") +
   scale_fill_manual(values = c('#fdd0a2','#fdae6b')) +
@@ -401,7 +401,7 @@ Asn <- ggplot(prop[AA == "Asn"], aes(phylum,perc, fill = Prototrophy)) +
   ggtitle("Asparagine") +
   theme(title = element_text(size=8, colour = "black", face ="bold"))
 
-Chor <- ggplot(prop[AA == "Chor"], aes(phylum,perc, fill = Prototrophy)) +
+Chor <- ggplot(prop[AA == "Chor"], aes(phylum,perc)) +
   geom_bar(stat = "identity", aes(fill = Status)) +
   ylab("Proportion of MAGs") +
   scale_fill_manual(values = c('#fdd0a2','#fdae6b')) +
@@ -441,15 +441,12 @@ plot4 <- ggarrange(Ser, Cys,Met,Gly,
 plot4
 ggsave("output/plots/plot4_proportions.pdf", plot = plot4,
        width = 6, height = 6)
-plot5 <- ggarrange(Lys, Arg, Pro,
+plot5 <- ggarrange(Lys, Arg, Pro, His,
                    ncol=2, nrow= 2, common.legend = TRUE, legend = "bottom")
 plot5
 ggsave("output/plots/plot5_proportions.pdf", plot = plot5,
        width = 6, height = 6)
-plot6 <- ggarrange(Ala, His,
-                   ncol=2, nrow= 1, common.legend = TRUE, legend = "bottom")
-plot6
-ggsave("output/plots/plot6_proportions.pdf", plot = plot6,
-       width = 6, height = 6)
-
+#single plot for Alanine (no auxotrophies)
+ggsave("output/plots/Ala_proportions.pdf", plot = Ala,
+       width = 4, height = 4)
 
