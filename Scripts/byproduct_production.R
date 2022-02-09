@@ -1,11 +1,4 @@
 ###########################     SCFA production   ##############################
-library(MicrobiomeGS2)
-library(ggplot2)
-library(data.table)
-library(MetBrewer)
-library(tidyverse)
-library(rstatix)
-library(ggpubr)
 
 cutoff_prodrate <- 1  # at which mmol/gDW the rate is considered as 'real'production
 
