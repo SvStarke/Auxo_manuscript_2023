@@ -1,6 +1,6 @@
 #Predict Auxotrophies
 
-model.auxo <- lapply(models, FUN = predict_auxotrohies)
+model.auxo <- lapply(models, FUN = predict_auxotrophies)
 
 Auxotrophie <- data.frame(model.auxo)
 head(Auxotrophie) 
