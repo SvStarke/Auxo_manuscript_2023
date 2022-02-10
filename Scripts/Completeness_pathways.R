@@ -1,4 +1,3 @@
-
 library(MicrobiomeGS2)
 library(stringr)
 library(dplyr)
@@ -419,9 +418,6 @@ for (rxni in relrxns) {
 val <- rbindlist(Val)
 
 
-
-islands
-library(gt)
 #Bind all data together
 pathway_completeness <- rbind(arg, asn, chor, cys, gln, gly, his, ile, leu, lys, met, phe, pro, ser, thr, trp, tyr, val)
 pathway_completeness$perc <- pathway_completeness$perc * 100
