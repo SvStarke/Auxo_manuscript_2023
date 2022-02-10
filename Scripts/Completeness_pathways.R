@@ -426,11 +426,13 @@ pathway_completeness <- data.frame(pathway_completeness)
 pathway_new <- merge(pathway_completeness, test, by.x = "rxn", by.y="rxn")
 pathway_completeness <- pathway_new[order(pathway_new$AA),]
 colnames(pathway_completeness) <- c("Reaction names", "Abundance[%]", "AA", "EC number")
+pathway <- pathway_completeness[,c(3,4,1,2)]
 install.packages("gt")
-library(gt)
+
 
 ################################   visualization ###############################
-t <- gt(pathway_completeness,
+library(gt)
+t <- gt(pathway,
    rowname_col = "rowname",
    groupname_col = "AA",
    rownames_to_stub = FALSE,
@@ -438,13 +440,25 @@ t <- gt(pathway_completeness,
    id = NULL)
 
 t1 <- t %>%
-  tab_header(title = "Completeness of the pathways",
+  tab_header(title = md("**Completeness of the pathways**"),
              subtitle = "Abundance of missing enzymes in auxotrophic microbiota")
-t1
+t2 <- t1 %>%
+  tab_options(table.width = pct(70),
+              data_row.padding = px(10),
+              column_labels.font.weight = "bold",
+              row_group.font.weight = "bold",
+              table.font.size = px(12))
+t2
+t2 %>%
+  gtsave("pathway.png", expand = 100,  path = "/home/svenja/Documents")
 
-t1 %>%
+t2 %>%
   gtsave("pathway.pdf", path = "/home/svenja/Documents")
 
+
+
+library(gtsummary)
+trial2 <- pathway_completeness %>% select(`Reaction names`,`Abundance[%]`, AA, `EC number`)
 
 
 
