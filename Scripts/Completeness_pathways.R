@@ -51,26 +51,34 @@ models <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models/", IDs = relGenomes
 rxns <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models", file.type = "reactions", IDs = relGenomes)
 pwys <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models", file.type = "pathways", IDs = relGenomes)
 pwys_cov_Arg <- get_pathway_coverage(models,rxns,pwys, pathways.of.interest = c("ARGSYNBSUB-PWY","PWY-5154"))
-head(rxns)
-l <- rxns[[1]]
-x <- l[,c(1,3)]
-test <- distinct(x)
-View(x)
-
+View(pwys_cov_Arg)
 relrxns <- unique(pwys_cov_Arg$rxn.metacyc)
-relpathway <- unique(pwys_cov_Arg$pathway)
+#relpathway <- unique(pwys_cov_Arg$pathway.name)
 Arg <- list()
 k <- 1
 for (rxni in relrxns) {
-  Argperc <- nrow(pwys_cov_Arg[pwys_cov_Arg$rxn.metacyc == rxni & pwys_cov_Arg$prediction == "FALSE"]) / nrow(pwys_cov_Arg[pwys_cov_Arg$rxn.metacyc == rxni])
+  #print(rxni)
+  #for (pwayi in relpathway) {
+  Argperc <- nrow(pwys_cov_Arg[pwys_cov_Arg$rxn.metacyc == rxni & pwys_cov_Arg$prediction == "FALSE" ]) / nrow(pwys_cov_Arg[pwys_cov_Arg$rxn.metacyc == rxni])
   argperc<- data.frame(Argperc)
   colnames(argperc) <- "perc"
   argperc$rxn <- rxni
   argperc$AA <- "Arginine"
   Arg[[k]] <- argperc
-  k <- k+1  
+  k <- k+1    
+  #}
+ 
 }
 arg <- rbindlist(Arg)
+arg <- dplyr::mutate(arg, ID = row_number())
+
+remove(arg)
+#get the enzyme names for merging with the table later
+head(rxns)
+l <- rxns[[1]]
+x <- l[,c(1,3)]
+test <- distinct(x)
+View(x)
 
 #Asparagine
 relGenomes <- Auxo_info[Asn == 0, `Genomes`]
@@ -79,9 +87,12 @@ rxns <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models", file.type = "reacti
 pwys <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models", file.type = "pathways", IDs = relGenomes)
 pwys_cov_Asn <- get_pathway_coverage(models,rxns,pwys, pathways.of.interest = c("ASPARAGINE-BIOSYNTHESIS","ASPARAGINESYN-PWY"))
 relrxns <- unique(pwys_cov_Asn$rxn.metacyc)
+#relpathway <- unique(pwys_cov_Asn$pathway.name)
 Asn <- list()
 k <- 1
 for (rxni in relrxns) {
+  #print(rxni)
+ # for (pwayi in relpathway) {
   Asnperc <- nrow(pwys_cov_Asn[pwys_cov_Asn$rxn.metacyc == rxni & pwys_cov_Asn$prediction == "FALSE"]) / nrow(pwys_cov_Asn[pwys_cov_Asn$rxn.metacyc == rxni])
   asnperc <- data.frame(Asnperc)
   colnames(asnperc) <- "perc"
@@ -89,9 +100,10 @@ for (rxni in relrxns) {
   asnperc$AA <- "Asparagine"
   Asn[[k]] <- asnperc
   k <- k+1
+  #}
 }
 asn <- rbindlist(Asn)
-
+asn <- dplyr::mutate(asn, ID = row_number())
 #Chorismate
 relGenomes <- Auxo_info[Chor == 0, `Genomes`]
 models <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models/", IDs = relGenomes)
@@ -111,7 +123,8 @@ for (rxni in relrxns) {
   k <- k+1
 }
 chor <- rbindlist(Chor)
-
+chor <- dplyr::mutate(chor, ID = row_number())
+remove(Chor)
 #Cysteine
 relGenomes <- Auxo_info[Cys == 0, `Genomes`]
 models <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models/", IDs = relGenomes)
@@ -131,6 +144,9 @@ for (rxni in relrxns) {
   k <- k+1
 }
 cys <- rbindlist(Cys)
+cys <- filter(cys, perc !=0)
+cys <- dplyr::mutate(cys, ID = row_number())
+View(pwys_cov_Cys)
 
 
 #Glutamine
@@ -152,6 +168,7 @@ for (rxni in relrxns) {
   k <- k+1
 }
 gln <- rbindlist(Gln)
+gln <- dplyr::mutate(gln, ID = row_number())
 
 #Glycine
 relGenomes <- Auxo_info[Gly == 0, `Genomes`]
@@ -172,6 +189,7 @@ for (rxni in relrxns) {
   k <- k+1
 }
 gly <- rbindlist(Gly)
+gly <- dplyr::mutate(gly, ID = row_number())
 
 
 #Histidine
@@ -193,6 +211,7 @@ for (rxni in relrxns) {
   k <- k+1
 }
 his <- rbindlist(His)
+his <- dplyr::mutate(his, ID = row_number())
 
 #Isoleucine
 relGenomes <- Auxo_info[Ile == 0, `Genomes`]
@@ -204,7 +223,7 @@ relrxns <- unique(pwys_cov_Ile$rxn.metacyc)
 Ile <- list()
 k <- 1
 for (rxni in relrxns) {
-  Ileperc <- nrow(pwys_cov_Ile[pwys_cov_Ile$rxn.metacyc == rxni & pwys_cov_Ile$prediction == "FALSE"]) / nrow(pwys_cov_Ile[pwys_cov_Ile$rxn.metacyc == rxni])
+  Ileperc <- nrow(pwys_cov_Ile[pwys_cov_Ile$rxn.metacyc == rxni & pwys_cov_Ile$prediction == FALSE]) / nrow(pwys_cov_Ile[pwys_cov_Ile$rxn.metacyc == rxni])
   ileperc <- data.frame(Ileperc)
   colnames(ileperc) <- "perc"
   ileperc$rxn <- rxni
@@ -213,6 +232,10 @@ for (rxni in relrxns) {
   k <- k+1
 }
 ile <- rbindlist(Ile)
+#delete 6th and 7th row because that reactions are spontaenous(zero)
+ile <-ile[-c(6,7),]
+ile <- dplyr::mutate(ile, ID = row_number())
+
 
 #Leucine
 relGenomes <- Auxo_info[Leu == 0, `Genomes`]
@@ -220,11 +243,12 @@ models <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models/", IDs = relGenomes
 rxns <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models", file.type = "reactions", IDs = relGenomes)
 pwys <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models", file.type = "pathways", IDs = relGenomes)
 pwys_cov_Leu <- get_pathway_coverage(models,rxns,pwys, pathways.of.interest = c("LEUSYN-PWY"))
+View(pwys_cov_Leu)
 relrxns <- unique(pwys_cov_Leu$rxn.metacyc)
 Leu<- list()
 k <- 1
 for (rxni in relrxns) {
-  Leuperc <- nrow(pwys_cov_Leu[pwys_cov_Leu$rxn.metacyc == rxni & pwys_cov_Leu$prediction == "FALSE"]) / nrow(pwys_cov_Leu[pwys_cov_Leu$rxn.metacyc == rxni])
+  Leuperc <- nrow(pwys_cov_Leu[pwys_cov_Leu$rxn.metacyc == rxni & pwys_cov_Leu$prediction == "FALSE" & pwys_cov_Leu$spontaneous == "FALSE"]) / nrow(pwys_cov_Leu[pwys_cov_Leu$rxn.metacyc == rxni])
   leuperc <- data.frame(Leuperc)
   colnames(leuperc) <- "perc"
   leuperc$rxn <- rxni
@@ -233,6 +257,9 @@ for (rxni in relrxns) {
   k <- k+1
 }
 leu <- rbindlist(Leu)
+#delete RXN-7800 because its spontaneous and zero
+leu <-leu[-5,]
+leu <- dplyr::mutate(leu, ID = row_number())
 
 #Lysine
 relGenomes <- Auxo_info[Lys == 0, `Genomes`]
@@ -240,11 +267,12 @@ models <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models/", IDs = relGenomes
 rxns <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models", file.type = "reactions", IDs = relGenomes)
 pwys <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models", file.type = "pathways", IDs = relGenomes)
 pwys_cov_Lys <- get_pathway_coverage(models,rxns,pwys, pathways.of.interest = c("PWY-2941", "PWY-2942", "PWY-3081","PWY-5097","DAPLYSINESYN-PWY"))
+View(pwys_cov_Lys)
 relrxns <- unique(pwys_cov_Lys$rxn.metacyc)
 Lys <- list()
 k <- 1
 for (rxni in relrxns) {
-  Lysperc <- nrow(pwys_cov_Lys[pwys_cov_Lys$rxn.metacyc == rxni & pwys_cov_Lys$prediction == "FALSE"]) / nrow(pwys_cov_Lys[pwys_cov_Lys$rxn.metacyc == rxni])
+  Lysperc <- nrow(pwys_cov_Lys[pwys_cov_Lys$rxn.metacyc == rxni & pwys_cov_Lys$prediction == "FALSE"& pwys_cov_Lys$spontaneous == "FALSE"]) / nrow(pwys_cov_Lys[pwys_cov_Lys$rxn.metacyc == rxni])
   lysperc <- data.frame(Lysperc)
   colnames(lysperc) <- "perc"
   lysperc$rxn <- rxni
@@ -253,6 +281,8 @@ for (rxni in relrxns) {
   k <- k+1
 }
 lys <- rbindlist(Lys)
+lys <- filter(lys, perc != 0)
+lys <- dplyr::mutate(lys, ID = row_number())
 
 
 #Methionine
@@ -274,6 +304,8 @@ for (rxni in relrxns) {
   k <- k+1
 }
 met <- rbindlist(Met)
+met <- filter(met, perc != 0)
+met <- dplyr::mutate(met, ID = row_number())
 
 #Phenylalanine
 relGenomes <- Auxo_info[Phe == 0, `Genomes`]
@@ -294,6 +326,7 @@ for (rxni in relrxns) {
   k <- k+1
 }
 phe <- rbindlist(Phe)
+phe <- dplyr::mutate(phe, ID = row_number())
 
 #Proline
 relGenomes <- Auxo_info[Pro == 0, `Genomes`]
@@ -301,6 +334,7 @@ models <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models/", IDs = relGenomes
 rxns <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models", file.type = "reactions", IDs = relGenomes)
 pwys <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models", file.type = "pathways", IDs = relGenomes)
 pwys_cov_Pro <- get_pathway_coverage(models,rxns,pwys, pathways.of.interest = c("PROSYN-PWY","PWY-4981"))
+View(pwys_cov_Pro)
 relrxns <- unique(pwys_cov_Pro$rxn.metacyc)
 Pro <- list()
 k <- 1
@@ -314,6 +348,8 @@ for (rxni in relrxns) {
   k <- k+1
 }
 pro <- rbindlist(Pro)
+pro <- filter(pro, perc != 0)
+pro <- dplyr::mutate(pro, ID = row_number())
 
 #Serine
 relGenomes <- Auxo_info[Ser == 0, `Genomes`]
@@ -334,6 +370,7 @@ for (rxni in relrxns) {
   k <- k+1
 }
 ser <- rbindlist(Ser)
+ser <- dplyr::mutate(ser, ID = row_number())
 
 #Threonine
 relGenomes <- Auxo_info[Thr == 0, `Genomes`]
@@ -354,6 +391,8 @@ for (rxni in relrxns) {
   k <- k+1
 }
 thr <- rbindlist(Thr)
+thr <- filter(thr, perc != 0)
+thr <- dplyr::mutate(thr, ID = row_number())
 
 #Tryptophan
 relGenomes <- Auxo_info[Trp == 0, `Genomes`]
@@ -374,6 +413,11 @@ for (rxni in relrxns) {
   k <- k+1
 }
 trp <- rbindlist(Trp)
+trp <- dplyr::mutate(trp, ID = row_number())
+trp$name <- c("trpC", "trpC", "")
+
+ggplot(pathway1[AA == "Tryptophan"], aes(`EC number`, `Abundance[%]`))+
+  geom_bar(stat="identity")
 
 
 #Tyrosine
@@ -395,7 +439,7 @@ for (rxni in relrxns) {
   k <- k+1
 }
 tyr <- rbindlist(Tyr)
-
+tyr <- dplyr::mutate(tyr, ID = row_number())
 
 #Valine
 relGenomes <- Auxo_info[Val == 0, `Genomes`]
@@ -416,6 +460,7 @@ for (rxni in relrxns) {
   k <- k+1
 }
 val <- rbindlist(Val)
+val <- dplyr::mutate(val, ID = row_number())
 
 
 #Bind all data together
@@ -425,9 +470,138 @@ pathway_completeness$perc <- round(pathway_completeness$perc)
 pathway_completeness <- data.frame(pathway_completeness)
 pathway_new <- merge(pathway_completeness, test, by.x = "rxn", by.y="rxn")
 pathway_completeness <- pathway_new[order(pathway_new$AA),]
-colnames(pathway_completeness) <- c("Reaction names", "Abundance[%]", "AA", "EC number")
+colnames(pathway_completeness) <- c("Reaction names", "Abundance[%]", "AA","ID", "EC number")
 pathway <- pathway_completeness[,c(3,4,1,2)]
-install.packages("gt")
+pathway1 <- data.table(pathway_completeness)
+
+remove(pathway_completeness)
+
+ r <- ggplot(pathway1, aes(AA, ID, fill = `Abundance[%]`)) +
+  geom_tile() +
+ # geom_text(aes(label = `EC number`)) +
+  scale_fill_gradientn(colours = met.brewer("OKeeffe2")) +
+  theme(axis.text.x = element_text(angle =90, hjust =0.5, vjust = 0.5)) +
+  theme(panel.background = element_blank()) +
+  ylab("Missing enzymes") +
+  xlab("Amino acid synthesis pathway") +
+  theme(axis.text.y = element_blank()) +
+  theme(axis.ticks.y = element_blank()) +
+  theme(axis.ticks.x = element_blank()) +
+  ggtitle("Missing Enzymes in the biosynthesis pathways of amino acidsin auxotrophic microbiota") +
+  theme(plot.title = element_text(hjust = 0.5, vjust =0.5, size =12))
+
+
+ggsave("output/plots/Barplot_Completeness.pdf", plot = r,
+       width = 8, height = 6)
+
+
+library(MetBrewer)
+install.packages("patchwork")
+library(patchwork)
+library(ggpubr)
+ a <- ggplot(pathway1[AA == "Arginine"], aes(AA, `EC number`, fill = `Abundance[%]`)) +
+  geom_tile() +
+  theme(panel.background = element_rect(fill="white", colour = "white")) +
+  theme(panel.border = element_blank()) +
+  theme(panel.grid = element_blank()) +
+  ggtitle("Arginine") +
+  theme(plot.title = element_text(hjust = 0.5, size = 8)) +
+  theme(axis.title.x = element_blank()) +
+  theme(axis.text.x = element_blank())  +
+   theme(axis.ticks.x = element_blank()) +
+   theme(axis.title.y = element_blank()) +
+   theme(axis.text.y = element_text(size = 5)) +
+   geom_text(aes(label = ID))
+
+b <- ggplot(pathway1[AA == "Cysteine"], aes(AA, `EC number`, fill = `Abundance[%]`)) +
+  geom_tile() +
+  theme(panel.background = element_rect(fill="white", colour = "white")) +
+  theme(panel.border = element_blank()) +
+  theme(panel.grid = element_blank()) +
+  ggtitle("Cysteine") +
+  theme(plot.title = element_text(hjust = 0.5, size = 8)) +
+  theme(axis.title.x = element_blank()) +
+  theme(axis.text.x = element_blank()) +
+  theme(axis.ticks.x = element_blank()) +
+  theme(axis.title.y = element_blank()) +
+  theme(axis.text.y = element_text(size = 5)) +
+  theme()
+b
+c <- ggplot(pathway1[AA == "Tryptophan"], aes(AA, `EC number`, fill = `Abundance[%]`)) +
+  geom_tile() +
+  theme(panel.background = element_rect(fill="white", colour = "white")) +
+  theme(panel.border = element_blank()) +
+  theme(panel.grid = element_blank()) +
+  ggtitle("Tryptophan") +
+  theme(plot.title = element_text(hjust = 0.5, size = 8)) +
+  theme(axis.title.x = element_blank()) +
+  theme(axis.text.x = element_blank())  +
+ theme(axis.ticks.x = element_blank()) +
+  theme(axis.title.y = element_blank())+
+  theme(axis.text.y = element_text(size = 5))
+
+c <- ggplot(pathway1[AA == "Isoleucine"], aes(AA, `EC number`, fill = `Abundance[%]`)) +
+  geom_tile() +
+  theme(panel.background = element_rect(fill="white", colour = "white")) +
+  theme(panel.border = element_blank()) +
+  theme(panel.grid = element_blank()) +
+  ggtitle("Isoleucine") +
+  theme(plot.title = element_text(hjust = 0.5, size = 8)) +
+  theme(axis.title.x = element_blank()) +
+  theme(axis.text.x = element_blank())  +
+  theme(axis.ticks.x = element_blank()) +
+  theme(axis.title.y = element_blank()) +
+  theme(axis.text.y = element_text(size = 5))
+
+d <- ggplot(pathway1[AA == "Valine"], aes(AA, `EC number`, fill = `Abundance[%]`)) +
+  geom_tile() +
+  theme(panel.background = element_rect(fill="white", colour = "white")) +
+  theme(panel.border = element_blank()) +
+  theme(panel.grid = element_blank()) +
+  ggtitle("Valine") +
+  theme(plot.title = element_text(hjust = 0.5, size = 8)) +
+  theme(axis.title.x = element_blank()) +
+  theme(axis.text.x = element_blank()) +
+  theme(axis.ticks.x = element_blank()) +
+  theme(axis.title.y = element_blank()) +
+  theme(axis.text.y = element_text(size = 5))
+
+e <- ggplot(pathway1[AA == "Leucine"], aes(AA, `EC number`, fill = `Abundance[%]`)) +
+  geom_tile() +
+  theme(panel.background = element_rect(fill="white", colour = "white")) +
+  theme(panel.border = element_blank()) +
+  theme(panel.grid = element_blank()) +
+  ggtitle("Leucine") +
+  theme(plot.title = element_text(hjust = 0.5, size = 8)) +
+  theme(axis.title.x = element_blank()) +
+  theme(axis.text.x = element_blank()) +
+  theme(axis.ticks.x = element_blank()) +
+  theme(axis.title.y = element_blank()) +
+  theme(axis.text.y = element_text(size = 5))
+
+
+e <- ggplot(pathway1[AA == "Methionine"], aes(AA, `EC number`, fill = `Abundance[%]`)) +
+  geom_tile() +
+  theme(panel.background = element_rect(fill="white", colour = "white")) +
+  theme(panel.border = element_blank()) +
+  theme(panel.grid = element_blank()) +
+  ggtitle("Methionine") +
+  theme(plot.title = element_text(hjust = 0.5, size = 8)) +
+  theme(axis.title.x = element_blank()) +
+  theme(axis.text.x = element_blank()) +
+  theme(axis.ticks.x = element_blank()) +
+  theme(axis.ticks.x = element_blank()) +
+  theme(axis.title.y = element_blank()) +
+  theme(axis.text.y = element_text(size = 5))
+
+a+b+c
+
+ggarrange(a, b,c,d,e,
+          ncol=5, nrow = 1,
+          common.legend = TRUE,
+          heights = c(0.8,0.1,1,0.1,0.1),
+          legend = "bottom")
+
 
 
 ################################   visualization ###############################
@@ -440,7 +614,7 @@ t <- gt(pathway,
    id = NULL)
 
 t1 <- t %>%
-  tab_header(title = md("**Completeness of the pathways**"),
+  tab_header(title = md("**Completeness of the amino acid biosynthesis pathways**"),
              subtitle = "Abundance of missing enzymes in auxotrophic microbiota")
 t2 <- t1 %>%
   tab_options(table.width = pct(70),
@@ -453,12 +627,9 @@ t2 %>%
   gtsave("pathway.png", expand = 100,  path = "/home/svenja/Documents")
 
 t2 %>%
-  gtsave("pathway.pdf", path = "/home/svenja/Documents")
+  gtsave("pathway_12.02.2022.pdf", path = "/home/svenja/Documents")
 
 
-
-library(gtsummary)
-trial2 <- pathway_completeness %>% select(`Reaction names`,`Abundance[%]`, AA, `EC number`)
 
 
 
