@@ -18,7 +18,7 @@ for (pi in relphylum) {
 }
 
 prop_all_phyla <- rbindlist(prop_all)
-prop_all_phyla$perc <- prop_all_phyla$p/prop_all_phyla$nrow *100
+prop_all_phyla$perc <- prop_all_phyla$p/prop_all_phyla$nrow
 
 ####################         visualization         #############################
 
@@ -64,7 +64,7 @@ for (i in relAA) {
 }
 
 prop <- rbindlist(new)
-prop$perc <- (prop$xz/prop$nrow)*100
+prop$perc <- (prop$xz/prop$nrow)
 prop$Status <- ifelse(prop$Prototrophy == 0, "Auxotrophy", "Prototrophy")
 
 

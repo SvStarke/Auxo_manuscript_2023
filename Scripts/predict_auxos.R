@@ -1,6 +1,6 @@
 #Predict Auxotrophies
 
-model.auxo <- lapply(models, FUN = predict_auxotrophies)
+model.auxo <- predict_auxotrophies(models)
 
 Auxotrophie <- data.frame(model.auxo)
 head(Auxotrophie) 
@@ -21,3 +21,4 @@ Genome <- rownames(Auxotrophy)
 Auxotrophy$Genomes <- Genome
 # ----
 Auxotrophy <- as.data.table(Auxotrophy)
+ 

@@ -7,6 +7,10 @@ Metadata <- fread("/mnt/nuuk/2021/HRGM/REPR_Genomes_metadata.tsv")
 Auxotrophy$count <- rowSums(Auxotrophy == 0)
 
 #merge files
+#for analysis of completeness pathways
+Auxo_info <- merge(Auxotrophy, Metadata, by.x = "Genomes",
+                   by.y = "HRGM name")
+#for any other analysis
 Auxotrophy_12 <- merge(Auxotrophy, Metadata, by.x = "Genomes",
                        by.y = "HRGM name")
 #change column name
@@ -32,6 +36,6 @@ Auxotrophy_12$phylum[Auxotrophy_12$phylum == "Halobacterota"] <- "Other"
 Auxotrophy_12$phylum[Auxotrophy_12$phylum == "Myxococcota"] <- "Other"
 Auxotrophy_12$phylum[Auxotrophy_12$phylum == "Patescibacteria"] <- "Other"
 Auxotrophy_12$phylum[Auxotrophy_12$phylum == "Synergistota"] <- "Other"
-Auxotrophy_12$phylum[Auxotrophy_12$phylum == "Spirochaeotota"] <- "Other"
+Auxotrophy_12$phylum[Auxotrophy_12$phylum == "Spirochaetota"] <- "Other"
 Auxotrophy_12$phylum[Auxotrophy_12$phylum == "Thermoplasmatota"] <- "Other"
 Auxotrophy_12$phylum[Auxotrophy_12$phylum == "Verrucomicrobiota"] <- "Other"

@@ -12,7 +12,35 @@ For getting the figures as a result, the scripts need to be ran in a specific or
 
 
 
-### 1) Proportions of auxotrophic to prototrophic MAGs  per phylum
+### 1) Completeness of the amino acid biosynthesis pathways
+
+##### Load models (Completeness >=85%, Contamination <=2)
+
+```R
+source("Scripts/init_models_filtered.R")
+```
+
+###### Predict auxotrophies
+
+```R
+source("Scripts/predict_auxos.R")
+```
+
+###### Add information about the genomes
+
+```R
+source("Scripts/auxotable_not_melted.R")
+```
+
+###### Analyze and then visualize the completeness of the amino acid biosynthesis pathways
+
+```R
+source("Scripts/Completeness_pathways.R")
+```
+
+### 
+
+### 2)Proportions of auxotrophic to prototrophic MAGs  per phylum
 
 ##### Load models (Completeness >=85%, Contamination <=2)
 
@@ -38,7 +66,7 @@ source("Scripts/auxotable_not_melted.R")
 source("Scripts/Auxo_Proto_data_per_phylum.R")
 ```
 
-### 2) Distribution of the number of auxotrophies per phylum
+### 3) Distribution of the number of auxotrophies per phylum
 ##### Load models (completeness >= 85% and contamination <=2)
 
 ```R
@@ -63,7 +91,7 @@ source("Scripts/auxotable_not_melted.R")
 source("Scripts/number_auxo_per_phylum.R")
 ```
 
-### 3) Scatterplot about the correlation of the completeness and the found number of auxotrophies in all genomes
+### 4) Scatterplot about the correlation of the completeness and the found number of auxotrophies in all genomes
 
 ##### Load all models
 
@@ -89,7 +117,7 @@ source("Scripts/auxotable_not_melted.R")
 source("Scripts/Scatterplot_Corr_NumbAuxos_Completeness.R")
 ```
 
-### 4) Abundancies of amino acid auxotrophies
+### 5) Abundancies of amino acid auxotrophies
 
 ###### Load models (completeness >=85% and a contamination <=2)
 
@@ -115,7 +143,7 @@ source("Scripts/auxotable_melted_merged.R")
 source("Scripts/Abundancies.R")
 ```
 
-### 5) Fermentation products(e.g.SCFA)
+### 6) Fermentation products(e.g.SCFA)
 
 ###### Load models (completeness >=85% and a contamination <=2)
 ```R
@@ -136,7 +164,7 @@ source("Scripts/auxotable_melted_merged.R")
 source("Scripts/byproduct_production.R")
 ```
 
-### 6) Abundancies in the gut
+### 7) Abundancies in the gut
 
 ###### Load models (completeness >=85% and a contamination <=2)
 ```R
@@ -157,7 +185,7 @@ source("Scripts/auxotable_melted_merged.R")
 source("Scripts/Abundancies_gut.R")
 ```
 
-### 7) Occurence of Auxotrophies together
+### 8) Occurence of Auxotrophies together
 
 ###### Load models() completeness >=85% and a contamination <=2)
 ```R
