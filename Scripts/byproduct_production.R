@@ -1,6 +1,6 @@
 ###########################     SCFA production   ##############################
 
-cutoff_prodrate <- 1  # at which mmol/gDW the rate is considered as 'real'production
+cutoff_prodrate <- 1 # at which mmol/gDW the rate is considered as 'real'production
 
 exchange <- get_exchanges(models)
 View(exchange)
@@ -14,7 +14,7 @@ is.data.table(SCFAs)
 View(SCFAs)
 
 #get growth rates
-m_gr <- lapply(models, FUN = get_growth)
+m_gr <- get_growth(models)
 head(m_gr)
 m_growth <- data.table(Genome = names(m_gr),
                        Growth = unlist(m_gr))
@@ -28,7 +28,7 @@ scfa_prod1 <- merge(SCFAs, m_growth, by.x = "model",
 scfa_prod1[, prod_rate := flux / Growth]
 
 
-# douple loop for statistics
+# double loop for statistics
 stat_BP_x_auxo <- list()
 k <- 1
 for(cpdi in relCompounds) {
@@ -123,6 +123,14 @@ q <- ggplot(stat_BP_x_auxo[auxo.compound != "Gly"], aes(auxo.compound, by.produc
 q +theme(plot.margin = unit(c(1,0.5,2,0.5), "cm")) +
   theme(legend.text = element_text(size=10),
         legend.title = element_text(size=8))
-
+q
 ggsave("output/plots/Heatmap_auxo-X-byproducts_FoldChange_Wilcox.pdf", plot = q,
        width = 6, height = 3.0)
+
+
+
+
+wicoxdata
+aggregate(tmp_wicoxdat$tmp_prod_rate, list(tmp_wicoxdat$name,tmp_wicoxdat$Prototrophy), FUN = mean)
+
+          
