@@ -1,5 +1,6 @@
 ################   Abundancies of auxotrophies in the gut   ####################
-data <- fread("/Users/Svenja/Downloads/FOCUS_HRGM_abundancies_2")
+library(data.table)
+data <- fread("/mnt/nuuk/2021/HRGM/FOCUS_HRGM_abundancies.csv.gz")
 
 #filter for BL
 data <- data[focus.call == "BL"]
@@ -46,7 +47,7 @@ a <- ggplot( sumfreqAA, aes(Aminoacid, x)) +
 
 a
 
-ggsave("/Users/Svenja/Desktop/barplot_frequence_gut.pdf", plot = a,
+ggsave("output/plots/barplot_frequence_gut.pdf", plot = a,
        width = 6, height = 4)
 
 
@@ -64,12 +65,13 @@ ggsave("/Users/Svenja/Desktop/barplot_frequence_gut.pdf", plot = a,
   theme(axis.text.y = element_text(size = 14, colour = "black")) +
   theme(plot.margin= margin(0.5,0.5,0.5,0.5, "cm"))
   
-ggsave("/Users/Svenja/Desktop/Standarderror_frequency_gut.pdf", plot = r,
+ggsave("output/plots/Standarderror_frequency_gut.pdf", plot = r,
        width = 6, height = 5)
 
 #boxplot
 b <- ggplot(sumfreq, aes(AA, x)) +
-  geom_boxplot( outlier.shape = NA, width = 0.8) +
+  geom_boxplot(outlier.shape = NA) +
+  geom_jitter(alpha = 0.05, width = 0.2, color = "black") +
   ylab("Abundance of Auxotrophy")+
   xlab("Amino Acids") +
   theme(axis.line = element_line(size=0.2, colour = "black")) +
@@ -78,9 +80,14 @@ b <- ggplot(sumfreq, aes(AA, x)) +
   theme(axis.title.x = element_text(colour = "black", size = 16, face = "bold", margin = margin(10,0,0,0))) +
   theme(axis.text.x = element_text(size=14, colour = "black", hjust = 1,  angle = 45, margin = margin(10,0,0,0))) +
   theme(axis.text.y = element_text(size = 14, colour = "black")) +
-  theme(plot.margin= margin(0.5,0.5,0.5,0.5, "cm"))
+  theme(plot.margin= margin(0.5,0.5,0.5,0.5, "cm")) +
+  coord_cartesian()
+b
 
-ggsave("/Users/Svenja/Desktop/boxplot_frequency_gut.pdf", plot = b,
+
+
+  
+ggsave("output/plots/boxplot_frequency_gut.pdf", plot = b,
        width = 6, height = 4)
 
 
