@@ -168,7 +168,7 @@ source("Scripts/auxotable_melted_merged.R")
 source("Scripts/byproduct_production.R")
 ```
 
-### 7) Abundancies in the gut
+### 7) Association of auxotrophies with diseases and different health factors
 
 ###### Load models (completeness >=85% and a contamination <=2)
 
