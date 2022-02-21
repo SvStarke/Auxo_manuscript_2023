@@ -233,6 +233,7 @@ models <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models/", IDs = relGenomes
 rxns <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models", file.type = "reactions", IDs = relGenomes)
 pwys <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models", file.type = "pathways", IDs = relGenomes)
 pwys_cov_Ile <- get_pathway_coverage(models,rxns,pwys, pathways.of.interest = c("ILEUSYN-PWY","PWY-5101","PWY-5103","PWY-5104","PWY-5108"))
+View(pwys_cov_Ile)
 #analyse only the isoleucine biosynthesis pathway from threonine
 pwys_cov_Ile <- get_pathway_coverage(models,rxns,pwys, pathways.of.interest = c("ILEUSYN-PWY"))
 
@@ -255,32 +256,244 @@ ile <- dplyr::mutate(ile, ID = row_number())
 
 
 #prepare the visualization part
-ileperce <- pwys_cov_Ile[ pwys_cov_Ile$model == "HRGM_Genome_0097",]
+ileperce <- pwys_cov_Ile[ pwys_cov_Ile$model == "HRGM_Genome_0167",]
 ileperc <- ileperce[,c(3,5)]
 distinct(ileperc)
-ile <- merge(ileperc, ile, by.x="rxn.metacyc",by.y = "rxn")
-ile_new <- distinct(ile)
-ile <- data.frame(ile_new)
-ile$perc <- ile$perc *100
-
-
+ile1 <- merge(ileperc, ile, by.x="rxn.metacyc",by.y = "rxn")
+ile_new1 <- distinct(ile1)
+ile1 <- data.frame(ile_new1)
+ile1$perc <- ile1$perc *100
+ile1[5,2] <- "RXN-15121"
+names(ile1) [names(ile1) == "ec"] <- "Enzymes"
 ##visualization completeness of the chor pathway with the right order
-il <- ggplot(ile, aes(x =`ec`, y =perc))+
+il1 <- ggplot(ile1, aes(x =Enzymes, y =perc, fill =factor(ifelse(Enzymes == "4.3.1.19/4.2.1.16", "not shared", "shared enzyme"))))+
   geom_bar(stat="identity") +
   ylab("Abundance of missing enzymes [%]") +
-  xlab("Enzymes in the histidine pathway") +
+  xlab("Isoleucine biosynthesis I pathway") +
   theme(axis.line = element_line(size=0.2, colour = "black")) +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
-  theme(axis.title.y = element_text(colour = "black", size = 16, face = "bold", margin = margin(0,10,0,0)))+
-  theme(axis.title.x = element_text(colour = "black", size = 16, face = "bold", margin = margin(10,0,0,0))) +
-  theme(axis.text.x = element_text(size=14, colour = "black", hjust = 1,  angle = 45, margin = margin(10,0,0,0))) +
-  theme(axis.text.y = element_text(size = 14, colour = "black")) +
+  theme(axis.title.y = element_text(colour = "black", size = 6, face = "bold", margin = margin(0,10,0,0)))+
+  theme(axis.title.x = element_text(colour = "black", size = 6, face = "bold", margin = margin(10,0,0,0))) +
+  theme(axis.text.x = element_text(size=6, colour = "black", hjust = 1,  angle = 45, margin = margin(10,0,0,0))) +
+  theme(axis.text.y = element_text(size = 6, colour = "black")) +
   theme(plot.margin= margin(0.5,0.5,0.5,0.5, "cm")) +
   coord_cartesian(ylim=c(0,100)) +
-  scale_x_discrete(limits = c("4.3.1.19/4.2.1.16","2.2.1.6/4.1.3.18","1.1.1.86/1.1.1.89","4.2.1.9","2.6.1.42"))
-il
-ggsave("output/plots/Completeness_His_pathway.pdf", plot = hi,
+  scale_x_discrete(limits = c("4.3.1.19/4.2.1.16","2.2.1.6/4.1.3.18","1.1.1.86/1.1.1.89","4.2.1.9","2.6.1.42")) +
+  scale_fill_manual(name = "Enzymes", values=c("#fcbba1","#99000d")) +
+  theme(legend.text = element_text(size=6))  +
+  theme(legend.title = element_text(size=6))
+il1
+ggsave("output/plots/Completeness_Ile1_pathway.pdf", plot = il1,
        width =7, height = 5.5)
+
+
+#PWY-5101
+pwys_cov_Ile <- get_pathway_coverage(models,rxns,pwys, pathways.of.interest = c("PWY-5101"))
+
+relrxns <- unique(pwys_cov_Ile$rxn.metacyc)
+Ile <- list()
+k <- 1
+for (rxni in relrxns) {
+  Ileperc <- nrow(pwys_cov_Ile[pwys_cov_Ile$rxn.metacyc == rxni & pwys_cov_Ile$prediction == FALSE]) / nrow(pwys_cov_Ile[pwys_cov_Ile$rxn.metacyc == rxni])
+  ileperc <- data.frame(Ileperc)
+  colnames(ileperc) <- "perc"
+  ileperc$rxn <- rxni
+  ileperc$AA <- "Isoleucine"
+  Ile[[k]] <- ileperc
+  k <- k+1
+}
+ile <- rbindlist(Ile)
+#delete 6th and 7th row because that reactions are spontaenous(zero)
+ile <-ile[-c(6,7),]
+ile <- dplyr::mutate(ile, ID = row_number())
+
+
+#prepare the visualization part
+ileperce <- pwys_cov_Ile[pwys_cov_Ile$model == "HRGM_Genome_0167",]
+ileperc <- ileperce[,c(3,5)]
+distinct(ileperc)
+ile2 <- merge(ileperc, ile, by.x="rxn.metacyc",by.y = "rxn")
+ile_new2 <- distinct(ile2)
+ile2 <- data.frame(ile_new2)
+ile2$perc <- ile2$perc *100
+names(ile2) [names(ile2) == "ec"] <- "Enzymes"
+#give ec number in missing values
+ile2[8,2] = "1.1.1.-"
+ile2[7,2] = "RXN-7744"
+il2 <- ggplot(ile2, aes(x =Enzymes, y =perc, fill =factor(ifelse(Enzymes == "2.2.1.6/4.1.3.18" | Enzymes == "4.2.1.9"| Enzymes =="2.6.1.42", "shared", "not shared"))))+
+  geom_bar(stat="identity", position = "stack") +
+  ylab("Abundance of missing enzymes [%]") +
+  xlab("Isoleucine biosynthesis II pathway") +
+  theme(axis.line = element_line(size=0.2, colour = "black")) +
+  theme(panel.background = element_rect(fill="white", colour= "white")) +
+  theme(axis.title.y = element_text(colour = "black", size = 6, face = "bold", margin = margin(0,10,0,0)))+
+  theme(axis.title.x = element_text(colour = "black", size = 6, face = "bold", margin = margin(10,0,0,0))) +
+  theme(axis.text.x = element_text(size=6, colour = "black", hjust = 1,  angle = 45, margin = margin(10,0,0,0))) +
+  theme(axis.text.y = element_text(size = 6, colour = "black")) +
+  theme(plot.margin= margin(0.5,0.5,0.5,0.5, "cm")) +
+  coord_cartesian(ylim=c(0,100)) +
+  scale_x_discrete(limits = c("2.3.1.182","4.2.1.35","RXN-7744","1.1.1.-","2.2.1.6/4.1.3.18", "1.1.1.383","4.2.1.9", "2.6.1.42")) +
+  scale_fill_manual(name = "Enzymes", values=c("#fcbba1","#99000d")) +
+  theme(legend.text = element_text(size=6))  +
+  theme(legend.title = element_text(size=6))
+il2
+ggsave("output/plots/Completeness_Ile2_pathway.pdf", plot = il2,
+       width =7, height = 5.5)
+
+####PWY-5103
+pwys_cov_Ile <- get_pathway_coverage(models,rxns,pwys, pathways.of.interest = c("PWY-5103"))
+
+relrxns <- unique(pwys_cov_Ile$rxn.metacyc)
+Ile <- list()
+k <- 1
+for (rxni in relrxns) {
+  Ileperc <- nrow(pwys_cov_Ile[pwys_cov_Ile$rxn.metacyc == rxni & pwys_cov_Ile$prediction == FALSE]) / nrow(pwys_cov_Ile[pwys_cov_Ile$rxn.metacyc == rxni])
+  ileperc <- data.frame(Ileperc)
+  colnames(ileperc) <- "perc"
+  ileperc$rxn <- rxni
+  ileperc$AA <- "Isoleucine"
+  Ile[[k]] <- ileperc
+  k <- k+1
+}
+ile <- rbindlist(Ile)
+
+
+#prepare the visualization part
+ileperce <- pwys_cov_Ile[ pwys_cov_Ile$model == "HRGM_Genome_0167",]
+ileperc <- ileperce[,c(3,5)]
+distinct(ileperc)
+ile3 <- merge(ileperc, ile, by.x="rxn.metacyc",by.y = "rxn")
+ile_new3 <- distinct(ile3)
+ile3 <- data.frame(ile_new3)
+ile3$perc <- ile3$perc *100
+View(pwys_cov_Ile)
+names(ile3) [names(ile3) == "ec"] <- "Enzymes"
+###fill in missing gaps with ec numbers
+ile3[7,2] = "2.6.1.-"
+ile3[6,2] = "RXN-7746"
+##visualization completeness of the ile pathway with the right order
+il3 <- ggplot(ile3, aes(x =Enzymes, y =perc, fill =factor(ifelse(Enzymes == "2.2.1.6/4.1.3.18" | Enzymes == "1.1.1.86/1.1.1.89"| Enzymes == "4.2.1.9" | Enzymes == "2.6.1.42", "shared", "not shared"))))+
+  geom_bar(stat="identity") +
+  ylab("Abundance of missing enzymes [%]") +
+  xlab("Isoleucine biosynthesis III pathway") +
+  theme(axis.line = element_line(size=0.2, colour = "black")) +
+  theme(panel.background = element_rect(fill="white", colour= "white")) +
+  theme(axis.title.y = element_text(colour = "black", size = 6, face = "bold", margin = margin(0,10,0,0)))+
+  theme(axis.title.x = element_text(colour = "black", size = 6, face = "bold", margin = margin(10,0,0,0))) +
+  theme(axis.text.x = element_text(size=6, colour = "black", hjust = 1,  angle = 45, margin = margin(10,0,0,0))) +
+  theme(axis.text.y = element_text(size = 6, colour = "black")) +
+  theme(plot.margin= margin(0.5,0.5,0.5,0.5, "cm")) +
+  coord_cartesian(ylim=c(0,100)) +
+  scale_x_discrete(limits = c("5.4.99.1","2.6.1.-","RXN-7746","2.2.1.6/4.1.3.18","1.1.1.86/1.1.1.89","4.2.1.9","2.6.1.42")) +
+  scale_fill_manual(name = "Enzymes", values=c("#fcbba1","#99000d")) +
+  theme(legend.text = element_text(size=6))  +
+  theme(legend.title = element_text(size=6))
+il3
+ggsave("output/plots/Completeness_Ile3_pathway.pdf", plot = il3,
+       width =7, height = 5.5)
+
+####PWY-5104
+pwys_cov_Ile <- get_pathway_coverage(models,rxns,pwys, pathways.of.interest = c("PWY-5104"))
+
+relrxns <- unique(pwys_cov_Ile$rxn.metacyc)
+Ile <- list()
+k <- 1
+for (rxni in relrxns) {
+  Ileperc <- nrow(pwys_cov_Ile[pwys_cov_Ile$rxn.metacyc == rxni & pwys_cov_Ile$prediction == FALSE]) / nrow(pwys_cov_Ile[pwys_cov_Ile$rxn.metacyc == rxni])
+  ileperc <- data.frame(Ileperc)
+  colnames(ileperc) <- "perc"
+  ileperc$rxn <- rxni
+  ileperc$AA <- "Isoleucine"
+  Ile[[k]] <- ileperc
+  k <- k+1
+}
+ile <- rbindlist(Ile)
+
+
+#prepare the visualization part
+ileperce <- pwys_cov_Ile[ pwys_cov_Ile$model == "HRGM_Genome_0167",]
+ileperc <- ileperce[,c(3,5)]
+distinct(ileperc)
+ile4 <- merge(ileperc, ile, by.x="rxn.metacyc",by.y = "rxn")
+ile_new4 <- distinct(ile4)
+ile4 <- data.frame(ile_new4)
+ile4$perc <- ile4$perc *100
+View(pwys_cov_Ile)
+names(ile4) [names(ile4) == "ec"] <- "Enzymes"
+###fill in missing gaps with ec numbers
+
+##visualization completeness of the ile pathway with the right order
+il4 <- ggplot(ile4, aes(x =Enzymes, y =perc, fill =factor(ifelse(Enzymes == "2.2.1.6/4.1.3.18"| Enzymes == "4.2.1.9" | Enzymes == "2.6.1.42", "shared", "not shared"))))+
+  geom_bar(stat="identity") +
+  ylab("Abundance of missing enzymes [%]") +
+  xlab("Isoleucine biosynthesis IV pathway") +
+  theme(axis.line = element_line(size=0.2, colour = "black")) +
+  theme(panel.background = element_rect(fill="white", colour= "white")) +
+  theme(axis.title.y = element_text(colour = "black", size = 6, face = "bold", margin = margin(0,10,0,0)))+
+  theme(axis.title.x = element_text(colour = "black", size = 6, face = "bold", margin = margin(10,0,0,0))) +
+  theme(axis.text.x = element_text(size=6, colour = "black", hjust = 1,  angle = 45, margin = margin(10,0,0,0))) +
+  theme(axis.text.y = element_text(size = 6, colour = "black")) +
+  theme(plot.margin= margin(0.5,0.5,0.5,0.5, "cm")) +
+  coord_cartesian(ylim=c(0,100)) +
+  scale_x_discrete(limits = c("6.2.1.17","1.2.7.7","2.2.1.6/4.1.3.18","1.1.1.383","4.2.1.9","2.6.1.42")) +
+  scale_fill_manual(name = "Enzymes", values=c("#fcbba1","#99000d")) +
+  theme(legend.text = element_text(size=6))  +
+  theme(legend.title = element_text(size=6))
+il4
+ggsave("output/plots/Completeness_Ile_pathway.pdf", plot = il4,
+       width =7, height = 5.5)
+
+####PWY-5108
+pwys_cov_Ile <- get_pathway_coverage(models,rxns,pwys, pathways.of.interest = c("PWY-5108"))
+
+relrxns <- unique(pwys_cov_Ile$rxn.metacyc)
+Ile <- list()
+k <- 1
+for (rxni in relrxns) {
+  Ileperc <- nrow(pwys_cov_Ile[pwys_cov_Ile$rxn.metacyc == rxni & pwys_cov_Ile$prediction == FALSE]) / nrow(pwys_cov_Ile[pwys_cov_Ile$rxn.metacyc == rxni])
+  ileperc <- data.frame(Ileperc)
+  colnames(ileperc) <- "perc"
+  ileperc$rxn <- rxni
+  ileperc$AA <- "Isoleucine"
+  Ile[[k]] <- ileperc
+  k <- k+1
+}
+ile <- rbindlist(Ile)
+
+
+#prepare the visualization part
+ileperce <- pwys_cov_Ile[ pwys_cov_Ile$model == "HRGM_Genome_0167",]
+ileperc <- ileperce[,c(3,5)]
+distinct(ileperc)
+ile5 <- merge(ileperc, ile, by.x="rxn.metacyc",by.y = "rxn")
+ile_new5 <- distinct(ile5)
+ile5 <- data.frame(ile_new5)
+ile5$perc <- ile5$perc *100
+names(ile5) [names(ile5) == "ec"] <- "Enzymes"
+
+
+##visualization completeness of the ile pathway with the right order
+il5 <- ggplot(ile5, aes(x =Enzymes, y =perc, fill = factor(ifelse(Enzymes == "2.6.1.42", "shared", "not shared"))))+
+  geom_bar(stat="identity") +
+  ylab("Abundance of missing enzymes [%]") +
+  xlab("Isoleucine biosynthesis V pathway") +
+  theme(axis.line = element_line(size=0.2, colour = "black")) +
+  theme(panel.background = element_rect(fill="white", colour= "white")) +
+  theme(axis.title.y = element_text(colour = "black", size = 6, face = "bold", margin = margin(0,10,0,0)))+
+  theme(axis.title.x = element_text(colour = "black", size = 6, face = "bold", margin = margin(10,0,0,0))) +
+  theme(axis.text.x = element_text(size=6, colour = "black", hjust = 1,  angle = 45, margin = margin(10,0,0,0))) +
+  theme(axis.text.y = element_text(size = 6, colour = "black")) +
+  theme(plot.margin= margin(0.5,0.5,0.5,0.5, "cm")) +
+  coord_cartesian(ylim=c(0,100)) +
+  scale_x_discrete(limits = c("6.2.1.1","1.2.7.7","2.6.1.42")) +
+  scale_fill_manual(name = "Enzymes", values=c("#fcbba1","#99000d")) +
+  theme(legend.text = element_text(size=6))  +
+  theme(legend.title = element_text(size=6))
+il5
+ggsave("output/plots/Completeness_Ile_pathway.pdf", plot = il5,
+       width =7, height = 5.5)
+
+
 #Leucine
 relGenomes <- Auxo_info[Leu == 0, `Genomes`]
 models <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models/", IDs = relGenomes)
@@ -313,25 +526,31 @@ leu <- merge(leuperc, leu, by.x="rxn.metacyc",by.y = "rxn")
 leu_new <- distinct(leu)
 leu <- data.frame(leu_new)
 leu$perc <- leu$perc *100
+names(leu) [names(leu) == "ec"] <- "Enzymes"
 
 #delete one reaction meaning the same enzyme because the percentage is the same
 leu <- leu[-5,]
 
 ##visualization completeness of the leu pathway with the right order
-le <- ggplot(leu, aes(x =`ec`, y =perc))+
+le <- ggplot(leu, aes(x =Enzymes, y =perc, fill =factor(ifelse(Enzymes == "2.6.1.6/2.6.1.42", "shared", "not shared"))))+
   geom_bar(stat="identity") +
   ylab("Abundance of missing enzymes [%]") +
-  xlab("Enzymes in the leucine pathway") +
+  xlab("Leucine pathway") +
   theme(axis.line = element_line(size=0.2, colour = "black")) +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
-  theme(axis.title.y = element_text(colour = "black", size = 16, face = "bold", margin = margin(0,10,0,0)))+
-  theme(axis.title.x = element_text(colour = "black", size = 16, face = "bold", margin = margin(10,0,0,0))) +
-  theme(axis.text.x = element_text(size=14, colour = "black", hjust = 1,  angle = 45, margin = margin(10,0,0,0))) +
-  theme(axis.text.y = element_text(size = 14, colour = "black")) +
+  theme(axis.title.y = element_text(colour = "black", size = 6, face = "bold", margin = margin(0,10,0,0)))+
+  theme(axis.title.x = element_text(colour = "black", size = 6, face = "bold", margin = margin(10,0,0,0))) +
+  theme(axis.text.x = element_text(size=6, colour = "black", hjust = 1,  angle = 45, margin = margin(10,0,0,0))) +
+  theme(axis.text.y = element_text(size = 6, colour = "black")) +
   theme(plot.margin= margin(0.5,0.5,0.5,0.5, "cm")) +
   coord_cartesian(ylim=c(0,100)) +
-  scale_x_discrete(limits = c("2.3.3.13/4.1.3.12","4.2.1.33","1.1.1.85","2.6.1.6/2.6.1.42"))
+  scale_x_discrete(limits = c("2.3.3.13/4.1.3.12","4.2.1.33","1.1.1.85","2.6.1.6/2.6.1.42")) +
+  scale_fill_manual(name = "Enzymes", values=c("#fcbba1","#99000d")) +
+  theme(legend.text = element_text(size=6))  +
+  theme(legend.title = element_text(size=6))
+
 le
+
 ggsave("output/plots/Completeness_Leu_pathway.pdf", plot = le,
        width =7, height = 5.5)
 
@@ -604,21 +823,24 @@ val <- merge(valperc, val, by.x="rxn.metacyc",by.y = "rxn")
 val_new <- distinct(val)
 val <- data.frame(val_new)
 val$perc <- val$perc *100
+names(val)[names(val) == "ec"] <- "Enzymes"
 
 ##visualization completeness of the leu pathway with the right order
-va <- ggplot(val, aes(x =`ec`, y =perc))+
-  geom_bar(stat="identity") +
+va <- ggplot(val, aes(x =Enzymes, y =perc))+
+  geom_bar(stat="identity", fill = "#99000d") +
   ylab("Abundance of missing enzymes [%]") +
-  xlab("Enzymes in the valine pathway") +
+  xlab("Valine pathway") +
   theme(axis.line = element_line(size=0.2, colour = "black")) +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
-  theme(axis.title.y = element_text(colour = "black", size = 16, face = "bold", margin = margin(0,10,0,0)))+
-  theme(axis.title.x = element_text(colour = "black", size = 16, face = "bold", margin = margin(10,0,0,0))) +
-  theme(axis.text.x = element_text(size=14, colour = "black", hjust = 1,  angle = 45, margin = margin(10,0,0,0))) +
-  theme(axis.text.y = element_text(size = 14, colour = "black")) +
+  theme(axis.title.y = element_text(colour = "black", size = 6, face = "bold", margin = margin(0,10,0,0)))+
+  theme(axis.title.x = element_text(colour = "black", size = 6, face = "bold", margin = margin(10,0,0,0))) +
+  theme(axis.text.x = element_text(size=6, colour = "black", hjust = 1,  angle = 45, margin = margin(10,0,0,0))) +
+  theme(axis.text.y = element_text(size = 6, colour = "black")) +
   theme(plot.margin= margin(0.5,0.5,0.5,0.5, "cm")) +
   coord_cartesian(ylim=c(0,100)) +
-  scale_x_discrete(limits = c("2.2.1.6/4.1.3.18","1.1.1.86/1.1.1.89","4.2.1.9", "2.6.1.42"))
+  scale_x_discrete(limits = c("2.2.1.6/4.1.3.18","1.1.1.86/1.1.1.89","4.2.1.9", "2.6.1.42")) +
+  theme(legend.text = element_text(size=6))  +
+  theme(legend.title = element_text(size=6))
 va
 ggsave("output/plots/Completeness_Val_pathway.pdf", plot = va,
        width =7, height = 5.5)
@@ -791,8 +1013,14 @@ t2 %>%
 
 
 
+############## combined plot for BCAA superpathway ##############################
+BCAA <- ggarrange(le,il1,il2,il3,va,il4,il5,
+                  labels = c("A","B","C", "D","E","F","G","H"),
+                  ncol=4, nrow= 2, common.legend = TRUE, legend = "right")
+BCAA
 
 
-
+ggsave("output/plots/BCAA_completeness.pdf", plot = BCAA,
+       width = 9, height = 6)
 
 
