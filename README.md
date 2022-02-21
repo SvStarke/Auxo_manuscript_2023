@@ -10,8 +10,6 @@ For getting the figures as a result, the scripts need to be ran in a specific or
 
 ![click here for an overview of the order for running the scripts](output/plots/Overview_Order_running_scripts.png)
 
-
-
 ### 1) Completeness of the amino acid biosynthesis pathways
 
 ##### Load models (Completeness >=85%, Contamination <=2)
@@ -67,6 +65,7 @@ source("Scripts/Auxo_Proto_data_per_phylum.R")
 ```
 
 ### 3) Distribution of the number of auxotrophies per phylum
+
 ##### Load models (completeness >= 85% and contamination <=2)
 
 ```R
@@ -146,20 +145,25 @@ source("Scripts/Abundancies.R")
 ### 6) Fermentation products(e.g.SCFA)
 
 ###### Load models (completeness >=85% and a contamination <=2)
+
 ```R
 source("Scripts/init_models_filtered.R")
 ```
-###### Predict auxotrophies 
+
+###### Predict auxotrophies
+
 ```R
 source("Scripts/predict_auxos.R")
 ```
 
 ###### Add information about the genomes
+
 ```R
 source("Scripts/auxotable_melted_merged.R")
 ```
 
 ###### Analyze the production of by products with statistical analysis
+
 ```R
 source("Scripts/byproduct_production.R")
 ```
@@ -167,37 +171,71 @@ source("Scripts/byproduct_production.R")
 ### 7) Abundancies in the gut
 
 ###### Load models (completeness >=85% and a contamination <=2)
+
 ```R
 source("Scripts/init_models_filtered.R")
 ```
-###### Predict auxotrophies 
+
+###### Predict auxotrophies
+
 ```R
 source("Scripts/predict_auxos.R")
 ```
 
 ###### Add information about the genomes
+
 ```R
 source("Scripts/auxotable_melted_merged.R")
 ```
 
 ###### Analyze the abundance of auxotrophies in the gut by data from the FoCus cohorte
+
 ```R
 source("Scripts/Abundancies_gut.R")
 ```
 
-### 8) Occurence of Auxotrophies together
+### 8) Abundancies of amino acid auxotrophies
 
-###### Load models() completeness >=85% and a contamination <=2)
+###### Load models (completeness >=85% and a contamination <=2)
+
 ```R
 source("Scripts/init_models_filtered.R")
 ```
 
-###### Predict auxotrophies 
+###### Predict auxotrophies
+
 ```R
 source("Scripts/predict_auxos.R")
 ```
 
 ###### Add information about the genomes
+
+```R
+source("Scripts/auxotable_melted_merged.R")
+```
+
+###### Analyze associations with diseases or health factors(BMI, weight, age)
+
+```R
+source("Scripts/Diseases_health_factors.R")###
+```
+
+### 9) Occurence of Auxotrophies together
+
+###### Load models() completeness >=85% and a contamination <=2)
+
+```R
+source("Scripts/init_models_filtered.R")
+```
+
+###### Predict auxotrophies
+
+```R
+source("Scripts/predict_auxos.R")
+```
+
+###### Add information about the genomes
+
 ```R
 source("Scripts/Occurence_Auxos_together.R")
 ```
@@ -207,21 +245,25 @@ source("Scripts/Occurence_Auxos_together.R")
 ### Completeness of bile acid metabolism pathways
 
 ###### Load models and filter them to get only the models with a completeness >=85% and a contamination <=2
+
 ```R
 source("Scripts/init_models_filtered.R")
 ```
 
-###### Predict auxotrophies 
+###### Predict auxotrophies
+
 ```R
 source("Scripts/predict_auxos.R")
 ```
 
 ###### Add information about the genomes
+
 ```R
 source("Scripts/auxotable_melted_merged.R")
 ```
 
 ###### Analyze bile acid metabolism pathways with statistical analysis
+
 ```R
 source("Scripts/bile_acid_metabolism_trp_auxo.R")
 ```
@@ -229,24 +271,25 @@ source("Scripts/bile_acid_metabolism_trp_auxo.R")
 ### H2S Production by trp auxotrophic microbiota
 
 ###### Load models and filter them to get only the models with a completeness >=85% and a contamination <=2
+
 ```R
 source("Scripts/init_models_filtered.R")
 ```
 
-###### Predict auxotrophies 
+###### Predict auxotrophies
+
 ```R
 source("Scripts/predict_auxos.R")
 ```
 
 ###### Add information about the genomes
+
 ```R
 source("Scripts/auxotable_melted_merged.R")
 ```
 
 ###### Analyze H2S production with statistics
+
 ```R
 source("Scripts/H2S_production_trp_auxo_statistics.R")
 ```
-
-
-
