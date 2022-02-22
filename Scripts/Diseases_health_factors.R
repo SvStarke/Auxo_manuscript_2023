@@ -39,7 +39,7 @@ View(sumfreq_diabetes)
 AA <- unique(sumfreq_diabetes$AA)
 sumfreq_diabetes$diabetes.status <- ifelse(sumfreq_diabetes$diabetes ==1, "yes", "no")
 
-
+remove(l)
 l <- list()
 k <- 1
 
@@ -69,15 +69,18 @@ for (AAi in AA) {
 diabetes_auxos <- rbindlist(l) 
 diabetes_auxos
 
-diabetes_auxos[wilcox.p < 0.05, sign.label := "P < 0.05"]
+
+diabetes_auxos$padjust = p.adjust(diabetes_auxos$wilcox.p, method = "fdr")
+diabetes_auxos[padjust < 0.05, sign.label := "P < 0.05"]
+pvalue_sumfreq_diabetes <- merge(sumfreq_diabetes, diabetes_auxos, by.x="AA", by.y="AA")
 diabetes_auxos
 
-diabetes <- ggplot(sumfreq_diabetes, aes(AA, x, fill = diabetes.status)) +
+diabetes <- ggplot(pvalue_sumfreq_diabetes, aes(AA, x, fill = diabetes.status)) +
   geom_boxplot(outlier.shape = NA) +
-  geom_signif(y_position = c(0.90,0.18,0.07), xmin = c(5.8,11.8,16.8), xmax = c(6.2,12.2,17.2), annotation = c("*", "*", "*"), tip_length = 0)+
   ylab("Frequence of auxotrophic bacteria[%]") +
   xlab("Amino acid auxotrophies") +
   theme(axis.line = element_line(size=0.2, colour = "black")) +
+  geom_point(aes(shape = sign.label), size = 0.5) +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
   theme(axis.title.y = element_text(colour = "black", size = 10, face = "bold", margin = margin(0,10,0,0)))+
   theme(axis.title.x = element_text(colour = "black", size = 10, face = "bold", margin = margin(10,0,0,0))) +
@@ -113,14 +116,19 @@ for (AAi in AA) {
 }
 
 IBD_auxos <- rbindlist(l) 
+
+
+IBD_auxos$padjust = p.adjust(IBD_auxos$wilcox.p, method = "fdr")
+IBD_auxos[padjust < 0.05, sign.label := "P < 0.05"]
 IBD_auxos
+sumfreq_IBD
+pvalue_sumfreq_IBD <- merge(sumfreq_IBD, IBD_auxos, by.x="AA", by.y="AA")
 
-IBD_auxos[wilcox.p < 0.05, sign.label := "P < 0.05"]
-
-IBD <- ggplot(sumfreq_IBD, aes(AA, x, fill = IBD.status)) +
+IBD <- ggplot(pvalue_sumfreq_IBD, aes(AA, x, fill = IBD.status)) +
   geom_boxplot(outlier.shape = NA) +
   geom_signif(y_position = c(0.07), xmin = c(16.8), xmax = c(17.2), annotation = c("*"), tip_length = 0)+
   ylab("Frequence of auxotrophic bacteria[%]") +
+  geom_point(aes(shape = sign.label), size = 0.5) +
   xlab("Amino acid auxotrophies") +
   theme(axis.line = element_line(size=0.2, colour = "black")) +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
@@ -156,19 +164,31 @@ for (AAi in AA) {
   wilcox <- wilcox_test(x~ chronic_diarrhea, data = wilcox_data)
   wilcox.pvalue <- data.table(wilcox.p = wilcox$p)
   wilcox.pvalue$AA <- AAi
+  new <- tapply(wilcox_data$x, wilcox_data$chronic_diarrhea, mean)
+  new5 <- tapply(wilcox_data$x, wilcox_data$chronic_diarrhea, median)
+  new1 <- t(new)
+  new2 <- t(new5)
+  mean1 <- new1[1,1]
+  mean2 <- new1[1,2]
+  wilcox.pvalue$mean1 <- mean1
+  wilcox.pvalue$mean2 <- mean2
+  median1 <- new2[1,1]
+  median2 <- new2[1,2]
+  wilcox.pvalue$median1 <- median1
+  wilcox.pvalue$median2 <- median2
   l[[k]] <- wilcox.pvalue
   k <- k +1
 }
 
 chronic_diarrhea_auxos <- rbindlist(l) 
-chronic_diarrhea_auxos[wilcox.p < 0.05, sign.label := "P < 0.05"]
+chronic_diarrhea_auxos$padjust = p.adjust(chronic_diarrhea_auxos$wilcox.p, method = "fdr")
+chronic_diarrhea_auxos[padjust < 0.05, sign.label := "P < 0.05"]
 chronic_diarrhea_auxos
+pvalue_sumfreq_chronic_diarrhea <- merge(sumfreq_chronic_diarrhea, chronic_diarrhea_auxos, by.x="AA", by.y="AA")
 
-chron_diar <- ggplot(sumfreq_chronic_diarrhea, aes(AA, x, fill = chronic_diarrhea.status)) +
+chron_diar <- ggplot(pvalue_sumfreq_chronic_diarrhea, aes(AA, x, fill = chronic_diarrhea.status)) +
   geom_boxplot(outlier.shape = NA) +
-  geom_signif(y_position = c(0.07), xmin = c(16.8), xmax = c(17.2), annotation = c("*"), tip_length = 0)+
-  ylab("Frequence of auxotrophic bacteria[%]") +
-  xlab("Amino acid auxotrophies") +
+  geom_signif(y_position = c(0.20), xmin = c(1.8), xmax = c(2.2), annotation = c("*"), tip_length = 0)+
   theme(axis.line = element_line(size=0.2, colour = "black")) +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
   theme(axis.title.y = element_text(colour = "black", size = 10, face = "bold", margin = margin(0,10,0,0)))+
@@ -179,6 +199,7 @@ chron_diar <- ggplot(sumfreq_chronic_diarrhea, aes(AA, x, fill = chronic_diarrhe
   scale_fill_manual(values=c("#4575b4", "#d73027")) +
   theme(legend.title = element_text(size = 8)) +
   theme(legend.text = element_text(size=8)) +
+  labs(y = "Frequence of auxotrophic bacteria[%]", x = "Amino acid auxotrophies")+
   labs(fill = "Chronic diarrhea status")
 chron_diar
 ggsave("output/plots/chron_diar.pdf", plot = chron_diar,
@@ -205,26 +226,29 @@ for (AAi in AA) {
 }
 
 IBS_auxos <- rbindlist(l) 
-IBS_auxos[wilcox.p < 0.05, sign.label := "P < 0.05"]
+IBS_auxos$padjust = p.adjust(IBS_auxos$wilcox.p, method = "fdr")
+IBS_auxos[padjust < 0.05, sign.label := "P < 0.05"]
 IBS_auxos
+pvalue_sumfreq_IBS <- merge(sumfreq_IBS, IBS_auxos, by.x="AA", by.y="AA")
 
-IBS <- ggplot(sumfreq_IBS, aes(AA, x, fill = IBS.status)) +
+IBS <- ggplot(pvalue_sumfreq_IBS, aes(AA, x, fill = IBS.status)) +
   geom_boxplot(outlier.shape = NA) +
-  geom_signif(y_position = c(0.30,0.40), xmin = c(12.8,15.8), xmax = c(13.2,16.2), annotation = c("*","*"), tip_length = 0)+
   ylab("Frequence of auxotrophic bacteria[%]") +
   xlab("Amino acid auxotrophies") +
   theme(axis.line = element_line(size=0.2, colour = "black")) +
+  geom_point(aes(shape = sign.label), size = 0.2) +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
   theme(axis.title.y = element_text(colour = "black", size = 10, face = "bold", margin = margin(0,10,0,0)))+
   theme(axis.title.x = element_text(colour = "black", size = 10, face = "bold", margin = margin(10,0,0,0))) +
   theme(axis.text.x = element_text(size=8, colour = "black", hjust = 1,  angle = 45, margin = margin(10,0,0,0))) +
   theme(axis.text.y = element_text(size = 8, colour = "black")) +
   theme(plot.margin= margin(0.5,0.5,0.5,0.5, "cm"))  +
+  scale_shape_manual(values = 8, na.translate = FALSE)+
   scale_fill_manual(values=c("#4575b4", "#d73027")) +
   theme(legend.title = element_text(size = 8)) +
   theme(legend.text = element_text(size=8)) +
   labs(fill = "IBS status")
-
+IBS
 ggsave("output/plots/IBS.pdf", plot = IBS,
        width = 9, height = 5)
 
@@ -307,29 +331,38 @@ correlation_age <- rbindlist(correlation_age)
 correlation_age
 
 ###visualization
-cys_age <- ggscatter(sumfreq_age[AA=="Cys"], x= "x", y = "Age", cor.method = "spearman", 
+cys_age <- ggscatter(sumfreq_age[AA=="Arg"], x= "x", y = "Age", cor.method = "spearman", 
                      cor.coef = TRUE, add = "reg.line")
-
+cys_age
 
 
 ######################## create big heatmap with all factors ###################
 corr_all <- rbind(correlation_BMI, correlation_weight, correlation_age)
-corr_all[pvalue < 0.05, sign.label1 := "Padj < 0.05"]
-ggplot(corr_all, aes(Aminoacid, factor, fill = rho))+
+corr_all$padjust = p.adjust(corr_all$pvalue, method = "fdr")
+corr_all[padjust < 0.05, sign.label1 := "P < 0.05"]
+corr_health <- ggplot(corr_all, aes(Aminoacid, factor, fill = rho))+
   geom_tile() +
   labs(x = "Auxotrophy", y = "", shape = "")+
-  geom_point(aes(shape = sign.label1), size = 0.5) +
-  scale_fill_gradient2(high = "#ca0020", mid = "white", low = "#0571b0") +
+  geom_point(aes(shape = sign.label1), size = 1) +
+  scale_fill_gradient2(high = "#b2182b", mid = "white", low = "#2166ac") +
   scale_shape_manual(values = 8, na.translate = FALSE) +
-  theme_classic() +
+  theme_minimal() +
   theme(legend.position = "bottom",
         legend.justification = 	1,
         axis.text.x = element_text(color = "black", angle = 45, hjust = 1, size = 10),
         axis.text.y = element_text(color = "black", size = 10)) +
   theme(axis.title.y = element_text(margin = margin(t =0, r = 20, b= 0, l = 0))) +
-  theme(panel.background = element_blank())
-
-
+  theme(axis.title.x = element_text(face  = "bold"))+
+  theme(panel.background = element_blank()) +
+  theme(legend.title = element_text(size=9)) +
+  labs(fill="Spearman correlation") +
+  theme(legend.position = "top",
+        legend.justification = 	1) +
+  theme(legend.text = element_text(size=9)) +
+  theme(panel.grid.major = element_blank())
+corr_health
+ggsave("output/plots/health_diseases.pdf", plot = corr_health,
+       width = 6, height = 3)
 
 
 
