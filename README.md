@@ -168,7 +168,7 @@ source("Scripts/auxotable_melted_merged.R")
 source("Scripts/byproduct_production.R")
 ```
 
-### 7) Abundancies in the gut
+### 7) Abundancies in the gut 
 
 ###### Load models (completeness >=85% and a contamination <=2)
 
@@ -194,7 +194,7 @@ source("Scripts/auxotable_melted_merged.R")
 source("Scripts/Abundancies_gut.R")
 ```
 
-### 8) Abundancies of amino acid auxotrophies
+### 8) Association of auxotrophies with diseases and different health factors
 
 ###### Load models (completeness >=85% and a contamination <=2)
 
@@ -217,7 +217,7 @@ source("Scripts/auxotable_melted_merged.R")
 ###### Analyze associations with diseases or health factors(BMI, weight, age)
 
 ```R
-source("Scripts/Diseases_health_factors.R")###
+source("Scripts/Diseases_health_factors.R")
 ```
 
 ### 9) Occurence of Auxotrophies together
