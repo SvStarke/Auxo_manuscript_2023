@@ -52,16 +52,23 @@ for(cpdi in relCompounds) {
       tmp_wicoxdat <- tmp_wicoxdat[tmp_prod_rate < 0, tmp_prod_rate := 0] # ersetzen der neg. Werte mit 0
       
       wilcox <- wilcox_test(tmp_prod_rate ~ Prototrophy, data = tmp_wicoxdat)
-      mean_Proto <- mean(tmp_wicoxdat$tmp_prod_rate[tmp_wicoxdat$Prototrophy == 1])
-      mean_Auxo <- mean(tmp_wicoxdat$tmp_prod_rate[tmp_wicoxdat$Prototrophy == 0])
-      FC <- log2(mean_Auxo/mean_Proto)
-      
+      mean <- tapply(tmp_wicoxdat$tmp_prod_rate, tmp_wicoxdat$Prototrophy, mean)
+      median <- tapply(tmp_wicoxdat$tmp_prod_rate, tmp_wicoxdat$Prototrophy, median)
+      new1 <- t(mean)
+      new2 <- t(median)
+      mean1 <- new1[1,1]
+      mean2 <- new1[1,2]
+      median1 <- new2[1,1]
+      median2 <- new2[1,2]
+      FC_median <- log2(median1/median2)
+      FC_mean <- log2(mean1/mean2)
       dttmp <- data.table(by.product = cpdi,
                           auxo.compound = auxoi,
                           fisher.p = test_fish$p.value,
                           fisher.or = test_fish$estimate,
                           wilcox.p = wilcox$p,
-                          FC.log = FC)
+                          FC.log_median = FC_median,
+                          FC.log_mean = FC_mean)
       
       stat_BP_x_auxo[[k]] <- dttmp
       k <- k + 1
@@ -104,7 +111,7 @@ ggsave("output/plots/Heatmap_auxo-X-byproducts_FoldChange_Fisher.pdf", plot = p,
 
 
 q <- ggplot(stat_BP_x_auxo[auxo.compound != "Gly"], aes(auxo.compound, by.product,
-                                                        fill = FC.log)) +
+                                                        fill = FC.log_mean)) +
   geom_tile() +
   geom_point(aes(shape = sign.label2), size = 0.5) +
   scale_fill_gradient2(high = "#ca0020", mid = "white", low = "#0571b0") +
@@ -124,7 +131,7 @@ q +theme(plot.margin = unit(c(1,0.5,2,0.5), "cm")) +
   theme(legend.text = element_text(size=10),
         legend.title = element_text(size=8))
 q
-ggsave("output/plots/Heatmap_auxo-X-byproducts_FoldChange_Wilcox.pdf", plot = q,
+  ggsave("output/plots/Heatmap_auxo-X-byproducts_FoldChange_Wilcox.pdf", plot = q,
        width = 6, height = 3.0)
 
 
