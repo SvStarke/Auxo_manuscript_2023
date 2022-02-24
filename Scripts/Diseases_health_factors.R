@@ -39,7 +39,7 @@ View(sumfreq_diabetes)
 AA <- unique(sumfreq_diabetes$AA)
 sumfreq_diabetes$diabetes.status <- ifelse(sumfreq_diabetes$diabetes ==1, "yes", "no")
 
-remove(l)
+
 l <- list()
 k <- 1
 
@@ -68,7 +68,7 @@ for (AAi in AA) {
 
 diabetes_auxos <- rbindlist(l) 
 diabetes_auxos
-
+remove(wilcox_data, wilcox, wilcox.pvalue,new,new5,new1,new2, mean1,mean2,median1,median2,l)
 
 diabetes_auxos$padjust = p.adjust(diabetes_auxos$wilcox.p, method = "fdr")
 diabetes_auxos[padjust < 0.05, sign.label := "P < 0.05"]
@@ -101,7 +101,6 @@ sumfreq_IBD <- data.table(sumfreq_IBD)
 sumfreq_IBD$IBD.status <- ifelse(sumfreq_IBD$IBD ==1, "yes", "no")
 
 AA <- unique(sumfreq_IBD$AA)
-remove(l)
 l <- list()
 k <- 1
 
@@ -116,7 +115,7 @@ for (AAi in AA) {
 }
 
 IBD_auxos <- rbindlist(l) 
-
+remove(wilcox_data, wilcox, wilcox.pvalue,l)
 
 IBD_auxos$padjust = p.adjust(IBD_auxos$wilcox.p, method = "fdr")
 IBD_auxos[padjust < 0.05, sign.label := "P < 0.05"]
@@ -154,7 +153,6 @@ sumfreq_chronic_diarrhea <- data.table(sumfreq_chronic_diarrhea)
 sumfreq_chronic_diarrhea$chronic_diarrhea.status <- ifelse(sumfreq_chronic_diarrhea$chronic_diarrhea ==1, "yes", "no")
 
 AA <- unique(sumfreq_chronic_diarrhea$AA)
-remove(l)
 l <- list()
 k <- 1
 
@@ -181,11 +179,12 @@ for (AAi in AA) {
 }
 
 chronic_diarrhea_auxos <- rbindlist(l) 
+remove(wilcox_data, wilcox, wilcox.pvalue,new,new5,new1,new2, mean1,mean2,median1,median2,l)
 chronic_diarrhea_auxos$padjust = p.adjust(chronic_diarrhea_auxos$wilcox.p, method = "fdr")
 chronic_diarrhea_auxos[padjust < 0.05, sign.label := "P < 0.05"]
 chronic_diarrhea_auxos
 pvalue_sumfreq_chronic_diarrhea <- merge(sumfreq_chronic_diarrhea, chronic_diarrhea_auxos, by.x="AA", by.y="AA")
-
+View()
 chron_diar <- ggplot(pvalue_sumfreq_chronic_diarrhea, aes(AA, x, fill = chronic_diarrhea.status)) +
   geom_boxplot(outlier.shape = NA) +
   geom_signif(y_position = c(0.20), xmin = c(1.8), xmax = c(2.2), annotation = c("*"), tip_length = 0)+
@@ -226,6 +225,7 @@ for (AAi in AA) {
 }
 
 IBS_auxos <- rbindlist(l) 
+remove(wilcox_data, wilcox, l)
 IBS_auxos$padjust = p.adjust(IBS_auxos$wilcox.p, method = "fdr")
 IBS_auxos[padjust < 0.05, sign.label := "P < 0.05"]
 IBS_auxos
@@ -275,7 +275,11 @@ for (AAi in relAA) {
   correlation[[k]] <- corre
   k <- k+1
 }
+
 correlation_BMI <- rbindlist(correlation)
+remove(correlation,test,corr,corre)
+correlation_BMI$padjust = p.adjust(correlation_BMI$pvalue, method = "fdr")
+correlation_BMI[padjust < 0.05, sign.label1 := "P < 0.05"]
 correlation_BMI
 
 ggplot(correlation_BMI, aes (Aminoacid, rho)) +
@@ -302,6 +306,9 @@ for (AAi in relAA) {
   k <- k+1
 }
 correlation_weight <- rbindlist(correlation_weight)
+remove(correlation,test,corr,corre)
+correlation_weight$padjust = p.adjust(correlation_weight$pvalue, method = "fdr")
+correlation_weight[padjust < 0.05, sign.label1 := "P < 0.05"]
 correlation_weight
 
 ggplot(sumfreq_weight[AA=="Cys"], aes(x, Weight)) +
@@ -329,6 +336,9 @@ for (AAi in relAA) {
 }
 correlation_age <- rbindlist(correlation_age)
 correlation_age
+remove(correlation,test,corr,corre)
+correlation_age$padjust = p.adjust(correlation_age$pvalue, method = "fdr")
+correlation_age[padjust < 0.05, sign.label1 := "P < 0.05"]
 
 ###visualization
 cys_age <- ggscatter(sumfreq_age[AA=="Arg"], x= "x", y = "Age", cor.method = "spearman", 
@@ -338,8 +348,6 @@ cys_age
 
 ######################## create big heatmap with all factors ###################
 corr_all <- rbind(correlation_BMI, correlation_weight, correlation_age)
-corr_all$padjust = p.adjust(corr_all$pvalue, method = "fdr")
-corr_all[padjust < 0.05, sign.label1 := "P < 0.05"]
 corr_health <- ggplot(corr_all, aes(Aminoacid, factor, fill = rho))+
   geom_tile() +
   labs(x = "Auxotrophy", y = "", shape = "")+
@@ -361,10 +369,320 @@ corr_health <- ggplot(corr_all, aes(Aminoacid, factor, fill = rho))+
   theme(legend.text = element_text(size=9)) +
   theme(panel.grid.major = element_blank())
 corr_health
-ggsave("output/plots/health_diseases.pdf", plot = corr_health,
+ggsave("output/plots/health_diseases_all_spearman.pdf", plot = corr_health,
        width = 6, height = 3)
 
 
+##########################    linear modeling    ###############################
+sumfreq_all <- aggregate(info_auxo$freq, by=list(subject=info_auxo$subject, AA=info_auxo$Compound,
+                                                 BMI=info_auxo$BMI, sex=info_auxo$gender,age=info_auxo$age), FUN=sum)
+sumfreq_all <- data.table(sumfreq_all)
+test <- lm(formula = x ~ sex + age + BMI, data = sumfreq_all[AA == "Cys"])
+summary(test)
+relAA <- unique(sumfreq_all$AA)
+lin <- list()
+k <- 1
+for (AAi in AA){
+  print(AAi)
+  m0 <- lm(formula = x ~ sex + age + BMI, data = sumfreq_all[AA == AAi])
+  m0.sum <- summary(m0)
+  lin_mod <- m0.sum$coefficients
+  lin_mod <- data.table(lin_mod)
+  lin_mod$AA <- AAi
+  lin_mod$factor <- c("Intercept","sex", "age", "BMI")
+  lin[[k]] <- lin_mod
+  k <- k +1
+  
+}
+
+linear_mod <- rbindlist(lin)
+remove(lin,m0,m0.sum,lin_mod)
+names(linear_mod)[names(linear_mod) == "Pr(>|t|)"] <- "pvalue"
+
+linear_mod_sex <- linear_mod[factor == "sex"]
+linear_mod_age <- linear_mod[factor == "age"]
+linear_mod_BMI <- linear_mod[factor == "BMI"]
+
+##sex
+linear_mod_sex$padjust = p.adjust(linear_mod_sex$pvalue, method = "fdr")
+linear_mod_sex[padjust < 0.05, sign.label1 := "P < 0.05"]
+
+##age
+linear_mod_age$padjust = p.adjust(linear_mod_age$pvalue, method = "fdr")
+linear_mod_age[padjust < 0.05, sign.label1 := "P < 0.05"]
+
+##BMI
+linear_mod_BMI$padjust = p.adjust(linear_mod_BMI$pvalue, method = "fdr")
+linear_mod_BMI[padjust < 0.05, sign.label1 := "P < 0.05"]
+
+##bind all together
+linear_all <- rbind(linear_mod_sex, linear_mod_age, linear_mod_BMI)
+
+##visualization BMI and age
+linear_wo_sex <- rbind(linear_mod_age, linear_mod_BMI)
+linear_health_BMI_age <- ggplot(linear_wo_sex, aes(AA, factor, fill = Estimate))+
+  geom_tile() +
+  labs(x = "Auxotrophy", y = "", shape = "")+
+  geom_point(aes(shape = sign.label1), size = 1) +
+  scale_fill_gradient2(high = "#b2182b", mid = "white", low = "#2166ac") +
+  scale_shape_manual(values = 8, na.translate = FALSE) +
+  theme_minimal() +
+  theme(legend.position = "bottom",
+        legend.justification = 	1,
+        axis.text.x = element_text(color = "black", angle = 45, hjust = 1, size = 10),
+        axis.text.y = element_text(color = "black", size = 10)) +
+  theme(axis.title.y = element_text(margin = margin(t =0, r = 20, b= 0, l = 0))) +
+  theme(axis.title.x = element_text(face  = "bold"))+
+  theme(panel.background = element_blank()) +
+  theme(legend.title = element_text(size=9)) +
+  labs(fill="") +
+  theme(legend.position = "right",
+        legend.justification = 	1) +
+  theme(legend.text = element_text(size=9)) +
+  theme(panel.grid.major = element_blank())
+linear_health_BMI_age
+ggsave("output/plots/health_diseases_lin_BMI_age.pdf", plot = linear_health_BMI_age,
+       width = 6, height = 3)
+
+###visualization for sex
+linear_mod_sex <- ggplot(linear_mod_sex, aes(AA, factor, fill = Estimate))+
+  geom_tile() +
+  labs(x = "Auxotrophy", y = "", shape = "")+
+  geom_point(aes(shape = sign.label1), size = 1) +
+  scale_fill_gradient2(high = "#b2182b", mid = "white", low = "#2166ac") +
+  scale_shape_manual(values = 8, na.translate = FALSE) +
+  theme_minimal() +
+  theme(legend.position = "bottom",
+        legend.justification = 	1,
+        axis.text.x = element_text(color = "black", angle = 45, hjust = 1, size = 10),
+        axis.text.y = element_text(color = "black", size = 10)) +
+  theme(axis.title.y = element_text(margin = margin(t =0, r = 20, b= 0, l = 0))) +
+  theme(axis.title.x = element_text(face  = "bold"))+
+  theme(panel.background = element_blank()) +
+  theme(legend.title = element_text(size=9)) +
+  labs(fill="") +
+  theme(legend.position = "right",
+        legend.justification = 	1) +
+  theme(legend.text = element_text(size=9)) +
+  theme(panel.grid.major = element_blank())
+linear_mod_sex 
+ggsave("output/plots/health_diseases_lin_sex.pdf", plot = linear_mod_sex,
+       width = 6, height = 3)
 
 
+#visualization for diabetes
+sumfreq_diabetes_lin <- aggregate(info_auxo$freq, by=list(subject=info_auxo$subject, AA=info_auxo$Compound,
+                                                 BMI=info_auxo$BMI, sex=info_auxo$gender,age=info_auxo$age, diabetes =info_auxo$diabetes), FUN=sum)
+sumfreq_diabetes_lin <- data.table(sumfreq_diabetes_lin)
+View(sumfreq_diabetes_lin)
+m0 <- lm(formula = x ~ sex + age + BMI + diabetes, data = sumfreq_diabetes_lin[AA == "Val"])
+
+relAA <- unique(sumfreq_diabetes_lin$AA)
+lin_diab <- list()
+k <- 1
+for (AAi in AA){
+  print(AAi)
+  m0 <- lm(formula = x ~ sex + age + BMI + diabetes, data = sumfreq_diabetes_lin[AA == AAi])
+  m0.sum <- summary(m0)
+  lin_mod <- m0.sum$coefficients
+  lin_mod <- data.table(lin_mod)
+  lin_mod$AA <- AAi
+  lin_mod$factor <- c("Intercept","sex", "age", "BMI","diabetes")
+  lin_diab[[k]] <- lin_mod
+  k <- k +1
+}
+linear_mod_diab <- rbindlist(lin_diab)
+remove(lin_diab,m0,m0.sum,lin_mod)
+names(linear_mod_diab)[names(linear_mod_diab) == "Pr(>|t|)"] <- "pvalue"
+
+
+linear_mod_diab_adjust <- linear_mod_diab[factor == "diabetes"]
+linear_mod_diab_adjust$padjust = p.adjust(linear_mod_diab_adjust$pvalue, method = "fdr")
+linear_mod_diab_adjust[padjust < 0.05, sign.label1 := "P < 0.05"]
+linear_mod_diab_adjust <- data.table(linear_mod_diab_adjust)
+
+d<- ggplot(linear_mod_diab_adjust[factor == "diabetes"], aes(AA, factor, fill = Estimate))+
+  geom_tile() +
+  labs(x = "Auxotrophy", y = "", shape = "")+
+  geom_point(aes(shape = sign.label1), size = 1) +
+  scale_fill_gradient2(high = "#b2182b", mid = "white", low = "#2166ac") +
+  scale_shape_manual(values = 8, na.translate = FALSE) +
+  theme_minimal() +
+  theme(legend.position = "bottom",
+        legend.justification = 	1,
+        axis.text.x = element_text(color = "black", angle = 45, hjust = 1, size = 10),
+        axis.text.y = element_text(color = "black", size = 10)) +
+  theme(axis.title.y = element_text(margin = margin(t =0, r = 20, b= 0, l = 0))) +
+  theme(axis.title.x = element_text(face  = "bold"))+
+  theme(panel.background = element_blank()) +
+  theme(legend.title = element_text(size=9)) +
+  labs(fill="") +
+  theme(legend.position = "right",
+        legend.justification = 	1) +
+  theme(legend.text = element_text(size=9)) +
+  theme(panel.grid.major = element_blank())
+d
+ggsave("output/plots/health_diseases_lin_sex.pdf", plot = d,
+       width = 6, height = 3)
+
+
+#visualization for IBD
+sumfreq_IBD_lin <- aggregate(info_auxo$freq, by=list(subject=info_auxo$subject, AA=info_auxo$Compound,
+                                                          BMI=info_auxo$BMI, sex=info_auxo$gender,age=info_auxo$age, IBD =info_auxo$IBD), FUN=sum)
+sumfreq_IBD_lin <- data.table(sumfreq_IBD_lin)
+View(sumfreq_IBD_lin)
+
+relAA <- unique(sumfreq_IBD_lin$AA)
+lin_IBD <- list()
+k <- 1
+for (AAi in AA){
+  print(AAi)
+  m0 <- lm(formula = x ~ sex + age + BMI + IBD, data = sumfreq_IBD_lin[AA == AAi])
+  m0.sum <- summary(m0)
+  lin_mod <- m0.sum$coefficients
+  lin_mod <- data.table(lin_mod)
+  lin_mod$AA <- AAi
+  lin_mod$factor <- c("Intercept","sex", "age", "BMI","IBD")
+  lin_IBD[[k]] <- lin_mod
+  k <- k +1
+}
+linear_mod_IBD <- rbindlist(lin_IBD)
+remove(lin_IBD,m0, m0.sum,lin_mod)
+names(linear_mod_IBD)[names(linear_mod_IBD) == "Pr(>|t|)"] <- "pvalue"
+
+linear_mod_IBD_adjust <- linear_mod_IBD[factor == "IBD"]
+linear_mod_IBD_adjust$padjust = p.adjust(linear_mod_IBD_adjust$pvalue, method = "fdr")
+linear_mod_IBD_adjust[padjust < 0.05, sign.label1 := "P < 0.05"]
+linear_mod_IBD_adjust <- data.table(linear_mod_IBD_adjust)
+
+i <- ggplot(linear_mod_IBD_adjust, aes(AA, factor, fill = Estimate))+
+  geom_tile() +
+  labs(x = "Auxotrophy", y = "", shape = "")+
+  geom_point(aes(shape = sign.label1), size = 1) +
+  scale_fill_gradient2(high = "#b2182b", mid = "white", low = "#2166ac") +
+  scale_shape_manual(values = 8, na.translate = FALSE) +
+  theme_minimal() +
+  theme(legend.position = "bottom",
+        legend.justification = 	1,
+        axis.text.x = element_text(color = "black", angle = 45, hjust = 1, size = 10),
+        axis.text.y = element_text(color = "black", size = 10)) +
+  theme(axis.title.y = element_text(margin = margin(t =0, r = 20, b= 0, l = 0))) +
+  theme(axis.title.x = element_text(face  = "bold"))+
+  theme(panel.background = element_blank()) +
+  theme(legend.title = element_text(size=9)) +
+  labs(fill="") +
+  theme(legend.position = "right",
+        legend.justification = 	1) +
+  theme(legend.text = element_text(size=9)) +
+  theme(panel.grid.major = element_blank())
+i
+ggsave("output/plots/health_diseases_lin_IBD.pdf", plot = i,
+       width = 6, height = 3)
+
+
+#visualization for chronic diarrhea
+sumfreq_chrond_lin <- aggregate(info_auxo$freq, by=list(subject=info_auxo$subject, AA=info_auxo$Compound,
+                                                     BMI=info_auxo$BMI, sex=info_auxo$gender,age=info_auxo$age, chrond =info_auxo$chronic_diarrhea), FUN=sum)
+sumfreq_chrond_lin <- data.table(sumfreq_chrond_lin)
+View(sumfreq_chrond_lin)
+
+relAA <- unique(sumfreq_chrond_lin$AA)
+lin_chrond <- list()
+k <- 1
+for (AAi in AA){
+  print(AAi)
+  m0 <- lm(formula = x ~ sex + age + BMI + chrond, data = sumfreq_chrond_lin[AA == AAi])
+  m0.sum <- summary(m0)
+  lin_mod <- m0.sum$coefficients
+  lin_mod <- data.table(lin_mod)
+  lin_mod$AA <- AAi
+  lin_mod$factor <- c("Intercept","sex", "age", "BMI","chrond")
+  lin_chrond[[k]] <- lin_mod
+  k <- k +1
+}
+linear_mod_chrond <- rbindlist(lin_chrond)
+remove(lin_chrond,m0,m0.sum,lin_mod)
+names(linear_mod_chrond)[names(linear_mod_chrond) == "Pr(>|t|)"] <- "pvalue"
+
+linear_mod_chrond_adjust <- linear_mod_chrond[factor == "chrond"]
+linear_mod_chrond_adjust$padjust = p.adjust(linear_mod_chrond_adjust$pvalue, method = "fdr")
+linear_mod_chrond_adjust[padjust < 0.05, sign.label1 := "P < 0.05"]
+linear_mod_chrond_adjust <- data.table(linear_mod_chrond_adjust)
+
+c <- ggplot(linear_mod_chrond_adjust, aes(AA, factor, fill = Estimate))+
+  geom_tile() +
+  labs(x = "Auxotrophy", y = "", shape = "")+
+  geom_point(aes(shape = sign.label1), size = 1) +
+  scale_fill_gradient2(high = "#b2182b", mid = "white", low = "#2166ac") +
+  scale_shape_manual(values = 8, na.translate = FALSE) +
+  theme_minimal() +
+  theme(legend.position = "bottom",
+        legend.justification = 	1,
+        axis.text.x = element_text(color = "black", angle = 45, hjust = 1, size = 10),
+        axis.text.y = element_text(color = "black", size = 10)) +
+  theme(axis.title.y = element_text(margin = margin(t =0, r = 20, b= 0, l = 0))) +
+  theme(axis.title.x = element_text(face  = "bold"))+
+  theme(panel.background = element_blank()) +
+  theme(legend.title = element_text(size=9)) +
+  labs(fill="") +
+  theme(legend.position = "right",
+        legend.justification = 	1) +
+  theme(legend.text = element_text(size=9)) +
+  theme(panel.grid.major = element_blank())
+c
+ggsave("output/plots/health_diseases_lin_chronic_diarrhea.pdf", plot = c,
+       width = 6, height = 3)
+
+#visualization for IBS
+sumfreq_IBS_lin <- aggregate(info_auxo$freq, by=list(subject=info_auxo$subject, AA=info_auxo$Compound,
+                                                        BMI=info_auxo$BMI, sex=info_auxo$gender,age=info_auxo$age, IBS =info_auxo$IBS), FUN=sum)
+sumfreq_IBS_lin <- data.table(sumfreq_IBS_lin)
+View(sumfreq_chrond_lin)
+
+relAA <- unique(sumfreq_IBS_lin$AA)
+lin_IBS <- list()
+k <- 1
+for (AAi in AA){
+  print(AAi)
+  m0 <- lm(formula = x ~ sex + age + BMI + IBS, data = sumfreq_IBS_lin[AA == AAi])
+  m0.sum <- summary(m0)
+  lin_mod <- m0.sum$coefficients
+  lin_mod <- data.table(lin_mod)
+  lin_mod$AA <- AAi
+  lin_mod$factor <- c("Intercept","sex", "age", "BMI","IBS")
+  lin_IBS[[k]] <- lin_mod
+  k <- k +1
+}
+linear_mod_IBS <- rbindlist(lin_IBS)
+remove(lin_IBS,m0,m0.sum,lin_mod)
+names(linear_mod_IBS)[names(linear_mod_IBS) == "Pr(>|t|)"] <- "pvalue"
+
+linear_mod_IBS_adjust <- linear_mod_IBS[factor == "IBS"]
+linear_mod_IBS_adjust$padjust = p.adjust(linear_mod_IBS_adjust$pvalue, method = "fdr")
+linear_mod_IBS_adjust[padjust < 0.05, sign.label1 := "P < 0.05"]
+linear_mod_IBS_adjust <- data.table(linear_mod_IBS_adjust)
+
+ibs <- ggplot(linear_mod_IBS_adjust, aes(AA, factor, fill = Estimate))+
+  geom_tile() +
+  labs(x = "Auxotrophy", y = "", shape = "")+
+  geom_point(aes(shape = sign.label1), size = 1) +
+  scale_fill_gradient2(high = "#b2182b", mid = "white", low = "#2166ac") +
+  scale_shape_manual(values = 8, na.translate = FALSE) +
+  theme_minimal() +
+  theme(legend.position = "bottom",
+        legend.justification = 	1,
+        axis.text.x = element_text(color = "black", angle = 45, hjust = 1, size = 10),
+        axis.text.y = element_text(color = "black", size = 10)) +
+  theme(axis.title.y = element_text(margin = margin(t =0, r = 20, b= 0, l = 0))) +
+  theme(axis.title.x = element_text(face  = "bold"))+
+  theme(panel.background = element_blank()) +
+  theme(legend.title = element_text(size=9)) +
+  labs(fill="") +
+  theme(legend.position = "right",
+        legend.justification = 	1) +
+  theme(legend.text = element_text(size=9)) +
+  theme(panel.grid.major = element_blank())
+ibs
+ggsave("output/plots/health_diseases_IBS.pdf", plot = ibs,
+       width = 6, height = 3)
 
