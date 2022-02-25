@@ -11,6 +11,7 @@ library(data.table)
 Auxotrophy
 Auxotrophy_2[,c(4:16)] <- NULL
 
+
 ############################# prepare data #####################################
 sub <- unique(focus_all_info$subject)
 relAA <- unique(Auxotrophy_2$Compound)
@@ -685,4 +686,28 @@ ibs <- ggplot(linear_mod_IBS_adjust, aes(AA, factor, fill = Estimate))+
 ibs
 ggsave("output/plots/health_diseases_IBS.pdf", plot = ibs,
        width = 6, height = 3)
-
+################## all heatmap conbined of the linear modeling #################
+all <- rbind(linear_mod_IBS_adjust, linear_mod_IBD_adjust, linear_mod_diab_adjust, linear_mod_chrond_adjust)
+all <- ggplot(all, aes(AA, factor, fill = Estimate))+
+  geom_tile() +
+  labs(x = "Auxotrophy", y = "", shape = "")+
+  geom_point(aes(shape = sign.label1), size = 1) +
+  scale_fill_gradient2(high = "#b2182b", mid = "white", low = "#2166ac") +
+  scale_shape_manual(values = 8, na.translate = FALSE) +
+  theme_minimal() +
+  theme(legend.position = "bottom",
+        legend.justification = 	1,
+        axis.text.x = element_text(color = "black", angle = 45, hjust = 1, size = 10),
+        axis.text.y = element_text(color = "black", size = 10)) +
+  theme(axis.title.y = element_text(margin = margin(t =0, r = 20, b= 0, l = 0))) +
+  theme(axis.title.x = element_text(face  = "bold"))+
+  theme(panel.background = element_blank()) +
+  theme(legend.title = element_text(size=9)) +
+  labs(fill="") +
+  theme(legend.position = "right",
+        legend.justification = 	1) +
+  theme(legend.text = element_text(size=9)) +
+  theme(panel.grid.major = element_blank())
+all
+ggsave("output/plots/health_diseases_linear_mod_all.pdf", plot = all,
+       width = 6, height = 3)

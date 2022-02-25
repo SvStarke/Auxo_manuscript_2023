@@ -100,7 +100,7 @@ c <- ggplot(median_rheuma, aes(Aminoacid, x)) +
   theme(axis.text.y = element_text(size = 8, colour = "black")) +
   theme(plot.margin= margin(0.5,0.5,0.5,0.5, "cm")) +
   coord_cartesian(ylim = c(0,0.4))   +
-  ggtitle("Rheumatoid arthritis with rheumatoid factor") +
+  ggtitle("Rheumatoid arthritis with\n rheumatoid factor") +
   theme(title = element_text(size = 10))
 
 
@@ -225,7 +225,7 @@ ggsave("output/plots/barplot_frequence_gut_IBD_combined.pdf", plot = IBD,
 ###wilcoxon test
 
 sumfreq_IBD_wilcox <- sumfreq_all_diseases[diseases == "Crohn's disease [regional enteritis]" | diseases == "Ulcerative colitis"]
-
+ggplot(sumfreq)
 AA <- unique(sumfreq_IBD_wilcox$AA)
 l <- list()
 k <- 1
