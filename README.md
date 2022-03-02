@@ -168,7 +168,7 @@ source("Scripts/auxotable_melted_merged.R")
 source("Scripts/byproduct_production.R")
 ```
 
-### 7) Abundancies in the gut 
+### 7) Abundancies in the gut
 
 ###### Load models (completeness >=85% and a contamination <=2)
 
@@ -220,7 +220,35 @@ source("Scripts/auxotable_melted_merged.R")
 source("Scripts/Diseases_health_factors.R")
 ```
 
-### 9) Occurence of Auxotrophies together
+
+
+### 9) Association of auxotrophies with diseases and different health factors
+
+###### Load models (completeness >=85% and a contamination <=2)
+
+```R
+source("Scripts/init_models_filtered.R")
+```
+
+###### Predict auxotrophies
+
+```R
+source("Scripts/predict_auxos.R")
+```
+
+###### Add information about the genomes
+
+```R
+source("Scripts/auxotable_melted_merged.R")
+```
+
+###### Analyze association with diseases
+
+```R
+source("Scripts/Other_clinical_data(not_FoCus).R")
+```
+
+### 10) Occurence of Auxotrophies together
 
 ###### Load models() completeness >=85% and a contamination <=2)
 
