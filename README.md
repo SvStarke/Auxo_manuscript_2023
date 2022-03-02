@@ -194,7 +194,7 @@ source("Scripts/auxotable_melted_merged.R")
 source("Scripts/Abundancies_gut.R")
 ```
 
-### 8) Association of auxotrophies with diseases and different health factors
+### 8) Association of auxotrophies with diseases and different health factors from FoCus cohorte
 
 ###### Load models (completeness >=85% and a contamination <=2)
 
@@ -222,7 +222,7 @@ source("Scripts/Diseases_health_factors.R")
 
 
 
-### 9) Association of auxotrophies with diseases and different health factors
+### 9) Association of auxotrophies with diseases
 
 ###### Load models (completeness >=85% and a contamination <=2)
 
