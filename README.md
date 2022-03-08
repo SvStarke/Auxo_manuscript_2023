@@ -221,8 +221,28 @@ source("Scripts/Diseases_health_factors.R")
 ```
 
 
+### 9) Occurence of Auxotrophies together
 
-### 9) Association of auxotrophies with diseases
+###### Load models() completeness >=85% and a contamination <=2)
+
+```R
+source("Scripts/init_models_filtered.R")
+```
+
+###### Predict auxotrophies
+
+```R
+source("Scripts/predict_auxos.R")
+```
+
+###### Add information about the genomes
+
+```R
+source("Scripts/Occurence_Auxos_together.R")
+```
+
+### Further scripts that may be used in the future but are yet not displayed in the flowchart
+### Association of auxotrophies with different diseases (not FoCus cohorte)
 
 ###### Load models (completeness >=85% and a contamination <=2)
 
@@ -247,28 +267,6 @@ source("Scripts/auxotable_melted_merged.R")
 ```R
 source("Scripts/Other_clinical_data(not_FoCus).R")
 ```
-
-### 10) Occurence of Auxotrophies together
-
-###### Load models() completeness >=85% and a contamination <=2)
-
-```R
-source("Scripts/init_models_filtered.R")
-```
-
-###### Predict auxotrophies
-
-```R
-source("Scripts/predict_auxos.R")
-```
-
-###### Add information about the genomes
-
-```R
-source("Scripts/Occurence_Auxos_together.R")
-```
-
-### Further scripts that may be used in the future but are yet not displayed in the flowchart
 
 ### Completeness of bile acid metabolism pathways
 
