@@ -94,14 +94,14 @@ chor$perc <- chor$perc *100
 ##visualization completeness of the chor pathway with the right order
 ch <- ggplot(chor, aes(x =`ec`, y =perc))+
   geom_bar(stat="identity") +
-  ylab("Abundance of missing enzymes [%]") +
+  ylab("Missing enzymes [%]") +
   xlab("Enzymes in the chorismate pathway") +
   theme(axis.line = element_line(size=0.2, colour = "black")) +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
-  theme(axis.title.y = element_text(colour = "black", size = 16, face = "bold", margin = margin(0,10,0,0)))+
-  theme(axis.title.x = element_text(colour = "black", size = 16, face = "bold", margin = margin(10,0,0,0))) +
-  theme(axis.text.x = element_text(size=14, colour = "black", hjust = 1,  angle = 45, margin = margin(10,0,0,0))) +
-  theme(axis.text.y = element_text(size = 14, colour = "black")) +
+  theme(axis.title.y = element_text(colour = "black", size = 6, face = "bold", margin = margin(0,10,0,0)))+
+  theme(axis.title.x = element_text(colour = "black", size = 6, face = "bold", margin = margin(10,0,0,0))) +
+  theme(axis.text.x = element_text(size=6, colour = "black", hjust = 1,  angle = 45, margin = margin(10,0,0,0))) +
+  theme(axis.text.y = element_text(size = 6, colour = "black")) +
   theme(plot.margin= margin(0.5,0.5,0.5,0.5, "cm")) +
   coord_cartesian(ylim=c(0,100)) +
   scale_x_discrete(limits = c("4.2.1.10","1.1.1.25","2.7.1.71","2.5.1.19","4.2.3.5/4.6.1.4"))
@@ -211,14 +211,14 @@ his <- his[-7,]
 ##visualization completeness of the chor pathway with the right order
 hi <- ggplot(his, aes(x =`ec`, y =perc))+
   geom_bar(stat="identity") +
-  ylab("Abundance of missing enzymes [%]") +
+  ylab("Missing enzymes [%]") +
   xlab("Enzymes in the histidine pathway") +
   theme(axis.line = element_line(size=0.2, colour = "black")) +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
-  theme(axis.title.y = element_text(colour = "black", size = 16, face = "bold", margin = margin(0,10,0,0)))+
-  theme(axis.title.x = element_text(colour = "black", size = 16, face = "bold", margin = margin(10,0,0,0))) +
-  theme(axis.text.x = element_text(size=14, colour = "black", hjust = 1,  angle = 45, margin = margin(10,0,0,0))) +
-  theme(axis.text.y = element_text(size = 14, colour = "black")) +
+  theme(axis.title.y = element_text(colour = "black", size = 6, face = "bold", margin = margin(0,10,0,0)))+
+  theme(axis.title.x = element_text(colour = "black", size = 6, face = "bold", margin = margin(10,0,0,0))) +
+  theme(axis.text.x = element_text(size=6, colour = "black", hjust = 1,  angle = 45, margin = margin(10,0,0,0))) +
+  theme(axis.text.y = element_text(size = 6, colour = "black")) +
   theme(plot.margin= margin(0.5,0.5,0.5,0.5, "cm")) +
   coord_cartesian(ylim=c(0,100)) +
   scale_x_discrete(limits = c("2.4.2.17", "3.6.1.31", "3.5.4.19","5.3.1.16","4.3.2.10","4.2.1.19","2.6.1.9","3.1.3.15","1.1.1.23","1.1.1.23"))
@@ -268,7 +268,7 @@ names(ile1) [names(ile1) == "ec"] <- "Enzymes"
 ##visualization completeness of the chor pathway with the right order
 il1 <- ggplot(ile1, aes(x =Enzymes, y =perc, fill =factor(ifelse(Enzymes == "4.3.1.19/4.2.1.16", "not shared", "shared enzyme"))))+
   geom_bar(stat="identity") +
-  ylab("Abundance of missing enzymes [%]") +
+  ylab("Missing enzymes [%]") +
   xlab("Isoleucine biosynthesis I pathway") +
   theme(axis.line = element_line(size=0.2, colour = "black")) +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
@@ -322,7 +322,7 @@ ile2[8,2] = "1.1.1.-"
 ile2[7,2] = "RXN-7744"
 il2 <- ggplot(ile2, aes(x =Enzymes, y =perc, fill =factor(ifelse(Enzymes == "2.2.1.6/4.1.3.18" | Enzymes == "4.2.1.9"| Enzymes =="2.6.1.42", "shared", "not shared"))))+
   geom_bar(stat="identity", position = "stack") +
-  ylab("Abundance of missing enzymes [%]") +
+  ylab("Missing enzymes [%]") +
   xlab("Isoleucine biosynthesis II pathway") +
   theme(axis.line = element_line(size=0.2, colour = "black")) +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
@@ -374,7 +374,7 @@ ile3[6,2] = "RXN-7746"
 ##visualization completeness of the ile pathway with the right order
 il3 <- ggplot(ile3, aes(x =Enzymes, y =perc, fill =factor(ifelse(Enzymes == "2.2.1.6/4.1.3.18" | Enzymes == "1.1.1.86/1.1.1.89"| Enzymes == "4.2.1.9" | Enzymes == "2.6.1.42", "shared", "not shared"))))+
   geom_bar(stat="identity") +
-  ylab("Abundance of missing enzymes [%]") +
+  ylab("Missing enzymes [%]") +
   xlab("Isoleucine biosynthesis III pathway") +
   theme(axis.line = element_line(size=0.2, colour = "black")) +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
@@ -425,7 +425,7 @@ names(ile4) [names(ile4) == "ec"] <- "Enzymes"
 ##visualization completeness of the ile pathway with the right order
 il4 <- ggplot(ile4, aes(x =Enzymes, y =perc, fill =factor(ifelse(Enzymes == "2.2.1.6/4.1.3.18"| Enzymes == "4.2.1.9" | Enzymes == "2.6.1.42", "shared", "not shared"))))+
   geom_bar(stat="identity") +
-  ylab("Abundance of missing enzymes [%]") +
+  ylab("Missing enzymes [%]") +
   xlab("Isoleucine biosynthesis IV pathway") +
   theme(axis.line = element_line(size=0.2, colour = "black")) +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
@@ -475,7 +475,7 @@ names(ile5) [names(ile5) == "ec"] <- "Enzymes"
 ##visualization completeness of the ile pathway with the right order
 il5 <- ggplot(ile5, aes(x =Enzymes, y =perc, fill = factor(ifelse(Enzymes == "2.6.1.42", "shared", "not shared"))))+
   geom_bar(stat="identity") +
-  ylab("Abundance of missing enzymes [%]") +
+  ylab("Missing enzymes [%]") +
   xlab("Isoleucine biosynthesis V pathway") +
   theme(axis.line = element_line(size=0.2, colour = "black")) +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
@@ -534,7 +534,7 @@ leu <- leu[-5,]
 ##visualization completeness of the leu pathway with the right order
 le <- ggplot(leu, aes(x =Enzymes, y =perc, fill =factor(ifelse(Enzymes == "2.6.1.6/2.6.1.42", "shared", "not shared"))))+
   geom_bar(stat="identity") +
-  ylab("Abundance of missing enzymes [%]") +
+  ylab("Missing enzymes [%]") +
   xlab("Leucine pathway") +
   theme(axis.line = element_line(size=0.2, colour = "black")) +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
@@ -678,14 +678,14 @@ ser$perc <- ser$perc *100
 ##visualization completeness of the leu pathway with the right order
 se <- ggplot(ser, aes(x =`ec`, y =perc))+
   geom_bar(stat="identity") +
-  ylab("Abundance of missing enzymes [%]") +
+  ylab("Missing enzymes [%]") +
   xlab("Enzymes in the serine pathway") +
   theme(axis.line = element_line(size=0.2, colour = "black")) +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
-  theme(axis.title.y = element_text(colour = "black", size = 16, face = "bold", margin = margin(0,10,0,0)))+
-  theme(axis.title.x = element_text(colour = "black", size = 16, face = "bold", margin = margin(10,0,0,0))) +
-  theme(axis.text.x = element_text(size=14, colour = "black", hjust = 1,  angle = 45, margin = margin(10,0,0,0))) +
-  theme(axis.text.y = element_text(size = 14, colour = "black")) +
+  theme(axis.title.y = element_text(colour = "black", size = 6, face = "bold", margin = margin(0,10,0,0)))+
+  theme(axis.title.x = element_text(colour = "black", size = 6, face = "bold", margin = margin(10,0,0,0))) +
+  theme(axis.text.x = element_text(size=6, colour = "black", hjust = 1,  angle = 45, margin = margin(10,0,0,0))) +
+  theme(axis.text.y = element_text(size = 6, colour = "black")) +
   theme(plot.margin= margin(0.5,0.5,0.5,0.5, "cm")) +
   coord_cartesian(ylim=c(0,100)) +
   scale_x_discrete(limits = c("1.1.1.95","2.6.1.52","3.1.3.3"))
@@ -757,14 +757,14 @@ trp_compl <- filter(pathway1, AA == "Tryptophan")
 ##visualization completeness of the trp pathway with the right order
 tr <- ggplot(trp, aes(x =`ec`, y =perc))+
   geom_bar(stat="identity") +
-  ylab("Abundance of missing enzymes [%]") +
+  ylab("Missing enzymes [%]") +
   xlab("Enzymes in the tryptophan pathway") +
   theme(axis.line = element_line(size=0.2, colour = "black")) +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
-  theme(axis.title.y = element_text(colour = "black", size = 16, face = "bold", margin = margin(0,10,0,0)))+
-  theme(axis.title.x = element_text(colour = "black", size = 16, face = "bold", margin = margin(10,0,0,0))) +
-  theme(axis.text.x = element_text(size=14, colour = "black", hjust = 1,  angle = 45, margin = margin(10,0,0,0))) +
-  theme(axis.text.y = element_text(size = 14, colour = "black")) +
+  theme(axis.title.y = element_text(colour = "black", size = 6, face = "bold", margin = margin(0,10,0,0)))+
+  theme(axis.title.x = element_text(colour = "black", size = 6, face = "bold", margin = margin(10,0,0,0))) +
+  theme(axis.text.x = element_text(size=6, colour = "black", hjust = 1,  angle = 45, margin = margin(10,0,0,0))) +
+  theme(axis.text.y = element_text(size = 6, colour = "black")) +
   theme(plot.margin= margin(0.5,0.5,0.5,0.5, "cm")) +
   coord_cartesian(ylim=c(0,100)) +
   scale_x_discrete(limits = c("4.1.3.27","2.4.2.18","5.3.1.24","4.1.1.48","4.2.1.20","4.2.1.122","4.1.2.8"))
@@ -828,7 +828,7 @@ names(val)[names(val) == "ec"] <- "Enzymes"
 ##visualization completeness of the leu pathway with the right order
 va <- ggplot(val, aes(x =Enzymes, y =perc))+
   geom_bar(stat="identity", fill = "#99000d") +
-  ylab("Abundance of missing enzymes [%]") +
+  ylab("Missing enzymes [%]") +
   xlab("Valine pathway") +
   theme(axis.line = element_line(size=0.2, colour = "black")) +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
@@ -1014,12 +1014,15 @@ t2 %>%
 
 
 ############## combined plot for BCAA superpathway ##############################
-BCAA <- ggarrange(le,il1,il2,il3,va,il4,il5,
-                  labels = c("A","B","C", "D","E","F","G","H"),
-                  ncol=4, nrow= 2, common.legend = TRUE, legend = "right")
-BCAA
 
-
+completeness_linear <- ggarrange(tr,hi,ch,se,le,il1,il2,il3,va,il4,il5,
+                  labels = c("A","B","C", "D","E"),
+                  ncol=4, nrow= 3, common.legend = TRUE, legend = "right")
+completeness_linear
+completeness_linear <- ggarrange(le,va,tr,hi,il1,il2,ch,se,il3,il4,il5,
+                                 labels = c("A","B","C", "D","E"),
+                                 ncol=4, nrow= 3, common.legend = TRUE, legend = "top")
+completeness_linear 
 ggsave("output/plots/BCAA_completeness.pdf", plot = BCAA,
        width = 9, height = 6)
 

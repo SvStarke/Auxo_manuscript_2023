@@ -51,22 +51,22 @@ pt <- ggplot(numbauxo, aes(AA, perc, fill = Phyla)) +
   ylab("Auxotrophies [%]") +
   xlab("Amino acids") +
   #theme_minimal() +
-  theme(legend.position = "bottom") +
+  theme(legend.position = "top") +
   theme(axis.line = element_line(size=0.2)) +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
-  theme(axis.text.x = element_text(size = 14, angle = 45, colour = "black", hjust = 1, margin = margin(10,0,0,0))) +
-  theme(axis.text.y = element_text(size = 14, colour = "black"))+
-  theme(axis.title.x = element_text(colour = "Black", face = "bold", size = 14, margin = margin(2,0,0,0))) +
-  theme(axis.title.y = element_text(colour = "Black", face = "bold", size = 14, margin = margin(0,10,0,0))) +
-  theme(legend.title = element_text(colour = "black", size = 14, face = "bold",  vjust = 1, margin = margin(10,5,5,0))) +
-  theme(legend.text = element_text(size = 14, colour = "black")) +
+  theme(axis.text.x = element_text(size = 10, angle = 45, colour = "black", hjust = 1, margin = margin(10,0,0,0))) +
+  theme(axis.text.y = element_text(size = 10, colour = "black"))+
+  theme(axis.title.x = element_text(colour = "Black", face = "bold", size = 10, margin = margin(2,0,0,0))) +
+  theme(axis.title.y = element_text(colour = "Black", face = "bold", size = 10, margin = margin(0,10,0,0))) +
+  theme(legend.title = element_text(colour = "black", size = 10, face = "bold",  vjust = 1, margin = margin(10,5,5,0))) +
+  theme(legend.text = element_text(size = 10, colour = "black")) +
   coord_cartesian()+
-  scale_fill_manual(values = brewer_palette) +
-  theme(plot.margin= margin(0.5,0.5,0.5,0.5, "cm"))
+  scale_fill_manual(values = brewer_palette)
 pt
 
+pt1 <- annotate_figure(pt, fig.lab = "A")
 
-ggsave("/Users/Svenja/Desktop/Abundancies_HRGM.pdf", plot = pt,
+ggsave("output/plots/Abundancies_HRGM.pdf", plot = pt1,
        width = 7, height = 5)
 
 

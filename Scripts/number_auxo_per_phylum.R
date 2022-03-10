@@ -22,75 +22,111 @@ numb <- rbindlist(tables)
 numb$abun <- numb$table / numb$Perc * 100
 
 View(numb)
-remove(numb)
 
+'#feedde','#fdd0a2','#fdae6b','#fd8d3c','#f16913','#d94801'
 #Firmicutes
 fi <- ggplot(numb[phylum == "Firmicutes"], aes (count,abun, fill = "#fdae6b")) +
   geom_bar(stat = "identity") +
-  xlab("Number of auxotrophies per genome") +
+  xlab("Auxotrophies per genome") +
   ylab("Abundance [%]") +
   theme(legend.position = "right") +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
   theme(legend.position = "none") +
+  theme(axis.title = element_text(face = "bold")) +
   scale_fill_manual(values = "#fdae6b") +
-  ggtitle("Firmicutes") +
   coord_cartesian(ylim=c(0,60)) +
-  theme(title = element_text(size = 8)) +
-  theme(axis.text.x = element_text(colour = "black")) +
-  theme(axis.text.y = element_text(colour = "black"))
+  theme(title = element_text(size = 10)) +
+  theme(axis.text.x = element_text(colour = "black", size = 10)) +
+  theme(axis.text.y = element_text(colour = "black", size = 10))
 fi
 
 #Actinobacteria
-a <- ggplot(numb[phylum == "Actinobacteriota"], aes (count, abun, fill = "#8csd04")) +
+a <- ggplot(numb[phylum == "Actinobacteriota"], aes (count, abun, fill = "#feedde")) +
   geom_bar(stat = "identity") +
-  xlab("Number of auxotrophies per genome") +
+  xlab("Auxotrophies per genome") +
   ylab("Abundance [%]") +
   theme(legend.position = "right") +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
   theme(legend.position = "none") + 
-  scale_fill_manual(values = "#8c2d04") +
-  ggtitle("Actinobacteriota") +
+  theme(axis.title.x = element_text(face = "bold")) +
+  theme(axis.title.y = element_text(face = "bold")) +
+  scale_fill_manual(values = "#feedde") +
   coord_cartesian(ylim=c(0,60)) +
-  theme(title = element_text(size = 8)) +
-  theme(axis.text.x = element_text(colour = "black")) +
-  theme(axis.text.y = element_text(colour = "black"))
+  theme(title = element_text(size = 10)) +
+  theme(axis.text.x = element_text(colour = "black", size = 10)) +
+  theme(axis.text.y = element_text(colour = "black", size = 10))
 a
 
 #Bacteroidetes
-b <- ggplot(numb[phylum == "Bacteroidota"], aes (count,abun, fill = "#f16913")) +
+b <- ggplot(numb[phylum == "Bacteroidota"], aes (count,abun, fill = "#fdd0a2")) +
   geom_bar(stat = "identity") +
-  xlab("Number of auxotrophies per genome") +
+  xlab("Auxotrophies per genome") +
   ylab("Abundance [%]") +
   theme(legend.position = "right") +
-  theme(panel.background = element_rect(fill="white", colour= "white")) +
-  theme(legend.position = "none") +
-  scale_fill_manual(values = "#f16913") +
-  ggtitle("Bacteroidota") +
-  coord_cartesian(ylim=c(0,60)) +
-  theme(title = element_text(size = 8)) +
-  theme(axis.text.x = element_text(colour = "black")) +
-  theme(axis.text.y = element_text(colour = "black"))
-b
-
-#Proteobacteria
-p <- ggplot(numb[phylum == "Proteobacteria"], aes (count, abun, fill = "#fdd0a2")) +
-  geom_bar(stat = "identity") +
-  xlab("Number of auxotrophies per genome") +
-  ylab("Abundance [%]") +
-  theme(legend.position = "right") +
+  theme(axis.title.x = element_text(face = "bold")) +
+  theme(axis.title.y = element_text(face = "bold")) +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
   theme(legend.position = "none") +
   scale_fill_manual(values = "#fdd0a2") +
-  ggtitle("Proteobacteria") +
   coord_cartesian(ylim=c(0,60)) +
-  theme(title = element_text(size = 8)) +
-  theme(axis.text.x = element_text(colour = "black")) +
-  theme(axis.text.y = element_text(colour = "black"))
-p
-#arrange in one figure
-abun <- ggarrange(fi,a,b,p,
-          labels = c("A","B","C", "D"),
-          ncol=2, nrow= 2)
+  theme(title = element_text(size = 10)) +
+  theme(axis.text.x = element_text(colour = "black", size = 10)) +
+  theme(axis.text.y = element_text(colour = "black", size = 10))
+b
 
-ggsave("/Users/Svenja/Desktop/number_auxo_phylum_comparison.pdf", plot = abun,
-       width = 6, height = 5)
+#Proteobacteria
+p <- ggplot(numb[phylum == "Proteobacteria"], aes (count, abun, fill = "#f16913")) +
+  geom_bar(stat = "identity") +
+  xlab("Auxotrophies per genome") +
+  ylab("Abundance [%]") +
+  theme(legend.position = "right") +
+  theme(panel.background = element_rect(fill="white", colour= "white")) +
+  theme(legend.position = "none") +
+  theme(axis.title.x = element_text(face = "bold")) +
+  theme(axis.title.y = element_text(face = "bold")) +
+  scale_fill_manual(values = "#f16913") +
+  coord_cartesian(ylim=c(0,60)) +
+  theme(title = element_text(size = 10)) +
+  theme(axis.text.x = element_text(colour = "black", size = 10)) +
+  theme(axis.text.y = element_text(colour = "black", size = 10))
+p
+#Fusobacteriota
+fu <- ggplot(numb[phylum == "Fusobacteriota"], aes (count, abun, fill = "#fd8d3c")) +
+  geom_bar(stat = "identity") +
+  xlab("Auxotrophies per genome") +
+  ylab("Abundance [%]") +
+  theme(legend.position = "right") +
+  theme(axis.title.x = element_text(face = "bold")) +
+  theme(axis.title.y = element_text(face = "bold")) +
+  theme(panel.background = element_rect(fill="white", colour= "white")) +
+  theme(legend.position = "none") +
+  scale_fill_manual(values = "#fd8d3c") +
+  coord_cartesian(ylim=c(0,60)) +
+  theme(title = element_text(size = 10)) +
+  theme(axis.text.x = element_text(colour = "black", size = 10)) +
+  theme(axis.text.y = element_text(colour = "black", size = 10))
+fu
+#Other
+ot <- ggplot(numb[phylum == "Other"], aes (count, abun, fill = "#d94801")) +
+  geom_bar(stat = "identity") +
+  xlab("Auxotrophies per genome") +
+  ylab("Abundance [%]") +
+  theme(legend.position = "right") +
+  theme(axis.title.x = element_text(face = "bold")) +
+  theme(axis.title.y = element_text(face = "bold")) +
+  theme(panel.background = element_rect(fill="white", colour= "white")) +
+  theme(legend.position = "none") +
+  scale_fill_manual(values = "#d94801") +
+  coord_cartesian(ylim=c(0,60)) +
+  theme(title = element_text(size = 10)) +
+  theme(axis.text.x = element_text(colour = "black", size = 10)) +
+  theme(axis.text.y = element_text(colour = "black", size = 10))
+ot
+#arrange in one figure
+abun <- ggarrange(a,b,fi,fu,p,ot,
+          ncol=3, nrow= 2)
+abun
+abun1 <- annotate_figure(abun, fig.lab = "C")
+
+ggsave("output/plots/number_auxo_phylum_comparison.pdf", plot = abun1,
+       width = 5, height = 4)

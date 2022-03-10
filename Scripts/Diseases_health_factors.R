@@ -380,10 +380,10 @@ sumfreq_all <- aggregate(info_auxo$freq, by=list(subject=info_auxo$subject, AA=i
 sumfreq_all <- data.table(sumfreq_all)
 test <- lm(formula = x ~ sex + age + BMI, data = sumfreq_all[AA == "Cys"])
 summary(test)
-relAA <- unique(sumfreq_all$AA)
+relAA1 <- unique(sumfreq_all$AA)
 lin <- list()
 k <- 1
-for (AAi in AA){
+for (AAi in relAA1){
   print(AAi)
   m0 <- lm(formula = x ~ sex + age + BMI, data = sumfreq_all[AA == AAi])
   m0.sum <- summary(m0)
@@ -421,27 +421,33 @@ linear_all <- rbind(linear_mod_sex, linear_mod_age, linear_mod_BMI)
 
 ##visualization BMI and age
 linear_wo_sex <- rbind(linear_mod_age, linear_mod_BMI)
-linear_health_BMI_age <- ggplot(linear_wo_sex, aes(AA, factor, fill = Estimate))+
+linear_health_BMI_age <- ggplot(linear_wo_sex, aes(factor, AA, fill = Estimate))+
   geom_tile() +
-  labs(x = "Auxotrophy", y = "", shape = "")+
+  labs(y = "Auxotrophy", x = "Health parameter", shape = "")+
   geom_point(aes(shape = sign.label1), size = 1) +
   scale_fill_gradient2(high = "#b2182b", mid = "white", low = "#2166ac") +
   scale_shape_manual(values = 8, na.translate = FALSE) +
   theme_minimal() +
-  theme(legend.position = "bottom",
-        legend.justification = 	1,
-        axis.text.x = element_text(color = "black", angle = 45, hjust = 1, size = 10),
-        axis.text.y = element_text(color = "black", size = 10)) +
-  theme(axis.title.y = element_text(margin = margin(t =0, r = 20, b= 0, l = 0))) +
-  theme(axis.title.x = element_text(face  = "bold"))+
-  theme(panel.background = element_blank()) +
-  theme(legend.title = element_text(size=9)) +
-  labs(fill="") +
   theme(legend.position = "right",
+        legend.justification = 	0.5,
+        axis.text.x = element_text(color = "black", angle = 90, vjust = 0.2, size = 8),
+        axis.text.y = element_text(color = "black", size = 8)) +
+  theme(axis.title.y = element_text(margin = margin(t =0, r = 20, b= 0, l = 0))) +
+  theme(axis.title.x = element_text(face  = "bold", size = 10, margin = margin(t=20, r = 0, b= 0, l = 0))) +
+  theme(axis.title.y = element_text(face  = "bold", size = 10))+ 
+  scale_x_discrete("Health parameter", labels = c("age" = "    Age", "BMI" = "    BMI")) +
+  theme(panel.background = element_blank()) +
+  theme(legend.title = element_text(size=7)) + 
+  theme(legend.text = element_text(size=7)) +
+  labs(fill="") +
+  theme(legend.position = "top",
         legend.justification = 	1) +
-  theme(legend.text = element_text(size=9)) +
+  theme(legend.text = element_text(size=7)) +
   theme(panel.grid.major = element_blank())
-linear_health_BMI_age
+linear_health_BMI_age + guides(shape = guide_legend(order = 1))
+linear_health_BMI_age1 <- linear_health_BMI_age + guides(shape= "none")
+linear_health_BMI_age1
+
 ggsave("output/plots/health_diseases_lin_BMI_age.pdf", plot = linear_health_BMI_age,
        width = 6, height = 3)
 
@@ -481,7 +487,7 @@ m0 <- lm(formula = x ~ sex + age + BMI + diabetes, data = sumfreq_diabetes_lin[A
 relAA <- unique(sumfreq_diabetes_lin$AA)
 lin_diab <- list()
 k <- 1
-for (AAi in AA){
+for (AAi in relAA){
   print(AAi)
   m0 <- lm(formula = x ~ sex + age + BMI + diabetes, data = sumfreq_diabetes_lin[AA == AAi])
   m0.sum <- summary(m0)
@@ -536,7 +542,7 @@ View(sumfreq_IBD_lin)
 relAA <- unique(sumfreq_IBD_lin$AA)
 lin_IBD <- list()
 k <- 1
-for (AAi in AA){
+for (AAi in relAA){
   print(AAi)
   m0 <- lm(formula = x ~ sex + age + BMI + IBD, data = sumfreq_IBD_lin[AA == AAi])
   m0.sum <- summary(m0)
@@ -590,7 +596,7 @@ View(sumfreq_chrond_lin)
 relAA <- unique(sumfreq_chrond_lin$AA)
 lin_chrond <- list()
 k <- 1
-for (AAi in AA){
+for (AAi in relAA){
   print(AAi)
   m0 <- lm(formula = x ~ sex + age + BMI + chrond, data = sumfreq_chrond_lin[AA == AAi])
   m0.sum <- summary(m0)
@@ -643,7 +649,7 @@ View(sumfreq_chrond_lin)
 relAA <- unique(sumfreq_IBS_lin$AA)
 lin_IBS <- list()
 k <- 1
-for (AAi in AA){
+for (AAi in relAA){
   print(AAi)
   m0 <- lm(formula = x ~ sex + age + BMI + IBS, data = sumfreq_IBS_lin[AA == AAi])
   m0.sum <- summary(m0)
@@ -686,28 +692,43 @@ ibs <- ggplot(linear_mod_IBS_adjust, aes(AA, factor, fill = Estimate))+
 ibs
 ggsave("output/plots/health_diseases_IBS.pdf", plot = ibs,
        width = 6, height = 3)
+
 ################## all heatmap conbined of the linear modeling #################
 all <- rbind(linear_mod_IBS_adjust, linear_mod_IBD_adjust, linear_mod_diab_adjust, linear_mod_chrond_adjust)
-all <- ggplot(all, aes(AA, factor, fill = Estimate))+
+all1 <- ggplot(all, aes(factor, AA, fill = Estimate))+
   geom_tile() +
-  labs(x = "Auxotrophy", y = "", shape = "")+
+  labs(y = "", x = "Diseases", shape = "")+
   geom_point(aes(shape = sign.label1), size = 1) +
   scale_fill_gradient2(high = "#b2182b", mid = "white", low = "#2166ac") +
   scale_shape_manual(values = 8, na.translate = FALSE) +
   theme_minimal() +
-  theme(legend.position = "bottom",
-        legend.justification = 	1,
-        axis.text.x = element_text(color = "black", angle = 45, hjust = 1, size = 10),
-        axis.text.y = element_text(color = "black", size = 10)) +
+  scale_x_discrete("Diseases", labels = c("IBS" = "IBS", "IBD" = "IBD", "diabetes" = "Diab.", "chrond" = "Chron.\nDiarr.")) +
+  theme(legend.position = "top", legend.box = "horizontal",
+        legend.justification = 	0.5,
+        axis.text.x = element_text(color = "black", angle = 90, vjust = 0.2, size = 8),
+        axis.text.y = element_text(color = "black", size = 8)) +
   theme(axis.title.y = element_text(margin = margin(t =0, r = 20, b= 0, l = 0))) +
-  theme(axis.title.x = element_text(face  = "bold"))+
+  theme(axis.title.x = element_text(face  = "bold", size = 10, margin = margin(t=20, r = 0, b= 0, l = 0))) +
+  theme(axis.title.y = element_text(face  = "bold", size = 10))+
   theme(panel.background = element_blank()) +
   theme(legend.title = element_text(size=9)) +
-  labs(fill="") +
-  theme(legend.position = "right",
-        legend.justification = 	1) +
-  theme(legend.text = element_text(size=9)) +
+  labs(fill="", x = "") +
+  theme(legend.text = element_text(size=7)) +
   theme(panel.grid.major = element_blank())
-all
+all1 + guides(shape = guide_legend(order = 1))
+all2 <- all1 + guides(shape= "none")
+all2
+
 ggsave("output/plots/health_diseases_linear_mod_all.pdf", plot = all,
        width = 6, height = 3)
+
+
+
+
+
+
+
+
+
+
+
