@@ -136,44 +136,59 @@ ggsave("output/plots/number_auxo_phylum_comparison.pdf", plot = abun1,
 ###number auxo per phylum and order
 #Firmicutes
 Auxotrophy_13_Firm <- Auxotrophy_13[Auxotrophy_13$phylum == "Firmicutes"]
-relorder <- unique(names(sort(summary(as.factor(Auxotrophy_13_Firm$order)), decreasing = T)[1:10]))
+relorder_Firm <- unique(names(sort(summary(as.factor(Auxotrophy_13_Firm$order)), decreasing = T)[1:10]))
 
 #Bacteroidota
 Auxotrophy_13_Bac <- Auxotrophy_13[Auxotrophy_13$phylum == "Bacteroidota"]
-names(sort(summary(as.factor(Auxotrophy_13_Bac$order)), decreasing = T)[1:10])
+relorder_Bac <- names(sort(summary(as.factor(Auxotrophy_13_Bac$order)), decreasing = T)[1:10])
 
 #Actinobacteriota
 Auxotrophy_13_Act <- Auxotrophy_13[Auxotrophy_13$phylum == "Actinobacteriota"]
-names(sort(summary(as.factor(Auxotrophy_13_Act$order)), decreasing = T)[1:10])
+relorder_Act <- names(sort(summary(as.factor(Auxotrophy_13_Act$order)), decreasing = T)[1:10])
 
 #Fusobacteriota
 Auxotrophy_13_Fus <- Auxotrophy_13[Auxotrophy_13$phylum == "Fusobacteriota"]
-names(sort(summary(as.factor(Auxotrophy_13_Fus$order)), decreasing = T)[1:10])
+relorder_Fus <- names(sort(summary(as.factor(Auxotrophy_13_Fus$order)), decreasing = T)[1:10])
 
 #Proteobacteriota
 Auxotrophy_13_Pro <- Auxotrophy_13[Auxotrophy_13$phylum == "Proteobacteria"]
-names(sort(summary(as.factor(Auxotrophy_13_Pro$order)), decreasing = T)[1:10])
+relorder_Pro <- names(sort(summary(as.factor(Auxotrophy_13_Pro$order)), decreasing = T)[1:10])
 
-sort(Auxotrophy_13_Firm(""))
-View(Auxotrophy_13_Bac)
-count <- unique(Auxotrophy_13$count)
-phylum <- unique(Auxotrophy_13$phylum)
-
-tables <- list()
+###
+count <- unique(Auxotrophy_13_Firm$count)
+Firm_list <- list()
 k <- 1
 for (i in count) {
   print(i) 
-  for (pi in phylum) {
-    x <- Auxotrophy_13[count == i & phylum == pi]
+  for (oi in relorder_Firm) {
+    x <- Auxotrophy_13_Firm[count == i & order == oi]
     table <- nrow(x)
     tablea <- data.frame(table)
-    tablea$phylum <- pi
+    tablea$order <- oi
     tablea$count <- i
-    tablea$Perc <- nrow(Auxotrophy_13[Auxotrophy_13$phylum == pi])
-    tables[[k]] <- tablea
+    tablea$Perc <- nrow(Auxotrophy_13_Firm[Auxotrophy_13_Firm$order == oi])
+    Firm_list[[k]] <- tablea
     k <- k + 1
   }
 }
-numb <- rbindlist(tables)
-numb$abun <- numb$table / numb$Perc * 100
 
+numb_Firm <- rbindlist(Firm_list)
+rm(numb_Firm)
+rm(Firm_list)
+numb_Firm$abun <- numb_Firm$table / numb_Firm$Perc * 100
+
+
+fi_or <- ggplot(numb_Firm, aes (count,abun, fill = order)) +
+  geom_bar(stat = "identity") +
+  xlab("Auxotrophies per genome") +
+  ylab("Abundance [%]") +
+  theme(legend.position = "right") +
+  theme(panel.background = element_rect(fill="white", colour= "white")) +
+  theme(legend.position = "bottom")+
+  coord_cartesian() +
+  theme(axis.line.x = element_line(colour= "black"))+
+  theme(axis.line.y = element_line(colour = "black"))+
+  theme(title = element_text(size = 10)) +
+  theme(axis.text.x = element_text(colour = "black", size = 10)) +
+  theme(axis.text.y = element_text(colour = "black", size = 10))
+fi_or
