@@ -1,0 +1,30 @@
+#######################  number of auxotrophies and genome length ##############
+#Load models (completeness >= 85% and contamination <=2)
+
+source("Scripts/init_models_filtered.R")
+
+#Predict auxotrophies
+
+source("Scripts/predict_auxos.R")
+
+#Add information about the genomes
+
+source("Scripts/auxotable_not_melted.R")
+
+########## visualization ############
+length_count <- ggplot(Auxotrophy_12, aes(x =`Genome Length (bp)`, y= count)) +
+  geom_point() +
+  geom_smooth() +
+  xlab("Genome Length (bp)") +
+  ylab("Number of auxotrophies") +
+  theme_minimal()+
+  theme(axis.title.x = element_text(color = "black", size = 12, face = "bold", margin = margin(t = 20, r = 0, b= 0, l = 0))) +
+  theme(axis.title.y = element_text(colour = "black", size = 12, face = "bold", margin = margin(t =0, r = 20, b= 0, l = 0))) +
+  theme(axis.text.x = element_text(colour = "black", size = 10)) +
+  theme(axis.text.y = element_text(colour = "black", size = 10)) +
+  ylim(0,21)+
+  coord_cartesian()
+length_count 
+
+ggsave("output/plots/Genome_length_numb_auxos.pdf", plot = length_count,
+       width = 6, height = 4)
