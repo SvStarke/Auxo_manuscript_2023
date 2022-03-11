@@ -39,3 +39,13 @@ Auxotrophy_12$phylum[Auxotrophy_12$phylum == "Synergistota"] <- "Other"
 Auxotrophy_12$phylum[Auxotrophy_12$phylum == "Spirochaetota"] <- "Other"
 Auxotrophy_12$phylum[Auxotrophy_12$phylum == "Thermoplasmatota"] <- "Other"
 Auxotrophy_12$phylum[Auxotrophy_12$phylum == "Verrucomicrobiota"] <- "Other"
+
+Auxotrophy_13 <- Auxotrophy_12
+Auxotrophy_13[, order := str_match(`GTDB Taxonomy`, "o__.*;f__")[,1]]
+Auxotrophy_13[, order := gsub("o__|;f__","", order)]
+Auxotrophy_13[, phylum := gsub("_C$","", phylum)]
+
+
+
+
+

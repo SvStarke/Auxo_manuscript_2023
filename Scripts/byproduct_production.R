@@ -1,4 +1,15 @@
 ###########################     SCFA production   ##############################
+#Load models (completeness >=85% and a contamination <=2)
+
+source("Scripts/init_models_filtered.R")
+
+#Predict auxotrophies
+
+source("Scripts/predict_auxos.R")
+
+#Add information about the genomes
+
+source("Scripts/auxotable_melted_merged.R")
 
 cutoff_prodrate <- 1 # at which mmol/gDW the rate is considered as 'real'production
 
@@ -87,7 +98,7 @@ stat_BP_x_auxo[wilcox.padj < 0.05, sign.label2 := "Padj < 0.05"]
 p <- ggplot(stat_BP_x_auxo[auxo.compound != "Gly"], aes(auxo.compound, by.product,
                                 fill = -log2(fisher.or))) +
   geom_tile() +
-  geom_point(aes(shape = sign.label1), size = 0.5) +
+  geom_point(aes(shape = sign.label1), size = 1) +
   scale_fill_gradient2(high = "#ca0020", mid = "white", low = "#0571b0") +
   scale_shape_manual(values = 8, na.translate = FALSE) +
   scale_x_discrete(expand = c(0,0)) + scale_y_discrete(expand = c(0,0)) +
@@ -98,7 +109,8 @@ p <- ggplot(stat_BP_x_auxo[auxo.compound != "Gly"], aes(auxo.compound, by.produc
         legend.justification = 	1,
         axis.text.x = element_text(color = "black", angle = 45, hjust = 1, size = 10),
         axis.text.y = element_text(color = "black", size = 10)) +
-  theme(axis.title.y = element_text(margin = margin(t = 0, r = 20, b= 0, l = 0))) +
+  theme(axis.title.y = element_text(margin = margin(t = 0, r = 20, b= 0, l = 0), face = "bold")) +
+  theme(axis.title.x = element_text(face = "bold", margin = margin(t = 20, r = 0, b= 0, l = 0))) +
   theme(panel.background = element_blank())
 
 p +theme(plot.margin = unit(c(1,0.5,2,0.5), "cm")) +
