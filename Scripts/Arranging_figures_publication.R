@@ -19,13 +19,13 @@ ggsave("output/plots/figure2.pdf", plot = fi2,
 #completeness of the pathways
 fi3 <- ggarrange(tr,hi,ch,se,le,il1,il2,il3,va,il4,il5,
                                  labels = c("A","B","C", "D","E"),
-                                 hjust = c(-0.1,1,1,1,-0.1),
+                                 hjust = c(-0.1,0.5,0.5,0.5,-0.1),
                                  ncol=4, nrow= 3, common.legend = TRUE, legend = "bottom",
                                      heights = c(1,1,1,1), widths= c(1,1,1,1))
 fi3
 
 ggsave("output/plots/figure3.pdf", plot = fi3,
-       width = 9, height = 6)
+       width = 9, height = 8)
 
 
 ################# figure 4 ###########
