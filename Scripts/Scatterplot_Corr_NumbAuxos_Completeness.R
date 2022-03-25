@@ -14,13 +14,13 @@ c <- ggplot(Auxotrophy_12, aes(Completeness, count)) +
   theme_minimal() +
   xlim(50,100) +
   ylim(0,21)+
-  theme(axis.title.x = element_text(size=20, colour = "black", margin = margin(10,0,0,0)),
-        axis.title.y = element_text(size = 20, colour = "black", margin = margin(0,10,0,0)),
-        axis.text.x = element_text(size=18, colour="black"),
-        axis.text.y = element_text(size=18, colour="black"))
+  theme(axis.title.x = element_text(size=12, colour = "black", margin = margin(20,0,0,0)),
+        axis.title.y = element_text(size = 12, colour = "black", margin = margin(0,20,0,0)),
+        axis.text.x = element_text(size=10, colour="black"),
+        axis.text.y = element_text(size=10, colour="black"))
 c
 
-ggsave("/Users/Svenja/Desktop/Completeness_NumbAuxos.pdf", plot = c,
+ggsave("output/plots/Completeness_NumbAuxos.pdf", plot = c,
               width = 6, height = 5)
 
 

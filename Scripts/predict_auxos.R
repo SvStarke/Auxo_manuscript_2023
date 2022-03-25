@@ -22,3 +22,4 @@ Auxotrophy$Genomes <- Genome
 # ----
 Auxotrophy <- as.data.table(Auxotrophy)
  
+View(Auxotrophy)

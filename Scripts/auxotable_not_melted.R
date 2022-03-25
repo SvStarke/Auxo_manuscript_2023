@@ -5,7 +5,7 @@ Metadata <- fread("/mnt/nuuk/2021/HRGM/REPR_Genomes_metadata.tsv")
 
 #count = of rows
 Auxotrophy$count <- rowSums(Auxotrophy == 0)
-
+o <- unique(Auxotrophy$count)
 #merge files
 #for analysis of completeness pathways
 Auxo_info <- merge(Auxotrophy, Metadata, by.x = "Genomes",

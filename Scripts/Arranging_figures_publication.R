@@ -47,14 +47,42 @@ fi2
 
 ggsave("output/plots/figure2.pdf", plot = fi2,
        width = 10, height = 8)
-#################figure 3 #################
+
+#################figure 3#################
+#Load models (completeness >= 85% and contamination <=2)
+
+source("Scripts/init_models_filtered.R")
+
+#Predict auxotrophies
+
+source("Scripts/predict_auxos.R")
+
+#Add information about the genomes
+
+source("Scripts/auxotable_not_melted.R")
+
+#Analyze and visualize the distribution of the number of auxotrophies in every phylum
+
+source("Scripts/number_auxo_per_phylum.R")
+
+#create figure
+fi3 <- ggarrange(fi_or, ba_or, ac_or, pr_or,
+                 labels = c("A","B","C", "D","E"),
+                 ncol=1, nrow= 4, common.legend = FALSE,
+                 heights = c(1,1,1,1), widths= c(1,1,1,1))
+fi3
+
+ggsave("output/plots/figure3_24.03.22_2.pdf", plot = fi3,
+       width = 10, height = 12)
+
+#################figure 4 #################
 #### fermentation products
 #Analyze the production of by products with statistical analysis
 
 source("Scripts/byproduct_production.R")
 
 #### create figure #####
-fi3 <- ggplot(stat_BP_x_auxo[auxo.compound != "Gly"], aes(auxo.compound, by.product,
+fi4 <- ggplot(stat_BP_x_auxo[auxo.compound != "Gly"], aes(auxo.compound, by.product,
                                                         fill = -log2(fisher.or))) +
   geom_tile() +
   geom_point(aes(shape = sign.label1), size = 1) +
@@ -72,16 +100,16 @@ fi3 <- ggplot(stat_BP_x_auxo[auxo.compound != "Gly"], aes(auxo.compound, by.prod
   theme(axis.title.x = element_text(face = "bold", margin = margin(t = 20, r = 0, b= 0, l = 0))) +
   theme(panel.background = element_blank())
 
-fi3 +theme(plot.margin = unit(c(1,0.5,2,0.5), "cm")) +
+fi4 +theme(plot.margin = unit(c(1,0.5,2,0.5), "cm")) +
   theme(legend.text = element_text(size=10),
         legend.title = element_text(size=8))
 
-fi3
-ggsave("output/plots/figure3.pdf", plot = fi3,
+fi4
+ggsave("output/plots/figure4.pdf", plot = fi4,
        width = 6, height = 3.0)
 
 
-################  figure 4 ####################################
+################  figure 5 ####################################
 #completeness of the pathways
 #Load models (Completeness >=85%, Contamination <=2)
 
@@ -100,18 +128,18 @@ source("Scripts/auxotable_not_melted.R")
 source("Scripts/Completeness_pathways.R")
 
 #### create figure ###
-fi4 <- ggarrange(tr,hi,ch,se,le,il1,il2,il3,va,il4,il5,
+fi5 <- ggarrange(tr,hi,ch,se,le,il1,il2,il3,va,il4,il5,
                                  labels = c("A","B","C", "D","E"),
                                  hjust = c(-0.1,0.5,0.5,0.5,-0.1),
                                  ncol=4, nrow= 3, common.legend = TRUE, legend = "bottom",
                                      heights = c(1,1,1,1), widths= c(1,1,1,1))
-fi4
+fi5
 
-ggsave("output/plots/figure4.pdf", plot = fi4,
-       width = 9, height = 8)
+ggsave("output/plots/figure5.pdf", plot = fi5,
+       width = 9, height = 9)
 
 
-################# figure 5 ###########
+################# figure 6 ###########
 #Load models (completeness >=85% and a contamination <=2)
 
 source("Scripts/init_models_filtered.R")
@@ -129,10 +157,10 @@ source("Scripts/auxotable_melted_merged.R")
 source("Scripts/Diseases_health_factors.R")
 
 #multivariate regression analysis and abundance of amino acid auxotrophies in the gut 
-fi5 <- ggarrange(b, linear_health_BMI_age1,all2, ncol=3,
+fi6 <- ggarrange(b, linear_health_BMI_age1,all2, ncol=3,
                    nrow=1, heights = c(1,1,1), widths= c(3,1,1.4),
                  labels = "AUTO", hjust = c(-0.5,1,-3))
-fi5
-ggsave("output/plots/figure5.pdf", plot = fi5,
+fi6
+ggsave("output/plots/figure6.pdf", plot = fi6,
        width = 9, height = 5)
 

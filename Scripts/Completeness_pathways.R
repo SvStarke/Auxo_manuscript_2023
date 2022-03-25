@@ -26,8 +26,17 @@ for (rxni in relrxns) {
 }
 arg <- rbindlist(Arg)
 arg <- dplyr::mutate(arg, ID = row_number())
-
-remove(arg)
+#get information about the biosynthesis pathways
+#prepare the visualization part
+argperce <- pwys_cov_Arg[pwys_cov_Arg$model == "HRGM_Genome_0005",]
+argperc <- argperce[,c(2,3,5)]
+distinct(argperc)
+arg1 <- merge(argperc, arg, by.x="rxn.metacyc",by.y = "rxn")
+arg1 <- arg1[order(pathway),]
+names(arg1)[names(arg1) == "ec"] <- "Enzymes"
+arg1$perc <- arg1$perc *100
+distinct(arg1)
+remove(arg1)
 #get the enzyme names for merging with the table later
 head(rxns)
 l <- rxns[[1]]
@@ -60,6 +69,18 @@ for (rxni in relrxns) {
 }
 asn <- rbindlist(Asn)
 asn <- dplyr::mutate(asn, ID = row_number())
+
+#prepare the visualization part
+asnperce <- pwys_cov_Asn[pwys_cov_Asn$model == "HRGM_Genome_0005",]
+asnperc <- asnperce[,c(2,3,5)]
+distinct(asnperc)
+asn1 <- merge(asnperc, asn, by.x="rxn.metacyc",by.y = "rxn")
+names(asn1)[names(asn1) == "ec"] <- "Enzymes"
+asn1$perc <- asn1$perc *100
+asn1 <- asn1[order(pathway),]
+distinct(arg1)
+remove(arg1)
+
 #Chorismate
 relGenomes <- Auxo_info[Chor == 0, `Genomes`]
 models <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models/", IDs = relGenomes)
@@ -83,19 +104,22 @@ chor <- dplyr::mutate(chor, ID = row_number())
 
 #prepare the visualization part
 chorperce <- pwys_cov_Chor[ pwys_cov_Chor$model == "HRGM_Genome_0003",]
-chorperc <- chorperce[,c(3,5)]
+chorperc <- chorperce[,c(2,3,5)]
 distinct(chorperc)
 chor <- merge(chorperc, chor, by.x="rxn.metacyc",by.y = "rxn")
 chor_new <- distinct(chor)
 chor <- data.frame(chor_new)
 chor$perc <- chor$perc *100
+names(chor)[names(chor) == "ec"] <- "Enzymes"
 level_order <- c("4.2.1.10","1.1.1.25" ,"2.7.1.71","2.5.1.19","4.2.3.5/4.6.1.4")
 
 ##visualization completeness of the chor pathway with the right order
 ch <- ggplot(chor, aes(x =factor(ec, level = level_order), y =perc))+
   geom_bar(stat="identity", width=0.8, fill = "black") +
-  ylab("Missing enzymes [%]") +
-  xlab("Enzymes in the chorismate pathway") +
+  ylab("Missing in auxotrophic microbiota[%]") +
+  xlab("Enzymes") +
+  ggtitle("Chorismate biosynthesis") +
+  theme(title = element_text(size = 6, face="bold")) +
   theme(axis.line = element_line(size=0.2, colour = "black")) +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
   theme(axis.title.y = element_text(colour = "black", size = 6, face = "bold", margin = margin(0,10,0,0)))+
@@ -104,7 +128,7 @@ ch <- ggplot(chor, aes(x =factor(ec, level = level_order), y =perc))+
   theme(axis.text.y = element_text(size = 6, colour = "black")) +
   theme(plot.margin= margin(0.5,0.5,0.5,0.5, "cm")) +
   coord_cartesian(ylim=c(0,100)) +
-  scale_x_discrete("Enzymes in the chorismate pathway", labels = c("4.2.1.10" = "4.2.1.10","1.1.1.25" = "1.1.1.25","2.7.1.71"="2.7.1.71","2.5.1.19"="2.5.1.19","4.2.3.5/4.6.1.4" = "4.2.1.3.5/\n4.6.1.4"))
+  scale_x_discrete("Enzymes", labels = c("4.2.1.10" = "4.2.1.10","1.1.1.25" = "1.1.1.25","2.7.1.71"="2.7.1.71","2.5.1.19"="2.5.1.19","4.2.3.5/4.6.1.4" = "4.2.1.3.5/\n4.6.1.4"))
 
 ch
 ggsave("output/plots/Completeness_Chor_pathway.pdf", plot = ch,
@@ -133,6 +157,15 @@ cys <- filter(cys, perc !=0)
 cys <- dplyr::mutate(cys, ID = row_number())
 View(pwys_cov_Cys)
 
+#prepare the visualization part
+cysperce <- pwys_cov_Cys[pwys_cov_Cys$model == "HRGM_Genome_0003",]
+cysperc <- cysperce[,c(2,3,5)]
+distinct(cysperc)
+cys1 <- merge(cysperc, cys, by.x="rxn.metacyc",by.y = "rxn")
+names(cys1)[names(cys1) == "ec"] <- "Enzymes"
+cys1$perc <- cys1$perc *100
+cys1 <- cys1[order(pathway),]
+
 
 #Glutamine
 relGenomes <- Auxo_info[Gln == 0, `Genomes`]
@@ -155,6 +188,15 @@ for (rxni in relrxns) {
 gln <- rbindlist(Gln)
 gln <- dplyr::mutate(gln, ID = row_number())
 
+#prepare the visualization part
+glnperce <- pwys_cov_Gln[pwys_cov_Gln$model == "HRGM_Genome_0097",]
+glnperc <- glnperce[,c(2,3,5)]
+distinct(glnperc)
+gln1 <- merge(glnperc, gln, by.x="rxn.metacyc",by.y = "rxn")
+names(gln1)[names(gln1) == "ec"] <- "Enzymes"
+gln1$perc <- gln1$perc *100
+gln1 <- gln1[order(pathway),]
+
 #Glycine
 relGenomes <- Auxo_info[Gly == 0, `Genomes`]
 models <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models/", IDs = relGenomes)
@@ -175,6 +217,14 @@ for (rxni in relrxns) {
 }
 gly <- rbindlist(Gly)
 gly <- dplyr::mutate(gly, ID = row_number())
+
+glyperce <- pwys_cov_Gly[pwys_cov_Gly$model == "HRGM_Genome_0614",]
+glyperc <- glyperce[,c(2,3,5)]
+distinct(glyperc)
+gly1 <- merge(glyperc, gly, by.x="rxn.metacyc",by.y = "rxn")
+names(gly1)[names(gly1) == "ec"] <- "Enzymes"
+gly1$perc <- gly1$perc *100
+gly1 <- gly1[order(pathway),]
 
 
 #Histidine
@@ -200,20 +250,22 @@ his <- dplyr::mutate(his, ID = row_number())
 
 #prepare the visualization part
 hisperce <- pwys_cov_His[ pwys_cov_His$model == "HRGM_Genome_0003",]
-hisperc <- hisperce[,c(3,5)]
+hisperc <- hisperce[,c(2,3,5)]
 distinct(hisperc)
 his <- merge(hisperc, his, by.x="rxn.metacyc",by.y = "rxn")
 his_new <- distinct(his)
 his <- data.frame(his_new)
 his$perc <- his$perc *100
-
+names(his)[names(his) == "ec"] <- "Enzymes"
 his <- his[-7,]
 
 ##visualization completeness of the chor pathway with the right order
 hi <- ggplot(his, aes(x =`ec`, y =perc))+
   geom_bar(stat="identity", width=0.8, fill = "black") +
-  ylab("Missing enzymes [%]") +
-  xlab("Enzymes in the histidine pathway") +
+  ylab("Missing in auxotrophic microbiota [%]") +
+  xlab("Enzymes") +
+  ggtitle("Histidine biosynthesis") +
+  theme(title = element_text(size=6, face="bold"))+
   theme(axis.line = element_line(size=0.2, colour = "black")) +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
   theme(axis.title.y = element_text(colour = "black", size = 6, face = "bold", margin = margin(0,10,0,0)))+
@@ -235,6 +287,7 @@ rxns <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models", file.type = "reacti
 pwys <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models", file.type = "pathways", IDs = relGenomes)
 pwys_cov_Ile <- get_pathway_coverage(models,rxns,pwys, pathways.of.interest = c("ILEUSYN-PWY","PWY-5101","PWY-5103","PWY-5104","PWY-5108"))
 View(pwys_cov_Ile)
+
 #analyse only the isoleucine biosynthesis pathway from threonine
 pwys_cov_Ile <- get_pathway_coverage(models,rxns,pwys, pathways.of.interest = c("ILEUSYN-PWY"))
 
@@ -257,20 +310,25 @@ ile <- dplyr::mutate(ile, ID = row_number())
 
 
 #prepare the visualization part
-ileperce <- pwys_cov_Ile[ pwys_cov_Ile$model == "HRGM_Genome_0167",]
-ileperc <- ileperce[,c(3,5)]
+ileperce <- pwys_cov_Ile[pwys_cov_Ile$model == "HRGM_Genome_0167",]
+ileperc <- ileperce[,c(2,3,5)]
 distinct(ileperc)
 ile1 <- merge(ileperc, ile, by.x="rxn.metacyc",by.y = "rxn")
 ile_new1 <- distinct(ile1)
-ile1 <- data.frame(ile_new1)
+ile1 <- data.table(ile_new1)
 ile1$perc <- ile1$perc *100
-ile1[5,2] <- "RXN-15121"
+#ile1[5,2] <- "RXN-15121"
+#for table delete these two rows because spotaneous
 names(ile1) [names(ile1) == "ec"] <- "Enzymes"
-##visualization completeness of the chor pathway with the right order
+ile1 <- ile1[order(pathway),]
+pro1
+##visualization completeness of the ile pathway with the right order
 il1 <- ggplot(ile1, aes(x =Enzymes, y =perc, fill =factor(ifelse(Enzymes == "4.3.1.19/4.2.1.16", "not shared", "shared enzyme"))))+
   geom_bar(stat="identity", width=0.8) +
-  ylab("Missing enzymes [%]") +
-  xlab("Isoleucine biosynthesis I pathway") +
+  ylab("Missing in auxotrophic microbiota [%]") +
+  xlab("Enzymes") +
+  ggtitle("Isoleucine biosynthesis I") +
+  theme(title = element_text(size = 6, face = "bold")) +
   theme(axis.line = element_line(size=0.2, colour = "black")) +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
   theme(axis.title.y = element_text(colour = "black", size = 6, face = "bold", margin = margin(0,10,0,0)))+
@@ -288,7 +346,7 @@ ggsave("output/plots/Completeness_Ile1_pathway.pdf", plot = il1,
        width =7, height = 5.5)
 
 
-#PWY-5101
+############PWY-5101#################
 pwys_cov_Ile <- get_pathway_coverage(models,rxns,pwys, pathways.of.interest = c("PWY-5101"))
 
 relrxns <- unique(pwys_cov_Ile$rxn.metacyc)
@@ -318,13 +376,16 @@ ile_new2 <- distinct(ile2)
 ile2 <- data.frame(ile_new2)
 ile2$perc <- ile2$perc *100
 names(ile2) [names(ile2) == "ec"] <- "Enzymes"
+
 #give ec number in missing values
 ile2[8,2] = "1.1.1.-"
 ile2[7,2] = "RXN-7744"
 il2 <- ggplot(ile2, aes(x =Enzymes, y =perc, fill =factor(ifelse(Enzymes == "2.2.1.6/4.1.3.18" | Enzymes == "4.2.1.9"| Enzymes =="2.6.1.42", "shared", "not shared"))))+
   geom_bar(stat="identity", position = "stack", width=0.8) +
-  ylab("Missing enzymes [%]") +
-  xlab("Isoleucine biosynthesis II pathway") +
+  ylab("Missing in auxotrophic microbiota [%]") +
+  xlab("Enzymes") +
+  ggtitle("Isoleucine biosynthesis II") +
+  theme(title = element_text(size = 6, face = "bold")) +
   theme(axis.line = element_line(size=0.2, colour = "black")) +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
   theme(axis.title.y = element_text(colour = "black", size = 6, face = "bold", margin = margin(0,10,0,0)))+
@@ -341,7 +402,7 @@ il2
 ggsave("output/plots/Completeness_Ile2_pathway.pdf", plot = il2,
        width =7, height = 5.5)
 
-####PWY-5103
+#############PWY-5103############
 pwys_cov_Ile <- get_pathway_coverage(models,rxns,pwys, pathways.of.interest = c("PWY-5103"))
 
 relrxns <- unique(pwys_cov_Ile$rxn.metacyc)
@@ -375,8 +436,10 @@ ile3[6,2] = "RXN-7746"
 ##visualization completeness of the ile pathway with the right order
 il3 <- ggplot(ile3, aes(x =Enzymes, y =perc, fill =factor(ifelse(Enzymes == "2.2.1.6/4.1.3.18" | Enzymes == "1.1.1.86/1.1.1.89"| Enzymes == "4.2.1.9" | Enzymes == "2.6.1.42", "shared", "not shared"))))+
   geom_bar(stat="identity", width=0.8) +
-  ylab("Missing enzymes [%]") +
-  xlab("Isoleucine biosynthesis III pathway") +
+  ylab("Missing in auxotrophic microbiota [%]") +
+  xlab("Enzymes") +
+  ggtitle("Isoleucine biosynthesis III") +
+  theme(title = element_text(size = 6, face = "bold")) +
   theme(axis.line = element_line(size=0.2, colour = "black")) +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
   theme(axis.title.y = element_text(colour = "black", size = 6, face = "bold", margin = margin(0,10,0,0)))+
@@ -427,17 +490,19 @@ level_order_il4 <-c("6.2.1.17","1.2.7.7","2.2.1.6/4.1.3.18","1.1.1.383","4.2.1.9
 ##visualization completeness of the ile pathway with the right order
 il4 <- ggplot(ile4, aes(x = factor(Enzymes, level = level_order_il4), y =perc, fill =factor(ifelse(Enzymes == "2.2.1.6/4.1.3.18"| Enzymes == "4.2.1.9" | Enzymes == "2.6.1.42", "shared", "not shared"))))+
   geom_bar(stat="identity", width=0.8) +
-  ylab("Missing enzymes [%]") +
-  xlab("Isoleucine biosynthesis IV pathway") +
+  ylab("Missing in auxotrophic mcirobiota [%]") +
+  xlab("Enzymes") +
+  ggtitle("Isoleucine biosynthesis IV") +
   theme(axis.line = element_line(size=0.2, colour = "black")) +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
+  theme(title = element_text(size = 6, face = "bold")) +
   theme(axis.title.y = element_text(colour = "black", size = 6, face = "bold", margin = margin(0,10,0,0)))+
   theme(axis.title.x = element_text(colour = "black", size = 6, face = "bold", margin = margin(10,0,0,0))) +
   theme(axis.text.x = element_text(size=6, colour = "black", hjust = 1,  angle = 45, margin = margin(10,0,0,0))) +
   theme(axis.text.y = element_text(size = 6, colour = "black")) +
   theme(plot.margin= margin(0.5,0.5,0.5,0.5, "cm")) +
   coord_cartesian(ylim=c(0,100)) +
-  scale_x_discrete("Isoleucine biosynthesis IV pathway", labels = c("6.2.1.17" = "6.2.1.17","1.2.7.7" = "1.2.7.7.","2.2.1.6/4.1.3.18" ="2.2.1.6/\n4.1.3.18","1.1.1.383"="1.1.1.383","4.2.1.9"="4.2.1.9","2.6.1.42"="2.6.1.42")) +
+  scale_x_discrete("Enzymes", labels = c("6.2.1.17" = "6.2.1.17","1.2.7.7" = "1.2.7.7.","2.2.1.6/4.1.3.18" ="2.2.1.6/\n4.1.3.18","1.1.1.383"="1.1.1.383","4.2.1.9"="4.2.1.9","2.6.1.42"="2.6.1.42")) +
   scale_fill_manual(name = "Enzymes", values=c("#fcbba1","#99000d")) +
   theme(legend.text = element_text(size=6))  +
   theme(legend.title = element_text(size=6))
@@ -477,8 +542,10 @@ names(ile5) [names(ile5) == "ec"] <- "Enzymes"
 ##visualization completeness of the ile pathway with the right order
 il5 <- ggplot(ile5, aes(x =Enzymes, y =perc, fill = factor(ifelse(Enzymes == "2.6.1.42", "shared", "not shared"))))+
   geom_bar(stat="identity", width=0.9) +
-  ylab("Missing enzymes [%]") +
-  xlab("Isoleucine biosynthesis V pathway") +
+  ylab("Missing in auxotrophic microbiota[%]") +
+  xlab("Enzymes") +
+  ggtitle("Isoleucine biosynthesis V ") +
+  theme(title = element_text(size= 6, face = "bold")) +
   theme(axis.line = element_line(size=0.2, colour = "black")) +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
   theme(axis.title.y = element_text(colour = "black", size = 6, face = "bold", margin = margin(0,10,0,0)))+
@@ -502,7 +569,6 @@ models <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models/", IDs = relGenomes
 rxns <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models", file.type = "reactions", IDs = relGenomes)
 pwys <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models", file.type = "pathways", IDs = relGenomes)
 pwys_cov_Leu <- get_pathway_coverage(models,rxns,pwys, pathways.of.interest = c("LEUSYN-PWY"))
-View(pwys_cov_Leu)
 relrxns <- unique(pwys_cov_Leu$rxn.metacyc)
 Leu<- list()
 k <- 1
@@ -522,13 +588,14 @@ leu <- dplyr::mutate(leu, ID = row_number())
 
 #prepare the visualization part
 leuperce <- pwys_cov_Leu[ pwys_cov_Leu$model == "HRGM_Genome_0167",]
-leuperc <- leuperce[,c(3,5)]
+leuperc <- leuperce[,c(2,3,5)]
 distinct(leuperc)
 leu <- merge(leuperc, leu, by.x="rxn.metacyc",by.y = "rxn")
 leu_new <- distinct(leu)
-leu <- data.frame(leu_new)
+leu <- data.table(leu_new)
 leu$perc <- leu$perc *100
 names(leu) [names(leu) == "ec"] <- "Enzymes"
+leu <- leu[order(pathway),]
 
 #delete one reaction meaning the same enzyme because the percentage is the same
 leu <- leu[-5,]
@@ -536,8 +603,10 @@ leu <- leu[-5,]
 ##visualization completeness of the leu pathway with the right order
 le <- ggplot(leu, aes(x =Enzymes, y =perc, fill =factor(ifelse(Enzymes == "2.6.1.6/2.6.1.42", "shared", "not shared"))))+
   geom_bar(stat="identity", width=0.8) +
-  ylab("Missing enzymes [%]") +
-  xlab("Leucine pathway") +
+  ylab("Missing in auxotrophic microbiota%]") +
+  xlab("Enzymes") +
+  ggtitle("Leucine biosynthesis") +
+  theme(title = element_text(size=6, face = "bold")) +
   theme(axis.line = element_line(size=0.2, colour = "black")) +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
   theme(axis.title.y = element_text(colour = "black", size = 6, face = "bold", margin = margin(0,10,0,0)))+
@@ -579,7 +648,16 @@ lys <- rbindlist(Lys)
 lys <- filter(lys, perc != 0)
 lys <- dplyr::mutate(lys, ID = row_number())
 
-
+#prepare the visualization part
+lysperce <- pwys_cov_Lys[ pwys_cov_Lys$model == "HRGM_Genome_0167",]
+lysperc <- lysperce[,c(2,3,5)]
+distinct(lysperc)
+lys <- merge(lysperc, lys, by.x="rxn.metacyc",by.y = "rxn")
+lys_new <- distinct(lys)
+lys1 <- data.table(lys_new)
+lys1$perc <- lys$perc *100
+names(lys)[names(lys) == "ec"] <- "Enzymes"
+lys <-lys[order(pathway),]
 #Methionine
 relGenomes <- Auxo_info[Met == 0, `Genomes`]
 models <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models/", IDs = relGenomes)
@@ -602,6 +680,17 @@ met <- rbindlist(Met)
 met <- filter(met, perc != 0)
 met <- dplyr::mutate(met, ID = row_number())
 
+#prepare the visualization part
+metperce <- pwys_cov_Met[ pwys_cov_Met$model == "HRGM_Genome_0167",]
+metperc <- metperce[,c(2,3,5)]
+distinct(metperc)
+met <- merge(metperc, met, by.x="rxn.metacyc",by.y = "rxn")
+met_new <- distinct(met)
+met1 <- data.table(met_new)
+met1$perc <- met$perc *100
+names(met)[names(met) == "ec"] <- "Enzymes"
+met <-met[order(pathway),]
+
 #Phenylalanine
 relGenomes <- Auxo_info[Phe == 0, `Genomes`]
 models <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models/", IDs = relGenomes)
@@ -622,6 +711,18 @@ for (rxni in relrxns) {
 }
 phe <- rbindlist(Phe)
 phe <- dplyr::mutate(phe, ID = row_number())
+
+
+#prepare the visualization part
+pheperce <- pwys_cov_Phe[ pwys_cov_Phe$model == "HRGM_Genome_0167",]
+pheperc <- pheperce[,c(2,3,5)]
+distinct(pheperc)
+phe <- merge(pheperc, phe, by.x="rxn.metacyc",by.y = "rxn")
+phe_new <- distinct(phe)
+phe1 <- data.table(phe_new)
+phe1$perc <- phe$perc *100
+names(phe)[names(phe) == "ec"] <- "Enzymes"
+phe <-phe[order(pathway),]
 
 #Proline
 relGenomes <- Auxo_info[Pro == 0, `Genomes`]
@@ -645,6 +746,17 @@ for (rxni in relrxns) {
 pro <- rbindlist(Pro)
 pro <- filter(pro, perc != 0)
 pro <- dplyr::mutate(pro, ID = row_number())
+
+#prepare the visualization part
+properce <- pwys_cov_Pro[ pwys_cov_Pro$model == "HRGM_Genome_0167",]
+properc <- properce[,c(2,3,5)]
+distinct(properc)
+pro <- merge(properc, pro, by.x="rxn.metacyc",by.y = "rxn")
+pro_new <- distinct(pro)
+pro1 <- data.table(pro_new)
+pro1$perc <- pro$perc *100
+names(pro1)[names(pro1) == "ec"] <- "Enzymes"
+pro1 <-pro[order(pathway),]
 
 #Serine
 relGenomes <- Auxo_info[Ser == 0, `Genomes`]
@@ -670,18 +782,23 @@ ser <- dplyr::mutate(ser, ID = row_number())
 
 #prepare the visualization part
 serperce <- pwys_cov_Ser[ pwys_cov_Ser$model == "HRGM_Genome_0002",]
-serperc <- serperce[,c(3,5)]
+serperc <- serperce[,c(2,3,5)]
 distinct(serperc)
 ser <- merge(serperc, ser, by.x="rxn.metacyc",by.y = "rxn")
 ser_new <- distinct(ser)
 ser <- data.frame(ser_new)
 ser$perc <- ser$perc *100
+names(ser)[names(ser) == "ec"] <- "Enzymes"
+
+
 
 ##visualization completeness of the leu pathway with the right order
-se <- ggplot(ser, aes(x =`ec`, y =perc))+
+se <- ggplot(ser, aes(x =Enzymes, y =perc))+
   geom_bar(stat="identity", width = 0.8, fill = "black") +
-  ylab("Missing enzymes [%]") +
-  xlab("Enzymes in the serine pathway") +
+  ylab("Missing in auxottrophic microbiota [%]") +
+  xlab("Enzymes") +
+  ggtitle("Serine biosynthesis") +
+  theme(title = element_text(size=6, face="bold")) +
   theme(axis.line = element_line(size=0.2, colour = "black")) +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
   theme(axis.title.y = element_text(colour = "black", size = 6, face = "bold", margin = margin(0,10,0,0)))+
@@ -717,6 +834,17 @@ thr <- rbindlist(Thr)
 thr <- filter(thr, perc != 0)
 thr <- dplyr::mutate(thr, ID = row_number())
 
+#prepare the visualization part
+thrperce <- pwys_cov_Thr[pwys_cov_Thr$model == "HRGM_Genome_0104",]
+thrperc <- thrperce[,c(2,3,5)]
+distinct(thrperc)
+thr <- merge(thrperc, thr, by.x="rxn.metacyc",by.y = "rxn")
+thr_new <- distinct(thr)
+thr1 <- data.frame(thr_new)
+thr1$perc <- thr1$perc *100
+names(thr1)[names(thr1) == "ec"] <- "Enzymes"
+thr <- thr[order(thr$pathway), ]
+
 #Tryptophan
 relGenomes <- Auxo_info[Trp == 0, `Genomes`]
 models <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models/", IDs = relGenomes)
@@ -744,14 +872,17 @@ for (rxni in relrxns) {
 }
 
 trp <- rbindlist(Trp)
+remove(trp)
 #prepare the visualization part
-trpperce <- pwys_cov_Trp[ pwys_cov_Trp$model == "HRGM_Genome_0094",]
-trpperc <- trpperce[,c(3,5)]
+trpperce <- pwys_cov_Trp[pwys_cov_Trp$model == "HRGM_Genome_0094",]
+trpperc <- trpperce[,c(2,3,5)]
 distinct(trpperc)
 trp <- merge(trpperc, trp, by.x="rxn.metacyc",by.y = "rxn")
 trp_new <- distinct(trp)
 trp <- data.frame(trp_new)
 trp <- dplyr::mutate(trp, ID = row_number())
+trp$perc <- trp$perc *100
+names(trp)[names(trp) == "ec"] <- "Enzymes"
 
 
 trp_compl <- filter(pathway1, AA == "Tryptophan")
@@ -759,8 +890,10 @@ trp_compl <- filter(pathway1, AA == "Tryptophan")
 ##visualization completeness of the trp pathway with the right order
 tr <- ggplot(trp, aes(x =`ec`, y =perc))+
   geom_bar(width = 0.8, stat="identity", fill = "black") +
-  ylab("Missing enzymes [%]") +
-  xlab("Enzymes in the tryptophan pathway") +
+  ylab("Missing in auxotrophic microbiota [%]") +
+  xlab("Enzymes") +
+  ggtitle("Tryptophan biosynthesis") +
+  theme(title = element_text(size = 6, face="bold")) +
   theme(axis.line = element_line(size=0.2, colour = "black")) +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
   theme(axis.title.y = element_text(colour = "black", size = 6, face = "bold", margin = margin(0,10,0,0)))+
@@ -794,7 +927,19 @@ for (rxni in relrxns) {
   k <- k+1
 }
 tyr <- rbindlist(Tyr)
+
 tyr <- dplyr::mutate(tyr, ID = row_number())
+
+#prepare the visualization part
+tyrperce <- pwys_cov_Tyr[pwys_cov_Tyr$model == "HRGM_Genome_0095",]
+tyrperc <- tyrperce[,c(2,3,5)]
+distinct(trpperc)
+tyr <- merge(tyrperc, tyr, by.x="rxn.metacyc",by.y = "rxn")
+tyr_new <- distinct(tyr)
+tyr <- data.frame(tyr_new)
+tyr <- dplyr::mutate(tyr, ID = row_number())
+tyr$perc <- tyr$perc *100
+names(tyr)[names(tyr) == "ec"] <- "Enzymes"
 
 #Valine
 relGenomes <- Auxo_info[Val == 0, `Genomes`]
@@ -819,7 +964,7 @@ val <- dplyr::mutate(val, ID = row_number())
 
 #prepare the visualization part
 valperce <- pwys_cov_Val[ pwys_cov_Val$model == "HRGM_Genome_0097",]
-valperc <- valperce[,c(3,5)]
+valperc <- valperce[,c(2,3,5)]
 distinct(valperc)
 val <- merge(valperc, val, by.x="rxn.metacyc",by.y = "rxn")
 val_new <- distinct(val)
@@ -831,8 +976,10 @@ level_order_val <- c("2.2.1.6/4.1.3.18","1.1.1.86/1.1.1.89","4.2.1.9", "2.6.1.42
 ##visualization completeness of the leu pathway with the right order
 va <- ggplot(val, aes(x = factor(Enzymes, levels = level_order_val), y =perc))+
   geom_bar(width= 0.8,stat="identity", fill = "#99000d") +
-  ylab("Missing enzymes [%]") +
-  xlab("Valine pathway") +
+  ylab("Missing in auxotrophic microbiota [%]") +
+  xlab("Enzymes") +
+  ggtitle("Valine biosynthesis") +
+  theme(title = element_text(size = 6, face="bold")) +
   theme(axis.line = element_line(size=0.2, colour = "black")) +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
   theme(axis.title.y = element_text(colour = "black", size = 6, face = "bold", margin = margin(0,10,0,0)))+
@@ -847,16 +994,18 @@ va <- ggplot(val, aes(x = factor(Enzymes, levels = level_order_val), y =perc))+
 va
 ggsave("output/plots/Completeness_Val_pathway.pdf", plot = va,
        width =7, height = 5.5)
-
+ile1
 #Bind all data together
-pathway_completeness <- rbind(arg, asn, chor, cys, gln, gly, his, ile, leu, lys, met, phe, pro, ser, thr, trp, tyr, val)
-pathway_completeness$perc <- pathway_completeness$perc * 100
+pathway_completeness <- rbind(arg1, asn1, chor, cys1, gln1, gly1, his, ile1, leu, lys, met, phe, pro1, ser, thr, trp, tyr, val)
+#pathway_completeness$perc <- pathway_completeness$perc * 100
 pathway_completeness$perc <- round(pathway_completeness$perc)
 pathway_completeness <- data.frame(pathway_completeness)
 pathway_new <- merge(pathway_completeness, test, by.x = "rxn", by.y="rxn")
 pathway_completeness <- pathway_new[order(pathway_new$AA),]
-colnames(pathway_completeness) <- c("Reaction names", "Abundance[%]", "AA","ID", "EC number")
-pathway <- pathway_completeness[,c(3,4,1,2)]
+colnames(pathway_completeness) <- c("Reaction names", "Pathway", "EC number", "Abundance[%]", "AA","ID")
+pathway <- pathway_completeness[,c(5,3,1,2,4)]
+
+write.csv(pathway, "output/plots/pathway_23.03.2022.csv")
 pathway1 <- data.table(pathway_completeness)
 
 remove(pathway_completeness)
@@ -1002,18 +1151,21 @@ t1 <- t %>%
   tab_header(title = md("**Completeness of the amino acid biosynthesis pathways**"),
              subtitle = "Abundance of missing enzymes in auxotrophic microbiota")
 t2 <- t1 %>%
-  tab_options(table.width = pct(70),
-              data_row.padding = px(10),
+  tab_options(table.width = pct(20),
+              data_row.padding = px(5),
               column_labels.font.weight = "bold",
               row_group.font.weight = "bold",
-              table.font.size = px(12))
+              table.font.size = px(30))
 t2
 t2 %>%
-  gtsave("pathway.png", expand = 100,  path = "/home/svenja/Documents")
+  gtsave("pathway_23.03.22.png", expand = 10,  path = "output/plots")
+
 
 t2 %>%
-  gtsave("pathway_12.02.2022.pdf", path = "/home/svenja/Documents")
+  gtsave("pathway_23.03.2022.pdf", path = "output/plots")
 
+t2 %>%
+  gtsave("pathway_23.03.2022.html", path = "output/plots")
 
 
 ############## combined plot for BCAA superpathway ##############################
