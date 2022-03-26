@@ -656,8 +656,9 @@ lys <- merge(lysperc, lys, by.x="rxn.metacyc",by.y = "rxn")
 lys_new <- distinct(lys)
 lys1 <- data.table(lys_new)
 lys1$perc <- lys$perc *100
-names(lys)[names(lys) == "ec"] <- "Enzymes"
-lys <-lys[order(pathway),]
+names(lys1)[names(lys1) == "ec"] <- "Enzymes"
+lys1 <-lys1[order(pathway),]
+
 #Methionine
 relGenomes <- Auxo_info[Met == 0, `Genomes`]
 models <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models/", IDs = relGenomes)
@@ -688,8 +689,8 @@ met <- merge(metperc, met, by.x="rxn.metacyc",by.y = "rxn")
 met_new <- distinct(met)
 met1 <- data.table(met_new)
 met1$perc <- met$perc *100
-names(met)[names(met) == "ec"] <- "Enzymes"
-met <-met[order(pathway),]
+names(met1)[names(met1) == "ec"] <- "Enzymes"
+met1 <-met1[order(pathway),]
 
 #Phenylalanine
 relGenomes <- Auxo_info[Phe == 0, `Genomes`]
@@ -721,8 +722,8 @@ phe <- merge(pheperc, phe, by.x="rxn.metacyc",by.y = "rxn")
 phe_new <- distinct(phe)
 phe1 <- data.table(phe_new)
 phe1$perc <- phe$perc *100
-names(phe)[names(phe) == "ec"] <- "Enzymes"
-phe <-phe[order(pathway),]
+names(phe1)[names(phe1) == "ec"] <- "Enzymes"
+phe1 <-phe1[order(pathway),]
 
 #Proline
 relGenomes <- Auxo_info[Pro == 0, `Genomes`]
@@ -862,7 +863,7 @@ relrxns <- unique(pwys_cov_Trp$rxn.metacyc)
 Trp <- list()
 k <- 1
 for (rxni in relrxns) {
-  Trpperc <- (nrow(pwys_cov_Trp[pwys_cov_Trp$rxn.metacyc == rxni & pwys_cov_Trp$prediction == "FALSE"]) / nrow(pwys_cov_Trp[pwys_cov_Trp$rxn.metacyc == rxni]))*100
+  Trpperc <- (nrow(pwys_cov_Trp[pwys_cov_Trp$rxn.metacyc == rxni & pwys_cov_Trp$prediction == "FALSE"]) / nrow(pwys_cov_Trp[pwys_cov_Trp$rxn.metacyc == rxni]))
   trpperc <- data.frame(Trpperc)
   colnames(trpperc) <- "perc"
   trpperc$rxn <- rxni
@@ -872,7 +873,7 @@ for (rxni in relrxns) {
 }
 
 trp <- rbindlist(Trp)
-remove(trp)
+remove(Trp)
 #prepare the visualization part
 trpperce <- pwys_cov_Trp[pwys_cov_Trp$model == "HRGM_Genome_0094",]
 trpperc <- trpperce[,c(2,3,5)]
@@ -996,16 +997,18 @@ ggsave("output/plots/Completeness_Val_pathway.pdf", plot = va,
        width =7, height = 5.5)
 ile1
 #Bind all data together
-pathway_completeness <- rbind(arg1, asn1, chor, cys1, gln1, gly1, his, ile1, leu, lys, met, phe, pro1, ser, thr, trp, tyr, val)
+pathway_completeness <- rbind(arg1, asn1, chor, cys1, gln1, gly1, his, ile1, leu, lys1, met1, phe1, pro1, ser, thr, trp, tyr, val)
+View(pathway_completeness)
+
 #pathway_completeness$perc <- pathway_completeness$perc * 100
 pathway_completeness$perc <- round(pathway_completeness$perc)
 pathway_completeness <- data.frame(pathway_completeness)
-pathway_new <- merge(pathway_completeness, test, by.x = "rxn", by.y="rxn")
-pathway_completeness <- pathway_new[order(pathway_new$AA),]
-colnames(pathway_completeness) <- c("Reaction names", "Pathway", "EC number", "Abundance[%]", "AA","ID")
+colnames(pathway_completeness) <- c("Reaction names", "Pathway", "EC number", "Abundance in auxotrophic microbiota[%]", "Amino acids","ID")
 pathway <- pathway_completeness[,c(5,3,1,2,4)]
 
-write.csv(pathway, "output/plots/pathway_23.03.2022.csv")
+#pathway_completeness <- pathway_new[order(pathway_new$AA),]
+
+write.csv(pathway, "output/plots/pathway_26.03.2022.csv")
 pathway1 <- data.table(pathway_completeness)
 
 remove(pathway_completeness)

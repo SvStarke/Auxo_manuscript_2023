@@ -166,6 +166,7 @@ relorder_Pro <- relorder_Pro[!is.na(relorder_Pro)]
 ###
 count <- unique(Auxotrophy_13_Firm$count)
 Auxotrophy_13_Firm_filt <- subset(Auxotrophy_13_Firm, order %in% relorder_Firm)
+nrow(Auxotrophy_13_Firm_filt)
 Firm_list <- list()
 k <- 1
 for (i in count) {
@@ -191,7 +192,9 @@ View(numb_Firm)
 
 #control calculated number of rows per order
 sum(numb_Firm[which(numb_Firm$order == "Lachnospirales"), 1])
+n_Firm_filt <- nrow(Auxotrophy_13_Firm_filt)
 
+nrow(Auxotrophy_13_Firm)
 #visualization
 fi_or <- ggplot(numb_Firm, aes (count,abun, fill = order)) +
   geom_bar(stat = "identity") +
@@ -203,13 +206,17 @@ fi_or <- ggplot(numb_Firm, aes (count,abun, fill = order)) +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
   coord_cartesian() +
   ggtitle("Firmicutes") +
+  labs(subtitle = "n = 1713")  +
   theme(title = element_text(face="bold")) +
+  theme(legend.title = element_text(size=10, face = "bold")) +
   theme(axis.title.x = element_text(face="bold")) +
   theme(axis.title.y = element_text(face="bold")) +
   theme(axis.line.x = element_line(colour= "black"))+
   theme(axis.line.y = element_line(colour = "black"))+
   theme(title = element_text(size = 10)) +
-  scale_fill_manual(values = c("#a50026","#d73027","#f46d43","#fdae61","#fee090","#e0f3f8","#abd9e9","#74add1","#4575b4","#313695")) +
+  scale_fill_manual(values = c("#000000","#004949","#009292","#ff6db6","#ffb6db",
+                                        "#490092","#006ddb","#b66dff","#6db6ff","#b6dbff",
+                                        "#920000","#924900","#db6d00","#24ff24","#ffff6d")) +
   theme(axis.text.x = element_text(colour = "black", size = 10)) +
   theme(axis.text.y = element_text(colour = "black", size = 10))
 
@@ -237,6 +244,7 @@ for (i in count) {
 numb_Bac <- rbindlist(Bac_list)
 rm(Bac_list)
 numb_Bac$abun <- numb_Bac$nrows / numb_Bac$countall * 100
+n_Bac_filt <- nrow(Auxotrophy_13_Bac)
 
 #visualization
 ba_or <- ggplot(numb_Bac, aes (count,abun, fill = order)) +
@@ -249,17 +257,75 @@ ba_or <- ggplot(numb_Bac, aes (count,abun, fill = order)) +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
   coord_cartesian() +
   ggtitle("Bacteroidota") +
+  labs(subtitle = "n = 585")  +
   theme(axis.line.x = element_line(colour= "black"))+
+  theme(legend.title = element_text(size=10, face = "bold")) +
   theme(axis.line.y = element_line(colour = "black"))+
   theme(title = element_text(face="bold")) +
   theme(axis.title.x = element_text(face="bold")) +
   theme(axis.title.y = element_text(face="bold")) +
   theme(title = element_text(size = 10)) +
-  scale_fill_manual(values = c("lightgrey","darkgrey")) +
+  scale_fill_manual(values = c("#000000","#004949","#009292","#ff6db6","#ffb6db",
+                                        "#490092","#006ddb","#b66dff","#6db6ff","#b6dbff",
+                                        "#920000","#924900","#db6d00","#24ff24","#ffff6d")) +
   theme(axis.text.x = element_text(colour = "black", size = 10)) +
   theme(axis.text.y = element_text(colour = "black", size = 10))
 ba_or
 
+##### special for bacteroidetes: family level ########
+#Bacteroidota family
+Auxotrophy_13_Bac <- Auxotrophy_13[Auxotrophy_13$phylum == "Bacteroidota"]
+relfamily_Bac <- names(sort(summary(as.factor(Auxotrophy_13_Bac$family)), decreasing = T)[1:10])
+
+#filter for the 10 msot abundant family to get the 100% abundance 
+Auxotrophy_13_Bac_filt <- subset(Auxotrophy_13_Bac, family %in% relfamily_Bac)
+
+count <- unique(Auxotrophy_13_Bac_filt$count)
+Bac_fam_list <- list()
+k <- 1
+for (i in count) {
+  print(i) 
+  for (fi in relfamily_Bac) {
+    x <- Auxotrophy_13_Bac_filt[count == i & family == fi]
+    nrows <- nrow(x)
+    tax <- data.frame(nrows)
+    tax$family <- fi
+    tax$count <- i
+    tax$countall <- nrow(Auxotrophy_13_Bac_filt[Auxotrophy_13_Bac_filt$count == i])
+    Bac_fam_list[[k]] <- tax
+    k <- k + 1
+  }
+}
+
+numb_Bac_fam <- rbindlist(Bac_fam_list)
+rm(Bac_fam_list)
+numb_Bac_fam$abun <- numb_Bac_fam$nrows / numb_Bac_fam$countall * 100
+ nrow(Auxotrophy_13_Bac_filt)
+#visualization
+ba_fam <- ggplot(numb_Bac_fam, aes (count,abun, fill = family)) +
+  geom_bar(stat = "identity") +
+  xlab("Auxotrophies per genome") +
+  ylab("Abundance [%]") +
+  theme(legend.position = "right") +
+  theme(legend.text = element_text(size=8)) +
+  theme(legend.title = element_text(size=8)) +
+  theme(panel.background = element_rect(fill="white", colour= "white")) +
+  coord_cartesian() +
+  ggtitle("Bacteroidota") +
+  labs(subtitle = "n = 560") +
+  theme(axis.line.x = element_line(colour= "black")) +
+  theme(legend.title = element_text(size=10, face = "bold")) +
+  theme(axis.line.y = element_line(colour = "black"))+
+  theme(title = element_text(face="bold")) +
+  theme(axis.title.x = element_text(face="bold")) +
+  theme(axis.title.y = element_text(face="bold")) +
+  theme(title = element_text(size = 10)) +
+  scale_fill_manual(values = c("#000000","#004949","#009292","#ff6db6","#ffb6db",
+                               "#490092","#006ddb","#b66dff","#6db6ff","#b6dbff",
+                               "#920000","#924900","#db6d00","#24ff24","#ffff6d")) +
+  theme(axis.text.x = element_text(colour = "black", size = 10)) +
+  theme(axis.text.y = element_text(colour = "black", size = 10))
+ba_fam
 
 
 ####Actinobacteriota
@@ -283,7 +349,7 @@ for (i in count) {
 numb_Act <- rbindlist(Act_list)
 rm(Act_list)
 numb_Act$abun <- numb_Act$nrows / numb_Act$countall * 100
-
+nrow(Auxotrophy_13_Act)
 #visualization
 ac_or <- ggplot(numb_Act, aes (count,abun, fill = order)) +
   geom_bar(stat = "identity") +
@@ -292,18 +358,23 @@ ac_or <- ggplot(numb_Act, aes (count,abun, fill = order)) +
   theme(legend.position = "right") +
   theme(legend.text = element_text(size=8)) +
   theme(legend.title = element_text(size=8)) +
+  theme(legend.title = element_text(size=10, face = "bold")) +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
   coord_cartesian() +
   ggtitle("Actinobacteriota") +
+  labs(subtitle = "n = 626") +
   theme(axis.line.x = element_line(colour= "black"))+
   theme(axis.line.y = element_line(colour = "black"))+
   theme(title = element_text(face="bold")) +
   theme(axis.title.x = element_text(face="bold")) +
   theme(axis.title.y = element_text(face="bold")) +
   theme(title = element_text(size = 10)) +
-  scale_fill_manual(values = c("#fee0b6","#d8daeb","#b2abd2","#8073ac","#542788")) +
+  scale_fill_manual(values = c("#009292","#ff6db6","#ffb6db",
+                                      "#490092","#006ddb","#b66dff","#6db6ff","#b6dbff",
+                                      "#920000","#924900","#db6d00","#24ff24","#ffff6d")) +
   theme(axis.text.x = element_text(colour = "black", size = 10)) +
   theme(axis.text.y = element_text(colour = "black", size = 10))
+
 ac_or
 
 
@@ -329,7 +400,7 @@ for (i in count) {
 numb_Fus <- rbindlist(Fus_list)
 rm(Fus_list)
 numb_Fus$abun <- numb_Fus$nrows / numb_Fus$countall * 100
-
+nrow(Auxotrophy_13_Fus)
 #visualization
 fu_or <- ggplot(numb_Fus, aes (count,abun, fill = order)) +
   geom_bar(stat = "identity") +
@@ -338,16 +409,20 @@ fu_or <- ggplot(numb_Fus, aes (count,abun, fill = order)) +
   theme(legend.position = "right") +
   theme(legend.text = element_text(size=8)) +
   theme(legend.title = element_text(size=8)) +
+  theme(legend.title = element_text(size=10, face = "bold")) +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
   coord_cartesian() +
   ggtitle("Fusobacteriota") +
+  labs(subtitle = "n = 31") +
   theme(axis.line.x = element_line(colour= "black"))+
+  theme(legend.title = element_text(size=10, face = "bold")) +
   theme(axis.line.y = element_line(colour = "black"))+
   theme(title = element_text(size = 10)) +
   scale_fill_manual(values = c("black")) +
   theme(axis.text.x = element_text(colour = "black", size = 10)) +
   theme(axis.text.y = element_text(colour = "black", size = 10))
 fu_or
+
 #7f3b08
 #b35806
 #e08214
@@ -374,7 +449,7 @@ for (i in count) {
 numb_Pro <- rbindlist(Pro_list)
 rm(Pro_list)
 numb_Pro$abun <- numb_Pro$nrows / numb_Pro$countall * 100
-
+nrow(Auxotrophy_13_Pro)
 #visualization
 pr_or <- ggplot(numb_Pro, aes (count,abun, fill = order)) +
   geom_bar(stat = "identity") +
@@ -386,22 +461,17 @@ pr_or <- ggplot(numb_Pro, aes (count,abun, fill = order)) +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
   coord_cartesian() +
   ggtitle("Proteobacteriota") +
+  labs(subtitle = "n=295") +
   theme(axis.line.x = element_line(colour= "black"))+
+  theme(legend.title = element_text(size=10, face = "bold")) +
   theme(title = element_text(face="bold")) +
   theme(axis.title.x = element_text(face="bold")) +
   theme(axis.title.y = element_text(face="bold")) +
   theme(axis.line.y = element_line(colour = "black"))+
   theme(title = element_text(size = 10)) +
-  scale_fill_manual(values = c("#543005",
-    "#8c510a",
-    "#bf812d",
-    "#dfc27d",
-    "#f6e8c3",
-    "#c7eae5",
-    "#80cdc1",
-    "#35978f",
-    "#01665e",
-    "#003c30")) +
+  scale_fill_manual(values = c("#000000","#004949","#009292","#ff6db6","#ffb6db",
+                                      "#490092","#006ddb","#b66dff","#6db6ff","#b6dbff",
+                                      "#920000","#924900","#db6d00","#24ff24","#ffff6d")) +
   theme(axis.text.x = element_text(colour = "black", size = 10)) +
   theme(axis.text.y = element_text(colour = "black", size = 10))
 pr_or

@@ -45,6 +45,9 @@ Auxotrophy_13[, class := str_match(`GTDB Taxonomy`, "c__.*;o__")[,1]]
 Auxotrophy_13[, class := gsub("c__|;o__","", class)]
 Auxotrophy_13[, order := str_match(`GTDB Taxonomy`, "o__.*;f__")[,1]]
 Auxotrophy_13[, order := gsub("o__|;f__","", order)]
+Auxotrophy_13[, family := str_match(`GTDB Taxonomy`, "f__.*;g__")[,1]]
+Auxotrophy_13[, family := gsub("f__|;g__","", family)]
+
 
 
 

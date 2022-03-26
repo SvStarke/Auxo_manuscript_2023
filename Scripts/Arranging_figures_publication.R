@@ -66,50 +66,16 @@ source("Scripts/auxotable_not_melted.R")
 source("Scripts/number_auxo_per_phylum.R")
 
 #create figure
-fi3 <- ggarrange(fi_or, ba_or, ac_or, pr_or,
-                 labels = c("A","B","C", "D","E"),
-                 ncol=1, nrow= 4, common.legend = FALSE,
+fi3 <- ggarrange(fi_or, ba_or, ac_or, pr_or, ba_fam,
+                 labels = c("A","","","", "B"),
+                 ncol=1, nrow= 5, common.legend = FALSE,
                  heights = c(1,1,1,1), widths= c(1,1,1,1))
 fi3
 
-ggsave("output/plots/figure3_24.03.22_2.pdf", plot = fi3,
-       width = 10, height = 12)
+ggsave("output/plots/figure3_26.03.22.pdf", plot = fi3,
+       width = 10, height = 14)
 
-#################figure 4 #################
-#### fermentation products
-#Analyze the production of by products with statistical analysis
-
-source("Scripts/byproduct_production.R")
-
-#### create figure #####
-fi4 <- ggplot(stat_BP_x_auxo[auxo.compound != "Gly"], aes(auxo.compound, by.product,
-                                                        fill = -log2(fisher.or))) +
-  geom_tile() +
-  geom_point(aes(shape = sign.label1), size = 1) +
-  scale_fill_gradient2(high = "#ca0020", mid = "white", low = "#0571b0") +
-  scale_shape_manual(values = 8, na.translate = FALSE) +
-  scale_x_discrete(expand = c(0,0)) + scale_y_discrete(expand = c(0,0)) +
-  labs(x = "Auxotrophy", y = "Fermentation\nproduct", shape = "",
-       fill = expression(log[2]~'(odds ratio)')) +
-  theme_bw() +
-  theme(legend.position = "bottom",
-        legend.justification = 	1,
-        axis.text.x = element_text(color = "black", angle = 45, hjust = 1, size = 10),
-        axis.text.y = element_text(color = "black", size = 10)) +
-  theme(axis.title.y = element_text(margin = margin(t = 0, r = 20, b= 0, l = 0), face = "bold")) +
-  theme(axis.title.x = element_text(face = "bold", margin = margin(t = 20, r = 0, b= 0, l = 0))) +
-  theme(panel.background = element_blank())
-
-fi4 +theme(plot.margin = unit(c(1,0.5,2,0.5), "cm")) +
-  theme(legend.text = element_text(size=10),
-        legend.title = element_text(size=8))
-
-fi4
-ggsave("output/plots/figure4.pdf", plot = fi4,
-       width = 6, height = 3.0)
-
-
-################  figure 5 ####################################
+################  figure 4 ####################################
 #completeness of the pathways
 #Load models (Completeness >=85%, Contamination <=2)
 
@@ -128,15 +94,53 @@ source("Scripts/auxotable_not_melted.R")
 source("Scripts/Completeness_pathways.R")
 
 #### create figure ###
-fi5 <- ggarrange(tr,hi,ch,se,le,il1,il2,il3,va,il4,il5,
-                                 labels = c("A","B","C", "D","E"),
-                                 hjust = c(-0.1,0.5,0.5,0.5,-0.1),
-                                 ncol=4, nrow= 3, common.legend = TRUE, legend = "bottom",
-                                     heights = c(1,1,1,1), widths= c(1,1,1,1))
-fi5
+fi4 <- ggarrange(tr,hi,ch,se,le,il1,il2,il3,va,il4,il5,
+                 labels = c("A","B","C", "D","E"),
+                 hjust = c(-0.1,0.5,0.5,0.5,-0.1),
+                 ncol=4, nrow= 3, common.legend = TRUE, legend = "bottom",
+                 heights = c(1,1,1,1), widths= c(1,1,1,1))
+fi4
 
-ggsave("output/plots/figure5.pdf", plot = fi5,
+ggsave("output/plots/figure4_26.03.22_new.pdf", plot = fi4,
        width = 9, height = 9)
+
+
+#################figure 4 #################
+#### fermentation products
+#Analyze the production of by products with statistical analysis
+
+source("Scripts/byproduct_production.R")
+
+#### create figure #####
+fi5.1 <- ggplot(stat_BP_x_auxo[auxo.compound != "Gly"], aes(auxo.compound, by.product,
+                                                        fill = -log2(fisher.or))) +
+  geom_tile() +
+  geom_point(aes(shape = sign.label1), size = 1) +
+  scale_fill_gradient2(high = "#ca0020", mid = "white", low = "#0571b0") +
+  scale_shape_manual(values = 8, na.translate = FALSE) +
+  scale_x_discrete(expand = c(0,0)) + scale_y_discrete(expand = c(0,0)) +
+  labs(x = "Auxotrophy", y = "Fermentation\nproduct", shape = "",
+       fill = expression(log[2]~'(odds ratio)')) +
+  theme_bw() +
+  theme(legend.position = "bottom",
+        legend.justification = 	1,
+        axis.text.x = element_text(color = "black", angle = 45, hjust = 1, size = 9),
+        axis.text.y = element_text(color = "black", size = 9)) +
+  theme(axis.title.y = element_text(margin = margin(t = 0, r = 10, b= 0, l = 0), face = "bold")) +
+  theme(axis.title.x = element_text(face = "bold", margin = margin(t = 10, r = 0, b= 0, l = 0))) +
+  theme(panel.background = element_blank())
+
+fi5.1 +theme(plot.margin = unit(c(1,0.5,2,0.5), "cm")) +
+  theme(legend.text = element_text(size=10),
+        legend.title = element_text(size=8))
+
+fi5 <- ggarrange(length_count,fi4.1,
+                 labels = c("A","B"),
+                 ncol=2, nrow= 1, common.legend = FALSE,
+                 heights = c(1,2), widths= c(1.5,2))
+fi5
+ggsave("output/plots/figure5_26.03.22.pdf", plot = fi5,
+       width = 8, height = 3)
 
 
 ################# figure 6 ###########
