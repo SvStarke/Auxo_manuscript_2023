@@ -374,6 +374,7 @@ ggsave("output/plots/health_diseases_all_spearman.pdf", plot = corr_health,
        width = 6, height = 3)
 
 
+
 ##########################    linear modeling    ###############################
 sumfreq_all <- aggregate(info_auxo$freq, by=list(subject=info_auxo$subject, AA=info_auxo$Compound,
                                                  BMI=info_auxo$BMI, sex=info_auxo$gender,age=info_auxo$age), FUN=sum)
@@ -403,6 +404,9 @@ names(linear_mod)[names(linear_mod) == "Pr(>|t|)"] <- "pvalue"
 linear_mod_sex <- linear_mod[factor == "sex"]
 linear_mod_age <- linear_mod[factor == "age"]
 linear_mod_BMI <- linear_mod[factor == "BMI"]
+
+#######export csv file
+write.csv(linear_mod, "output/plots/info_health_param_FoCus.csv")
 
 ##sex
 linear_mod_sex$padjust = p.adjust(linear_mod_sex$pvalue, method = "fdr")
@@ -722,7 +726,10 @@ all2
 ggsave("output/plots/health_diseases_linear_mod_all.pdf", plot = all,
        width = 6, height = 3)
 
-
+####export csv file
+info_diseases <- all[,!8]
+info_diseases$factor <- replace(info_diseases$factor, info_diseases$factor == "chrond", "chronic diarrhea")
+write.csv(info_diseases, "output/plots/info_diseases_FoCus.csv")
 
 
 
