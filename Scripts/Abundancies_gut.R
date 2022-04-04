@@ -70,13 +70,15 @@ ggsave("output/plots/Standarderror_frequency_gut.pdf", plot = r,
        width = 6, height = 5)
 AA
 Essentiality <- c("Essential" = "e66101", "Non-Essential" = "white")
+
+#####adding essetniality information
+sumfreq <- as.data.table(sumfreq)
+sumfreq[AA %in% c("Val","Met","Leu","Ile","Trp","Phe","Lys","His","Thr"), is.essential := "essential"]
+sumfreq[is.na(is.essential), is.essential := "not essential"]
+
 #boxplot
-b <- ggplot(sumfreq, aes(AA, x*100)) +
-  geom_boxplot(outlier.shape = NA, fill = c("#e66101", "#e66101","#e66101",
-                                            "#e66101","white","#e66101","#e66101"
-                                            ,"#e66101","white","#e66101","white",
-                                            "#e66101","white","white","white",
-                                            "white","white","white"), alpha=0.2) +
+b <- ggplot(sumfreq, aes(AA, x*100, fill = is.essential)) +
+  geom_boxplot(outlier.shape = NA) +
   #geom_jitter(alpha = 0.05, width = 0.2, color = "black") +
   ylab("Abundance of Auxotrophies in the gut [%]")+
   xlab("Amino Acids") +
@@ -86,7 +88,13 @@ b <- ggplot(sumfreq, aes(AA, x*100)) +
   theme(axis.title.x = element_text(colour = "black", size = 10, face = "bold", margin = margin(10,0,0,0))) +
   theme(axis.text.x = element_text(size=8, colour = "black", hjust = 1,  angle = 45, margin = margin(10,0,0,0))) +
   theme(axis.text.y = element_text(size = 8, colour = "black")) +
-  theme(plot.margin= margin(0.5,0.5,0.5,0.5, "cm")) 
+  theme(plot.margin= margin(0.5,0.5,0.5,0.5, "cm")) +
+  guides(fill = guide_legend(title = "Essentiality")) +
+  scale_fill_manual(values = c("#fdb863", "white")) +
+  theme(legend.position = c(.98, .98), legend.justification =  c("right","top"), legend.box.just = "right") +
+  theme(legend.text = element_text(size=8)) +
+  theme(legend.title = element_text(size =9, face = "bold"))
+
 b
 
 ggsave("output/plots/boxplot_frequency_gut.pdf", plot = b,
