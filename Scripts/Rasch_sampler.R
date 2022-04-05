@@ -71,7 +71,6 @@ head(rasch_freq)
 colnames(rasch_freq) <- c("freq", "AA2", "AA1")
 #reorder columns
 rasch_freq[,c(3,2,1)]
-colnames(new_dataframe) <- c("AA1")
 rasch_freq$AA1 <- gsub("[0-9]+", "", rasch_freq$AA1) 
 nrow(rasch_freq)
 #test for the number of rows with actual numbers (deleted NAs)
@@ -121,40 +120,39 @@ for (i1 in  1:(length(AAx)-1)) {
   for(i2 in (i1+1):length(AAx)) {
     AA2 <- AAx[i2]
     tmp_occu <- a[[c(AA1,AA2)]] 
-    tmp_occu1 <- data.frame(tmp_occu)
-    colnames(tmp_occu1) <- "perc"
-    x <- occurence3[occurence3$A1 == AA1 & occurence3$A2 == AA2]
-    x$A2 <- NULL
-    x$A1 <- NULL
-    mu_occu <- x$Freq_all
-    res <- wilcox.test(tmp_occu1$perc, mu = mu_occu)
-    tmp_wilcox <- res$p.value
-    tmp_wilcox <- data.frame(tmp_wilcox)
-    tmp_wilcox$A1 <- AA1
-    tmp_wilcox$A2 <- AA2
+    #tmp_occu1 <- data.table(tmp_occu)
+    #colnames(tmp_occu1) <- "perc"
+    mu_occu <- occurence3[occurence3$A1 == AA1 & occurence3$A2 == AA2, Freq_all]
+    res <- wilcox.test(tmp_occu, mu = mu_occu)
+    tmp_wilcox <- data.table(A1 = AA1, A2 = AA2,
+                             p.value = res$p.value, 
+                             obs_freq = mu_occu, 
+                             exp_freq_median = median(tmp_occu))
     tmp_wilcox_rasch[[k]] <- tmp_wilcox
     k <- k+1
   }
 }
 new_table <- rbindlist(tmp_wilcox_rasch)
+new_table[, padj := p.adjust(p.value, method = "fdr")]
+new_table[padj < 0.05, sign.label1 := "Padj < 0.05"]
 new_table
-View(new_table)
-View(tmp_occu1)
-i1 <- "Ser"
-i2 <- "Chor"
 
-a[[c("Ser","Chor")]]
-a[[c(i1,i2)]]
-nrow(a[["Met"]])
-tet <- a$Met
-nrow(a[a$Met])
-res <- wilcox.test(all)
-View(all_results)
-occurence4 <- occurence3
-occurence
-occurence5$A2 <- NULL
-occurence5$Freq_all <- NULL
-test11 <- c(i1,i2)
-colnames(occurence5) <- test11
+# View(new_table)
+# View(tmp_occu1)
+# i1 <- "Ser"
+# i2 <- "Chor"
+# 
+# a[[c("Ser","Chor")]]
+# a[[c(i1,i2)]]
+# nrow(a[["Met"]])
+# tet <- a$Met
+# nrow(a[a$Met])
+# res <- wilcox.test(all)
+# View(all_results)
+# occurence4 <- occurence3
+# occurence
+# occurence5$A2 <- NULL
+# occurence5$Freq_all <- NULL
+# test11 <- c(i1,i2)
+# colnames(occurence5) <- test11
 
-colnames occurence4
