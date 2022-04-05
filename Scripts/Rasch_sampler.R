@@ -135,8 +135,34 @@ for (i1 in  1:(length(AAx)-1)) {
 new_table <- rbindlist(tmp_wilcox_rasch)
 new_table[, padj := p.adjust(p.value, method = "fdr")]
 new_table[padj < 0.05, sign.label1 := "Padj < 0.05"]
+new_table[,log2FC := log2(obs_freq/exp_freq_median)]
+all_freq
 new_table
 
+#####################      visualization    ####################################
+t <- ggplot(new_table, aes(A1,A2, fill = log2FC)) +
+  geom_tile(color ="white", lwd= 0.5, linetype = 1.5) +
+  scale_fill_gradient2(high = "#ca0020", mid = "white", low = "#0571b0") +
+  guides(fill = guide_colourbar(barwidth = 15, barheight = 1, title ="log2FoldChange",
+                                label = TRUE, ticks = FALSE)) +
+  geom_point(aes(shape = sign.label1), size = 1) +
+  theme(legend.position = "bottom") +
+  scale_shape_manual(values = 8, na.translate = FALSE) +
+  theme(axis.text.x = element_text(colour = "Black", size = 10, angle = 45, vjust = 0.5, hjust=0.5)) +
+  theme(axis.text.y = element_text(colour = "black", size = 10, vjust = 0.5, hjust=0.5)) +
+  theme(axis.title.x = element_text(colour = "Black", face = "bold", size = 10, margin = margin(5,0,0,0))) +
+  theme(axis.title.y = element_text(colour = "Black", face = "bold", size = 10, margin = margin(0,5,0,0))) +
+  theme(legend.title = element_text(colour = "black", size = 10, face = "bold", vjust = 1, margin = margin(0,10,1,0))) +
+  theme(legend.text = element_text(size=6)) +
+  xlab("Amino acid auxotrophy 1") +
+  ylab("Amino acid auxotrophy 2") + 
+  labs(shape = "") +
+  theme(panel.background = element_blank()) +
+  theme(plot.margin= margin(0.5,0.5,0.5,0.5, "cm"))
+t
+
+ggsave("output/plots/Rasch_Sampler.pdf", plot = t,
+       width = 5, height = 5)
 # View(new_table)
 # View(tmp_occu1)
 # i1 <- "Ser"
