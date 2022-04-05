@@ -11,11 +11,17 @@ mat <- Auxotroph
 View(mat)
 auxomat <- na.omit(mat)
 nrow(auxomat)
-ctrl <- rsctrl(burn_in = 100, n_eff = 100, step = 16, seed = 0, tfixed = FALSE)
+ctrl <- rsctrl(burn_in = 100, n_eff = 1000, step = 16, seed = 0, tfixed = FALSE)
 res <- rsampler(auxomat, ctrl)
 
 rsextrmat(res, 2)
+permut_mat <- list()
+for(i in 2:1001) {
+  permut_mat[[i-1]] <- rsextrmat(res, i)
+}
 
+
+###take very long (n=1000)
 a <- list() # for distribution
 b <- list() # for median
 AAx1 <- colnames(Auxotroph)
@@ -28,8 +34,9 @@ for(aa1 in AAx) {
   for(aa2 in AAx) {
     print(paste("  ",aa2))
     a[[aa1]][[aa2]] <- c()
-    for(i in 2:11) {
-      tmpmat <- rsextrmat(res, i)
+    for(i in 1:1000) {
+      #print(i)
+      tmpmat <- permut_mat[[i]]
       colnames(tmpmat) <- AAx1
       
       
