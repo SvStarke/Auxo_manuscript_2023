@@ -143,7 +143,7 @@ new_table
 t <- ggplot(new_table, aes(A1,A2, fill = log2FC)) +
   geom_tile(color ="white", lwd= 0.5, linetype = 1.5) +
   scale_fill_gradient2(high = "#ca0020", mid = "white", low = "#0571b0") +
-  guides(fill = guide_colourbar(barwidth = 15, barheight = 1, title ="log2FoldChange",
+  guides(fill = guide_colourbar(barwidth = 12, barheight = 0.8, title ="log2FoldChange",
                                 label = TRUE, ticks = FALSE)) +
   geom_point(aes(shape = sign.label1), size = 1) +
   theme(legend.position = "bottom") +
@@ -152,8 +152,8 @@ t <- ggplot(new_table, aes(A1,A2, fill = log2FC)) +
   theme(axis.text.y = element_text(colour = "black", size = 10, vjust = 0.5, hjust=0.5)) +
   theme(axis.title.x = element_text(colour = "Black", face = "bold", size = 10, margin = margin(5,0,0,0))) +
   theme(axis.title.y = element_text(colour = "Black", face = "bold", size = 10, margin = margin(0,5,0,0))) +
-  theme(legend.title = element_text(colour = "black", size = 10, face = "bold", vjust = 1, margin = margin(0,10,1,0))) +
-  theme(legend.text = element_text(size=6)) +
+  theme(legend.title = element_text(colour = "black", size = 8, face = "bold", vjust = 1, margin = margin(0,10,1,0))) +
+  theme(legend.text = element_text(size=5)) +
   xlab("Amino acid auxotrophy 1") +
   ylab("Amino acid auxotrophy 2") + 
   labs(shape = "") +
@@ -162,7 +162,7 @@ t <- ggplot(new_table, aes(A1,A2, fill = log2FC)) +
 t
 
 ggsave("output/plots/Rasch_Sampler.pdf", plot = t,
-       width = 5, height = 5)
+       width = 5.5, height = 5)
 # View(new_table)
 # View(tmp_occu1)
 # i1 <- "Ser"
