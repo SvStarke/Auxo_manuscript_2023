@@ -133,8 +133,10 @@ fi5.1 <- ggplot(stat_BP_x_auxo[auxo.compound != "Gly"], aes(auxo.compound, by.pr
 fi5.1 +theme(plot.margin = unit(c(1,0.5,2,0.5), "cm")) +
   theme(legend.text = element_text(size=10),
         legend.title = element_text(size=8))
-
-fi5 <- ggarrange(length_count,fi4.1,
+install.packages()
+library(png)
+img <- readPNG()
+fi5 <- ggarrange(length_count,fi5.1,
                  labels = c("A","B"),
                  ncol=2, nrow= 1, common.legend = FALSE,
                  heights = c(1,2), widths= c(1.5,2))

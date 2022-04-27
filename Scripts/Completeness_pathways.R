@@ -14,7 +14,7 @@ k <- 1
 for (rxni in relrxns) {
   #print(rxni)
   #for (pwayi in relpathway) {
-  Argperc <- nrow(pwys_cov_Arg[pwys_cov_Arg$rxn.metacyc == rxni & pwys_cov_Arg$prediction == "FALSE" ]) / nrow(pwys_cov_Arg[pwys_cov_Arg$rxn.metacyc == rxni])
+  Argperc <- nrow(pwys_cov_Arg[pwys_cov_Arg$rxn.metacyc == rxni & pwys_cov_Arg$prediction == "FALSE" & pwys_cov_Arg$spontaneous == "FALSE"]) / nrow(pwys_cov_Arg[pwys_cov_Arg$rxn.metacyc == rxni])
   argperc<- data.frame(Argperc)
   colnames(argperc) <- "perc"
   argperc$rxn <- rxni
@@ -38,12 +38,12 @@ arg1$perc <- arg1$perc *100
 distinct(arg1)
 remove(arg1)
 #get the enzyme names for merging with the table later
-head(rxns)
-l <- rxns[[1]]
-is.data.frame(l)
-x <- l[,c(1,3)]
-test <- distinct(x)
-View(x)
+#head(rxns)
+#l <- rxns[[1]]
+#is.data.frame(l)
+#x <- l[,c(1,3)]
+#test <- distinct(x)
+#View(x)
 
 #Asparagine
 relGenomes <- Auxo_info[Asn == 0, `Genomes`]
@@ -58,7 +58,7 @@ k <- 1
 for (rxni in relrxns) {
   #print(rxni)
  # for (pwayi in relpathway) {
-  Asnperc <- nrow(pwys_cov_Asn[pwys_cov_Asn$rxn.metacyc == rxni & pwys_cov_Asn$prediction == "FALSE"]) / nrow(pwys_cov_Asn[pwys_cov_Asn$rxn.metacyc == rxni])
+  Asnperc <- nrow(pwys_cov_Asn[pwys_cov_Asn$rxn.metacyc == rxni & pwys_cov_Asn$prediction == "FALSE"& pwys_cov_Asn$spontaneous == "FALSE"]) / nrow(pwys_cov_Asn[pwys_cov_Asn$rxn.metacyc == rxni])
   asnperc <- data.frame(Asnperc)
   colnames(asnperc) <- "perc"
   asnperc$rxn <- rxni
@@ -78,8 +78,6 @@ asn1 <- merge(asnperc, asn, by.x="rxn.metacyc",by.y = "rxn")
 names(asn1)[names(asn1) == "ec"] <- "Enzymes"
 asn1$perc <- asn1$perc *100
 asn1 <- asn1[order(pathway),]
-distinct(arg1)
-remove(arg1)
 
 #Chorismate
 relGenomes <- Auxo_info[Chor == 0, `Genomes`]
@@ -91,7 +89,7 @@ relrxns <- unique(pwys_cov_Chor$rxn.metacyc)
 Chor <- list()
 k <- 1
 for (rxni in relrxns) {
-  Chorperc <- nrow(pwys_cov_Chor[pwys_cov_Chor$rxn.metacyc == rxni & pwys_cov_Chor$prediction == "FALSE"]) / nrow(pwys_cov_Chor[pwys_cov_Chor$rxn.metacyc == rxni])
+  Chorperc <- nrow(pwys_cov_Chor[pwys_cov_Chor$rxn.metacyc == rxni & pwys_cov_Chor$prediction == "FALSE"& pwys_cov_Chor$spontaneous == "FALSE"]) / nrow(pwys_cov_Chor[pwys_cov_Chor$rxn.metacyc == rxni])
   chorperc <- data.frame(Chorperc)
   colnames(chorperc) <- "perc"
   chorperc$rxn <- rxni
@@ -144,7 +142,7 @@ relrxns <- unique(pwys_cov_Cys$rxn.metacyc)
 Cys <- list()
 k <- 1
 for (rxni in relrxns) {
-  Cysperc <- nrow(pwys_cov_Cys[pwys_cov_Cys$rxn.metacyc == rxni & pwys_cov_Cys$prediction == "FALSE"]) / nrow(pwys_cov_Cys[pwys_cov_Cys$rxn.metacyc == rxni])
+  Cysperc <- nrow(pwys_cov_Cys[pwys_cov_Cys$rxn.metacyc == rxni & pwys_cov_Cys$prediction == "FALSE"& pwys_cov_Cys$spontaneous == "FALSE"]) / nrow(pwys_cov_Cys[pwys_cov_Cys$rxn.metacyc == rxni])
   cysperc <- data.frame(Cysperc)
   colnames(cysperc) <- "perc"
   cysperc$rxn <- rxni
@@ -177,7 +175,7 @@ relrxns <- unique(pwys_cov_Gln$rxn.metacyc)
 Gln <- list()
 k <- 1
 for (rxni in relrxns) {
-  Glnperc <- nrow(pwys_cov_Gln[pwys_cov_Gln$rxn.metacyc == rxni & pwys_cov_Gln$prediction == "FALSE"]) / nrow(pwys_cov_Gln[pwys_cov_Gln$rxn.metacyc == rxni])
+  Glnperc <- nrow(pwys_cov_Gln[pwys_cov_Gln$rxn.metacyc == rxni & pwys_cov_Gln$prediction == "FALSE"& pwys_cov_Gln$spontaneous == "FALSE"]) / nrow(pwys_cov_Gln[pwys_cov_Gln$rxn.metacyc == rxni])
   glnperc <- data.frame(Glnperc)
   colnames(glnperc) <- "perc"
   glnperc$rxn <- rxni
@@ -207,7 +205,7 @@ relrxns <- unique(pwys_cov_Gly$rxn.metacyc)
 Gly <- list()
 k <- 1
 for (rxni in relrxns) {
-  Glyperc <- nrow(pwys_cov_Gly[pwys_cov_Gly$rxn.metacyc == rxni & pwys_cov_Gly$prediction == "FALSE"]) / nrow(pwys_cov_Gly[pwys_cov_Gly$rxn.metacyc == rxni])
+  Glyperc <- nrow(pwys_cov_Gly[pwys_cov_Gly$rxn.metacyc == rxni & pwys_cov_Gly$prediction == "FALSE"& pwys_cov_Gly$spontaneous == "FALSE"]) / nrow(pwys_cov_Gly[pwys_cov_Gly$rxn.metacyc == rxni])
   glyperc <- data.frame(Glyperc)
   colnames(glyperc) <- "perc"
   glyperc$rxn <- rxni
@@ -237,7 +235,7 @@ relrxns <- unique(pwys_cov_His$rxn.metacyc)
 His <- list()
 k <- 1
 for (rxni in relrxns) {
-  Hisperc <- nrow(pwys_cov_His[pwys_cov_His$rxn.metacyc == rxni & pwys_cov_His$prediction == "FALSE"]) / nrow(pwys_cov_His[pwys_cov_His$rxn.metacyc == rxni])
+  Hisperc <- nrow(pwys_cov_His[pwys_cov_His$rxn.metacyc == rxni & pwys_cov_His$prediction == "FALSE" & pwys_cov_His$spontaneous == "FALSE"]) / nrow(pwys_cov_His[pwys_cov_His$rxn.metacyc == rxni])
   hisperc <- data.frame(Hisperc)
   colnames(hisperc) <- "perc"
   hisperc$rxn <- rxni
@@ -291,11 +289,12 @@ View(pwys_cov_Ile)
 #analyse only the isoleucine biosynthesis pathway from threonine
 pwys_cov_Ile <- get_pathway_coverage(models,rxns,pwys, pathways.of.interest = c("ILEUSYN-PWY"))
 
+#
 relrxns <- unique(pwys_cov_Ile$rxn.metacyc)
 Ile <- list()
 k <- 1
 for (rxni in relrxns) {
-  Ileperc <- nrow(pwys_cov_Ile[pwys_cov_Ile$rxn.metacyc == rxni & pwys_cov_Ile$prediction == FALSE]) / nrow(pwys_cov_Ile[pwys_cov_Ile$rxn.metacyc == rxni])
+  Ileperc <- nrow(pwys_cov_Ile[pwys_cov_Ile$rxn.metacyc == rxni & pwys_cov_Ile$prediction == FALSE, ]) / nrow(pwys_cov_Ile[pwys_cov_Ile$rxn.metacyc == rxni])
   ileperc <- data.frame(Ileperc)
   colnames(ileperc) <- "perc"
   ileperc$rxn <- rxni
