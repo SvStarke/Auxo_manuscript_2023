@@ -162,6 +162,10 @@ source("Scripts/auxotable_melted_merged.R")
 
 source("Scripts/Diseases_health_factors.R")
 
+#Analyze associations with diseases or health factors(BMI, weight, age)
+
+source("Scripts/Abundancies_gut.R")
+
 #multivariate regression analysis and abundance of amino acid auxotrophies in the gut 
 fi6 <- ggarrange(b, linear_health_BMI_age1,all2, ncol=3,
                    nrow=1, heights = c(1,1,1), widths= c(3,1,1.4),

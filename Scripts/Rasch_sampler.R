@@ -26,6 +26,7 @@ a <- list() # for distribution
 b <- list() # for median
 AAx1 <- colnames(Auxotroph)
 AAx <- colnames(Auxotroph)
+AAx <- sort(AAx)
 remove <- c("Ala","Asp","Glu")
 AAx <- setdiff(AAx, remove)
 
@@ -109,7 +110,7 @@ ggsave("output/plots/Rasch_Sampler.pdf", plot = t,
 
 
 ##### statistical analysis
-all_results <- rbindlist(a, fill = TRUE)
+#all_results <- rbindlist(a, fill = TRUE)
 remove(tmp_wilcox_rasch)
 tmp_wilcox_rasch <- list()
 k <- 1
@@ -138,6 +139,42 @@ new_table[padj < 0.05, sign.label1 := "Padj < 0.05"]
 new_table[,log2FC := log2(obs_freq/exp_freq_median)]
 all_freq
 new_table
+
+#########  new evaluation of the pvlaue  ###########
+
+nsim <- 1000
+
+
+
+tmp_pvalue_rasch <- list()
+k <- 1
+library(data.table)
+#get third element of the first list 
+for (i1 in  1:(length(AAx)-1)) {
+  AA1 <- AAx[i1]
+  print(AA1) 
+  for(i2 in (i1+1):length(AAx)) {
+    AA2 <- AAx[i2]
+    tmp_occu <- a[[c(AA1,AA2)]] 
+    #tmp_occu1 <- data.table(tmp_occu)
+    #colnames(tmp_occu1) <- "perc"
+    mu_occu <- occurence3[occurence3$A1 == AA1 & occurence3$A2 == AA2, Freq_all]
+    pvalue <- (sum(tmp_occu >= abs(mu_occu)) + sum(tmp_occu <= -abs(mu_occu)))/nsim
+    tmp_p <- data.table(A1 = AA1, A2 = AA2,
+                             p.value = pvalue, 
+                             obs_freq = mu_occu, 
+                             exp_freq_median = median(tmp_occu))
+    tmp_pvalue_rasch[[k]] <- tmp_p
+    k <- k+1
+  }
+}
+new_table_p <- rbindlist(tmp_pvalue_rasch)
+new_table_p[, padj := p.adjust(p.value, method = "fdr")]
+new_table_p[padj < 0.05, sign.label1 := "Padj < 0.05"]
+new_table_p[,log2FC := log2(obs_freq/exp_freq_median)]
+new_table
+
+
 
 #####################      visualization    ####################################
 t <- ggplot(new_table, aes(A1,A2, fill = log2FC)) +
