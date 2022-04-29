@@ -51,7 +51,7 @@ pt <- ggplot(numbauxo, aes(AA, perc, fill = Phyla)) +
   ylab("Auxotrophies [%]") +
   xlab("Amino acids") +
   #theme_minimal() +
-  theme(legend.position = "top") +
+  theme(legend.position = "bottom") +
   theme(axis.line = element_line(size=0.2)) +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
   theme(axis.text.x = element_text(size = 10, angle = 45, colour = "black", hjust = 1, margin = margin(10,0,0,0))) +

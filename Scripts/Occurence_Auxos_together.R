@@ -44,11 +44,12 @@ library(MetBrewer)
   theme(axis.text.y = element_text(colour = "black", size = 10, vjust = 0.5, hjust=0.5)) +
   theme(axis.title.x = element_text(colour = "Black", face = "bold", size = 10, margin = margin(5,0,0,0))) +
   theme(axis.title.y = element_text(colour = "Black", face = "bold", size = 10, margin = margin(0,5,0,0))) +
-  theme(legend.title = element_text(colour = "black", size = 10, face = "bold", vjust = 1, margin = margin(0,10,1,0))) +
-  theme(legend.text = element_text(size=10)) +
+  theme(legend.title = element_text(colour = "black", size = 8, face = "bold", vjust = 1, margin = margin(0,10,1,0))) +
+  theme(legend.text = element_text(size=8)) +
   xlab("Amino acid auxotrophy 1") +
   ylab("Amino acid auxotrophy 2") + 
   theme(panel.background = element_blank()) +
+   scale_x_discrete(position = "top") +
   theme(plot.margin= margin(0.5,0.5,0.5,0.5, "cm"))
 o
 o1 <- annotate_figure(o, fig.lab = "B")

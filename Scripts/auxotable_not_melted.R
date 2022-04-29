@@ -39,7 +39,7 @@ Auxotrophy_12$phylum[Auxotrophy_12$phylum == "Synergistota"] <- "Other"
 Auxotrophy_12$phylum[Auxotrophy_12$phylum == "Spirochaetota"] <- "Other"
 Auxotrophy_12$phylum[Auxotrophy_12$phylum == "Thermoplasmatota"] <- "Other"
 Auxotrophy_12$phylum[Auxotrophy_12$phylum == "Verrucomicrobiota"] <- "Other"
-View(Auxotrophy_12)
+
 Auxotrophy_13 <- Auxotrophy_12
 Auxotrophy_13[, class := str_match(`GTDB Taxonomy`, "c__.*;o__")[,1]]
 Auxotrophy_13[, class := gsub("c__|;o__","", class)]

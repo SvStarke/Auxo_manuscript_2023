@@ -14,7 +14,6 @@ source("Scripts/auxotable_melted_merged.R")
 cutoff_prodrate <- 1 # at which mmol/gDW the rate is considered as 'real'production
 
 exchange <- get_exchanges(models)
-View(exchange)
 fwrite(exchange, file = "exchange.csv")
 
 relCompounds <- c("Butyrate","Propionate","Acetate","DL-Lactate",
@@ -22,7 +21,7 @@ relCompounds <- c("Butyrate","Propionate","Acetate","DL-Lactate",
 
 SCFAs <- exchange[name %in% relCompounds]
 is.data.table(SCFAs)
-View(SCFAs)
+
 
 #get growth rates
 m_gr <- get_growth(models)

@@ -20,8 +20,6 @@ for (i in count) {
 numb <- rbindlist(tables)
 numb$abun <- numb$table / numb$countall * 100
 
-View(numb)
-
 
 
 '#feedde','#fdd0a2','#fdae6b','#fd8d3c','#f16913','#d94801'
