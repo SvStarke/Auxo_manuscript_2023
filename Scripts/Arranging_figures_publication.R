@@ -165,12 +165,11 @@ fi6.1 +theme(plot.margin = unit(c(1,0.5,2,0.5), "cm")) +
 install.packages()
 #library(png)
 #img <- readPNG()
-fi6 <- ggarrange(length_count,fi6.1,
-                 labels = c("A","B"),
-                 ncol=2, nrow= 1, common.legend = FALSE,
-                 heights = c(1,2), widths= c(1.5,2))
+fi6 <- ggarrange(fi6.1,
+                 labels = c("A"),
+                 ncol=1, nrow= 1, common.legend = FALSE)
 fi6
-ggsave("output/plots/figure6_28.04.22.pdf", plot = fi6.1,
+ggsave("output/plots/figure6_28.04.22.pdf", plot = fi6,
        width = 8, height = 3)
 
 
