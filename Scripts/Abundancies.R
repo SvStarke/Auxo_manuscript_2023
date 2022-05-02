@@ -41,7 +41,6 @@ for (pi in relphyla) {
 
 numbauxo <- rbindlist(numbauxos)
 numbauxo$perc <- numbauxo$t/ nrow(Auxotrophy)*100
-View(numbauxo)
 
 #######################     visualization      #################################
 brewer_palette <- c('#feedde','#fdd0a2','#fdae6b','#fd8d3c','#f16913','#d94801','#8c2d04')

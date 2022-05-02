@@ -22,9 +22,9 @@ source("Scripts/auxotable_not_melted.R")
 
 source("Scripts/number_auxo_per_phylum.R")
 
-#ocurrence of auxotrophies
+#abundance of auxotrophies
 
-source("Scripts/Occurence_Auxos_together.R")
+source("Scripts/Scatterplot_corr_Genomelength_Numbauxos.R")
 
 # abundancies in HRGM
 #Add information about the genomes
@@ -38,6 +38,7 @@ source("Scripts/Abundancies.R")
 #### create figure ####
 library(gridExtra)
 library(cowplot)
+library(ggplot2)
 fi <- grid.arrange(arrangeGrob(pt,length_count, ncol=2),
              nrow=2,
              abun

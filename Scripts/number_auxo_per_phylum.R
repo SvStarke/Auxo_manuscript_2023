@@ -74,7 +74,7 @@ b <- ggplot(numb[phylum == "Bacteroidota"], aes (count,abun, fill = "#fdd0a2")) 
 b
 
 #Proteobacteria
-p <- ggplot(numb[phylum == "Proteobacteria"], aes (count, abun, fill = "#f16913")) +
+p <- ggplot(numb[phylum == "Proteobacteria"], aes (count, abun, fill = "#d94801")) +
   geom_bar(stat = "identity") +
   xlab("Auxotrophies per genome") +
   ylab("Abundance [%]") +
@@ -83,7 +83,7 @@ p <- ggplot(numb[phylum == "Proteobacteria"], aes (count, abun, fill = "#f16913"
   theme(legend.position = "none") +
   theme(axis.title.x = element_text(face = "bold")) +
   theme(axis.title.y = element_text(face = "bold")) +
-  scale_fill_manual(values = "#f16913") +
+  scale_fill_manual(values = "#d94801") +
   coord_cartesian(ylim=c(0,60)) +
   theme(title = element_text(size = 10)) +
   theme(axis.text.x = element_text(colour = "black", size = 10)) +
@@ -106,7 +106,7 @@ fu <- ggplot(numb[phylum == "Fusobacteriota"], aes (count, abun, fill = "#fd8d3c
   theme(axis.text.y = element_text(colour = "black", size = 10))
 fu
 #Other
-ot <- ggplot(numb[phylum == "Other"], aes (count, abun, fill = "#d94801")) +
+ot <- ggplot(numb[phylum == "Other"], aes (count, abun, fill = "#f16913")) +
   geom_bar(stat = "identity") +
   xlab("Auxotrophies per genome") +
   ylab("Abundance [%]") +
@@ -115,7 +115,7 @@ ot <- ggplot(numb[phylum == "Other"], aes (count, abun, fill = "#d94801")) +
   theme(axis.title.y = element_text(face = "bold")) +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
   theme(legend.position = "none") +
-  scale_fill_manual(values = "#d94801") +
+  scale_fill_manual(values = "#f16913") +
   coord_cartesian(ylim=c(0,60)) +
   theme(title = element_text(size = 10)) +
   theme(axis.text.x = element_text(colour = "black", size = 10)) +
@@ -125,6 +125,7 @@ ot
 abun <- ggarrange(a,b,fi,fu,p,ot,
           ncol=3, nrow= 2)
 abun
+
 abun1 <- annotate_figure(abun, fig.lab = "C")
 
 ggsave("output/plots/number_auxo_phylum_comparison.pdf", plot = abun1,
