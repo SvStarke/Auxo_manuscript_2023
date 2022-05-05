@@ -75,7 +75,7 @@ Ala <- ggplot(prop[AA == "Ala"], aes(phylum,perc)) +
   geom_bar(stat = "identity", aes(fill = Status)) +
   ylab("Proportion of MAGs") +
   scale_fill_manual(values = c('#fdd0a2','#fdae6b')) +
-  theme(legend.position = "bottom") +
+  theme(legend.position = "none") +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
   theme(axis.text.x = element_text(size = 8, angle = 50, colour = "black", hjust = 1, margin = margin(0,0,0,0))) +
   theme(axis.text.y = element_text(size = 8, colour = "black")) +
@@ -91,7 +91,7 @@ Val <- ggplot(prop[AA == "Val"], aes(phylum,perc)) +
   geom_bar(stat = "identity", aes(fill = Status)) +
   ylab("Proportion of MAGs") +
   scale_fill_manual(values = c('#fdd0a2','#fdae6b')) +
-  theme(legend.position = "right") +
+  theme(legend.position = "none") +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
   theme(axis.text.x = element_text(size = 8, angle = 50, colour = "black", hjust = 1, margin = margin(0,0,0,0))) +
   theme(axis.text.y = element_text(size = 8, colour = "black")) +
@@ -108,7 +108,7 @@ Met <- ggplot(prop[AA == "Met"], aes(phylum,perc)) +
   geom_bar(stat = "identity", aes(fill = Status)) +
   ylab("Proportion of MAGs") +
   scale_fill_manual(values = c('#fdd0a2','#fdae6b')) +
-  theme(legend.position = "right") +
+  theme(legend.position = "none") +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
   theme(axis.text.x = element_text(size = 8, angle = 50, colour = "black", hjust = 1, margin = margin(0,0,0,0))) +
   theme(axis.text.y = element_text(size = 8, colour = "black")) +
@@ -124,7 +124,7 @@ Leu <- ggplot(prop[AA == "Leu"], aes(phylum,perc)) +
   geom_bar(stat = "identity", aes(fill = Status)) +
   ylab("Proportion of MAGs") +
   scale_fill_manual(values = c('#fdd0a2','#fdae6b')) +
-  theme(legend.position = "right") +
+  theme(legend.position = "none") +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
   theme(axis.text.x = element_text(size = 8, angle = 50, colour = "black", hjust = 1, margin = margin(0,0,0,0))) +
   theme(axis.text.y = element_text(size = 8, colour = "black")) +
@@ -140,7 +140,7 @@ Ile <- ggplot(prop[AA == "Ile"], aes(phylum,perc)) +
   geom_bar(stat = "identity", aes(fill = Status)) +
   ylab("Proportion of MAGs") +
   scale_fill_manual(values = c('#fdd0a2','#fdae6b')) +
-  theme(legend.position = "right") +
+  theme(legend.position = "none") +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
   theme(axis.text.x = element_text(size = 8, angle = 50, colour = "black", hjust = 1, margin = margin(0,0,0,0))) +
   theme(axis.text.y = element_text(size = 8, colour = "black")) +
@@ -157,7 +157,7 @@ Pro <- ggplot(prop[AA == "Pro"], aes(phylum,perc)) +
   geom_bar(stat = "identity", aes(fill = Status)) +
   ylab("Proportion of MAGs") +
   scale_fill_manual(values = c('#fdd0a2','#fdae6b')) +
-  theme(legend.position = "right") +
+  theme(legend.position = "none") +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
   theme(axis.text.x = element_text(size = 8, angle = 50, colour = "black", hjust = 1, margin = margin(0,0,0,0))) +
   theme(axis.text.y = element_text(size = 8, colour = "black")) +
@@ -173,7 +173,7 @@ Trp <- ggplot(prop[AA == "Trp"], aes(phylum,perc)) +
   geom_bar(stat = "identity", aes(fill = Status)) +
   ylab("Proportion of MAGs") +
   scale_fill_manual(values = c('#fdd0a2','#fdae6b')) +
-  theme(legend.position = "right") +
+  theme(legend.position = "none") +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
   theme(axis.text.x = element_text(size = 8, angle = 50, colour = "black", hjust = 1, margin = margin(0,0,0,0))) +
   theme(axis.text.y = element_text(size = 8, colour = "black")) +
@@ -191,7 +191,7 @@ Phe <- ggplot(prop[AA == "Phe"], aes(phylum,perc)) +
   geom_bar(stat = "identity", aes(fill = Status)) +
   ylab("Proportion of MAGs") +
   scale_fill_manual(values = c('#fdd0a2','#fdae6b')) +
-  theme(legend.position = "right") +
+  theme(legend.position = "none") +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
   theme(axis.text.x = element_text(size = 8, angle = 50, colour = "black", hjust = 1, margin = margin(0,0,0,0))) +
   theme(axis.text.y = element_text(size = 8, colour = "black")) +
@@ -209,7 +209,7 @@ Lys <- ggplot(prop[AA == "Lys"], aes(phylum,perc)) +
   geom_bar(stat = "identity", aes(fill = Status)) +
   ylab("Proportion of MAGs") +
   scale_fill_manual(values = c('#fdd0a2','#fdae6b')) +
-  theme(legend.position = "right") +
+  theme(legend.position = "none") +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
   theme(axis.text.x = element_text(size = 8, angle = 50, colour = "black", hjust = 1, margin = margin(0,0,0,0))) +
   theme(axis.text.y = element_text(size = 8, colour = "black")) +
@@ -225,7 +225,7 @@ Arg <- ggplot(prop[AA == "Arg"], aes(phylum,perc)) +
   geom_bar(stat = "identity", aes(fill = Status)) +
   ylab("Proportion of MAGs") +
   scale_fill_manual(values = c('#fdd0a2','#fdae6b')) +
-  theme(legend.position = "right") +
+  theme(legend.position = "none") +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
   theme(axis.text.x = element_text(size = 8, angle = 50, colour = "black", hjust = 1, margin = margin(0,0,0,0))) +
   theme(axis.text.y = element_text(size = 8, colour = "black")) +
@@ -241,7 +241,7 @@ His <- ggplot(prop[AA == "His"], aes(phylum,perc)) +
   geom_bar(stat = "identity", aes(fill = Status)) +
   ylab("Proportion of MAGs") +
   scale_fill_manual(values = c('#fdd0a2','#fdae6b')) +
-  theme(legend.position = "right") +
+  theme(legend.position = "none") +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
   theme(axis.text.x = element_text(size = 8, angle = 50, colour = "black", hjust = 1, margin = margin(0,0,0,0))) +
   theme(axis.text.y = element_text(size = 8, colour = "black")) +
@@ -257,7 +257,7 @@ Tyr <- ggplot(prop[AA == "Tyr"], aes(phylum,perc)) +
   geom_bar(stat = "identity", aes(fill = Status)) +
   ylab("Proportion of MAGs") +
   scale_fill_manual(values = c('#fdd0a2','#fdae6b')) +
-  theme(legend.position = "right") +
+  theme(legend.position = "none") +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
   theme(axis.text.x = element_text(size = 8, angle = 50, colour = "black", hjust = 1, margin = margin(0,0,0,0))) +
   theme(axis.text.y = element_text(size = 8, colour = "black")) +
@@ -273,7 +273,7 @@ Thr <- ggplot(prop[AA == "Thr"], aes(phylum,perc)) +
   geom_bar(stat = "identity", aes(fill = Status)) +
   ylab("Proportion of MAGs") +
   scale_fill_manual(values = c('#fdd0a2','#fdae6b')) +
-  theme(legend.position = "right") +
+  theme(legend.position = "none") +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
   theme(axis.text.x = element_text(size = 8, angle = 50, colour = "black", hjust = 1, margin = margin(0,0,0,0))) +
   theme(axis.text.y = element_text(size = 8, colour = "black")) +
@@ -289,7 +289,7 @@ Glu <- ggplot(prop[AA == "Glu"], aes(phylum,perc)) +
   geom_bar(stat = "identity", aes(fill = Status)) +
   ylab("Proportion of MAGs") +
   scale_fill_manual(values = c('#fdd0a2','#fdae6b')) +
-  theme(legend.position = "right") +
+  theme(legend.position = "none") +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
   theme(axis.text.x = element_text(size = 8, angle = 50, colour = "black", hjust = 1, margin = margin(0,0,0,0))) +
   theme(axis.text.y = element_text(size = 8, colour = "black")) +
@@ -305,7 +305,7 @@ Gln <- ggplot(prop[AA == "Gln"], aes(phylum,perc)) +
   geom_bar(stat = "identity", aes(fill = Status)) +
   ylab("Proportion of MAGs") +
   scale_fill_manual(values = c('#fdd0a2','#fdae6b')) +
-  theme(legend.position = "right") +
+  theme(legend.position = "none") +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
   theme(axis.text.x = element_text(size = 8, angle = 50, colour = "black", hjust = 1, margin = margin(0,0,0,0))) +
   theme(axis.text.y = element_text(size = 8, colour = "black")) +
@@ -321,7 +321,7 @@ Gly <- ggplot(prop[AA == "Gly"], aes(phylum,perc)) +
   geom_bar(stat = "identity", aes(fill = Status)) +
   ylab("Proportion of MAGs") +
   scale_fill_manual(values = c('#fdd0a2','#fdae6b')) +
-  theme(legend.position = "right") +
+  theme(legend.position = "none") +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
   theme(axis.text.x = element_text(size = 8, angle = 50, colour = "black", hjust = 1, margin = margin(0,0,0,0))) +
   theme(axis.text.y = element_text(size = 8, colour = "black")) +
@@ -337,7 +337,7 @@ Ser <- ggplot(prop[AA == "Ser"], aes(phylum,perc)) +
   geom_bar(stat = "identity", aes(fill = Status)) +
   ylab("Proportion of MAGs") +
   scale_fill_manual(values = c('#fdd0a2','#fdae6b')) +
-  theme(legend.position = "right") +
+  theme(legend.position = "none") +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
   theme(axis.text.x = element_text(size = 8, angle = 50, colour = "black", hjust = 1, margin = margin(0,0,0,0))) +
   theme(axis.text.y = element_text(size = 8, colour = "black")) +
@@ -354,7 +354,7 @@ Cys <- ggplot(prop[AA == "Cys"], aes(phylum,perc)) +
   geom_bar(stat = "identity", aes(fill = Status)) +
   ylab("Proportion of MAGs") +
   scale_fill_manual(values = c('#fdd0a2','#fdae6b')) +
-  theme(legend.position = "right") +
+  theme(legend.position = "none") +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
   theme(axis.text.x = element_text(size = 8, angle = 50, colour = "black", hjust = 1, margin = margin(0,0,0,0))) +
   theme(axis.text.y = element_text(size = 8, colour = "black")) +
@@ -370,7 +370,7 @@ Asp <- ggplot(prop[AA == "Asp"], aes(phylum,perc)) +
   geom_bar(stat = "identity", aes(fill = Status)) +
   ylab("Proportion of MAGs") +
   scale_fill_manual(values = c('#fdd0a2','#fdae6b')) +
-  theme(legend.position = "right") +
+  theme(legend.position = "none") +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
   theme(axis.text.x = element_text(size = 8, angle = 50, colour = "black", hjust = 1, margin = margin(0,0,0,0))) +
   theme(axis.text.y = element_text(size = 8, colour = "black")) +
@@ -386,7 +386,7 @@ Asn <- ggplot(prop[AA == "Asn"], aes(phylum,perc)) +
   geom_bar(stat = "identity", aes(fill = Status)) +
   ylab("Proportion of MAGs") +
   scale_fill_manual(values = c('#fdd0a2','#fdae6b')) +
-  theme(legend.position = "right") +
+  theme(legend.position = "none") +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
   theme(axis.text.x = element_text(size = 8, angle = 50, colour = "black", hjust = 1, margin = margin(0,0,0,0))) +
   theme(axis.text.y = element_text(size = 8, colour = "black")) +
@@ -402,7 +402,7 @@ Chor <- ggplot(prop[AA == "Chor"], aes(phylum,perc)) +
   geom_bar(stat = "identity", aes(fill = Status)) +
   ylab("Proportion of MAGs") +
   scale_fill_manual(values = c('#fdd0a2','#fdae6b')) +
-  theme(legend.position = "right") +
+  theme(legend.position = "none") +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
   theme(axis.text.x = element_text(size = 8, angle = 50, colour = "black", hjust = 1, margin = margin(0,0,0,0))) +
   theme(axis.text.y = element_text(size = 8, colour = "black")) +
@@ -418,32 +418,36 @@ Chor
 
 
 plot1 <- ggarrange(Asp, Asn, Glu, Gln,
-                   ncol=2, nrow= 2, common.legend = TRUE, legend = "bottom")
+                   ncol=2, nrow= 2)
 plot1
 ggsave("output/plots/plot1_proportions.pdf", plot = plot1,
        width = 6, height = 6)
 
 plot2 <- ggarrange(Leu, Ile, Val, Thr,
-                   ncol=2, nrow= 2, common.legend = TRUE, legend = "bottom")
+                   ncol=2, nrow= 2)
 plot2
 ggsave("output/plots/plot2_proportions.pdf", plot = plot2,
        width = 6, height = 6)
 plot3 <- ggarrange(Chor, Trp, Tyr, Phe,
-                   ncol=2, nrow= 2, common.legend = TRUE, legend = "bottom")
+                   ncol=2, nrow= 2)
 plot3
 ggsave("output/plots/plot3_proportions.pdf", plot = plot3,
        width = 6, height = 6)
 plot4 <- ggarrange(Ser, Cys,Met,Gly,
-                   ncol=2, nrow= 2, common.legend = TRUE, legend = "bottom")
+                   ncol=2, nrow= 2)
 plot4
 ggsave("output/plots/plot4_proportions.pdf", plot = plot4,
        width = 6, height = 6)
 plot5 <- ggarrange(Lys, Arg, Pro, His,
-                   ncol=2, nrow= 2, common.legend = TRUE, legend = "bottom")
+                   ncol=2, nrow= 2, common.legend = TRUE, legend = "none")
 plot5
 ggsave("output/plots/plot5_proportions.pdf", plot = plot5,
        width = 6, height = 6)
+
 #single plot for Alanine (no auxotrophies)
+plot6 <- ggarrange(Ala,
+                   ncol=2, nrow= 2, common.legend = TRUE, legend = "bottom")
+plot6
 ggsave("output/plots/Ala_proportions.pdf", plot = Ala,
        width = 4, height = 4)
 

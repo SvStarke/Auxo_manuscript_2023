@@ -203,3 +203,12 @@ fi7
 ggsave("output/plots/figure7.pdf", plot = fi7,
        width = 9, height = 5)
 
+
+###### supplementary material figure 2 ######
+
+prop_all_auxo <- ggarrange(plot1,plot2,plot3,plot4,plot5,plot6,
+                           nrow=3, ncol = 2, common.legend = TRUE)
+
+ggsave("output/plots/suppfigure2.pdf", plot = prop_all_auxo,
+       width = 17, height = 15)
+
