@@ -1,5 +1,6 @@
 #######################  number of auxotrophies and genome length ##############
 
+cor.test(Auxotrophy_12$`Genome Length (bp)`, Auxotrophy_12$count, method = "spearman", exact = FALSE) 
 
 ########## visualization ############
 length_count <- ggplot(Auxotrophy_12, aes(x =`Genome Length (bp)`, y= count)) +

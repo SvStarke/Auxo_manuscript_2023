@@ -8,11 +8,13 @@ nutr_info_AA <- nutr_info[,c(1:25,70)]
 nutr_info_AA$EH <- NULL
 nutr_info_AA$EP <- NULL
 nutr_info_AA$EPF <- NULL
+nutr_info_AA$ENA <- NULL
+nutr_info_AA$EEA <- NULL
 remove(nutr_info_AA)
 ####   AA/day (E%)
 library(dplyr)
-nutr_info_AA[,3:22] <- nutr_info_AA[,3:22]* 17
-nutr_info_AA <- nutr_info_AA %>% mutate(across(c(3:22), .fns = ~./GJ)*100)
+nutr_info_AA[,3:20] <- nutr_info_AA[,3:20]* 17
+nutr_info_AA <- nutr_info_AA %>% mutate(across(c(3:20), .fns = ~./GJ)*100)
 
 #####  
 data <- fread("/mnt/nuuk/2021/HRGM/FOCUS_HRGM_abundancies.csv.gz")
@@ -21,7 +23,6 @@ data <- data[focus.call == "BL"]
 #correlation analysis
 subj <- unique(data$subject)
 relAA <- unique(Auxotrophy_2$Compound)
-View(Auxotrophy_2)
 remove(e)
 e <- list()
 k <- 1
@@ -39,6 +40,7 @@ for (subi in subj) {
 }
 
 nutr_info_auxo <- rbindlist(e) 
+View(nutr_info_auxo)
 rm(sumfreq_nutr_auxo)
 
 View(nutr_info_auxo)
@@ -47,7 +49,9 @@ nutri_all_info <- merge(sumfreq_nutr_auxo,nutr_info_AA, by.x="subject", by.y="ne
 
 
 colnames <- colnames(nutri_all_info)
-newcol <- colnames[-c(1:4,25)]
+nrow(nutri_all_info[nutri_all_info$AA=="Gln"])
+
+newcol <- colnames[-c(1:4,23)]
 
 AAI <- unique(newcol)
 AA <- unique(nutri_all_info$AA)
@@ -79,17 +83,88 @@ nutr_auxo[, padj := p.adjust(Pvalue, method = "fdr")]
 nutr_auxo[padj< 0.05, sign.label1 := "Padj < 0.05"]
 
 heatmap_EAA_auxo <- ggplot(nutr_auxo, aes(AA,day_int, fill = Estimate)) +
-  geom_tile() +
+  geom_tile(linetype = 1.5, colour ="grey", lwd=0.2) +
   geom_point(aes(shape=sign.label1), size=1) +
   scale_fill_gradient2(high = "#ca0020", mid="white", low = "#0571b0") +
   theme_minimal() +
+  theme(axis.text.x = element_text(colour="black", size = 10)) +
+  theme(axis.text.y = element_text(colour = "black", size=10)) +
+  theme(axis.title.x = element_text(colour="black", size = 12, face = "bold")) +
+  theme(axis.title.y = element_text(colour = "black", size =12, face = "bold")) +
   scale_shape_manual(values = 8, na.translate = FALSE)+
   xlab("Amino acid auxotrophies") +
-  ylab("E(%)") 
-  
+  ylab("E(%)") +
+  theme(panel.background = element_blank())
+
+heatmap_EAA_auxo
+ggsave("output/plots/heatmap_nutr_AA.pdf", plot = heatmap_EAA_auxo,
+       width = 9, height = 6)
+
 Tryp <- nutri_all_info[nutri_all_info$AA == "Trp",]
 cor.test(Tryp$x, Tryp$EALA, method = "spearman")
 
+
+##################### B-VITAMINS ###############################
+#### analysis for amino acids 
+nutr_info_BVit <- nutr_info[,c("new_id","gramm","VB1","VB12","VB2","VB3","VB3A","VB5","VB6","VB7","VB9","VB9F","VB9G","GJ")]
+####   AA/day (E%)
+library(dplyr)
+nutr_info_BVit <- nutr_info_BVit %>% mutate(across(c(3:13), .fns = ~./GJ)*100)
+
+#####  
+data <- fread("/mnt/nuuk/2021/HRGM/FOCUS_HRGM_abundancies.csv.gz")
+data <- data[focus.call == "BL"]
+
+#merge
+nutri_all_info_BV <- merge(sumfreq_nutr_auxo,nutr_info_BVit, by.x="subject", by.y="new_id")
+
+
+colnames <- colnames(nutri_all_info_BV)
+nrow(nutri_all_info[nutri_all_info$AA=="Gln"])
+
+newcol <- colnames[-c(1:4,16)]
+
+AAI <- unique(newcol)
+B_Vit <- unique(nutri_all_info_BV$AA)
+rm(l)
+l <- list()
+k <- 1
+
+for(AAi in AA) {
+  print(AAi)
+  for(AAIi in AAI){
+    table <- nutri_all_info_BV[nutri_all_info_BV$AA == AAi, ]
+    res <- cor.test(table$x, table[[AAIi]], method = "spearman", exact = FALSE)
+    table_corr_B <- data.table(Pvalue = res$p.value,
+                             AA = AAi,
+                             day_int = AAIi,
+                             Estimate = res$estimate)
+    l[[k]] <- table_corr_B
+    k <- k+1
+  }
+}
+
+
+BVit_auxo <- rbindlist(l)
+BVit_auxo[Pvalue< 0.05, sign.label1 := "not adj.P < 0.05"]
+
+heatmap_BVit_auxo <- ggplot(BVit_auxo, aes(AA,day_int, fill = Estimate)) +
+  geom_tile(linetype = 1.5, colour ="grey", lwd=0.2) +
+  geom_point(aes(shape=sign.label1), size=1) +
+  scale_fill_gradient2(high = "#ca0020", mid="white", low = "#0571b0") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(colour="black", size = 10)) +
+  theme(axis.text.y = element_text(colour = "black", size=10)) +
+  theme(axis.title.x = element_text(colour="black", size = 12, face = "bold")) +
+  theme(axis.title.y = element_text(colour = "black", size =12, face = "bold")) +
+  scale_shape_manual(values = 8, na.translate = FALSE)+
+  xlab("Amino acid auxotrophies") +
+  ylab("E(%)") +
+  theme(panel.background = element_blank())
+
+heatmap_BVit_auxo
+ggsave("output/plots/heatmap_nutr_BVit.pdf", plot = heatmap_BVit_auxo,
+       width = 9, height = 6)
 
 
 
@@ -198,6 +273,9 @@ PHE <- ggplot(nutr_info_AA[nutr_info_AA$EPHE], aes(x = "PHE", y = EPHE)) +
   theme_bw()  +
   #ylim(0,25)+
   labs(y="")
+
+boxplot(nutr_info_AA$EMET)
+
 
 PRO <- ggplot(nutr_info_AA[nutr_info_AA$EPRO], aes(x = "PRO", y = EPRO)) +
   geom_boxplot()+
