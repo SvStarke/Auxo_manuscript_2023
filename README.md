@@ -246,7 +246,33 @@ source("Scripts/auxotable_melted_merged.R")
 source("Scripts/Diseases_health_factors.R")
 ```
 
-### 10) Rasch Sampler
+### 10) Intake of amino acids and abundance of auxotrophic gut bacteria
+
+###### Load models() completeness >=85% and a contamination <=2)
+
+```R
+source("Scripts/init_models_filtered.R")
+```
+
+###### Predict auxotrophies
+
+```R
+source("Scripts/predict_auxos.R")
+```
+
+###### Add information about the genomes
+
+```R
+source("Scripts/auxotable_melted_merged.R")
+```
+
+###### Spearman correlation
+
+```R
+source("Scripts/Nutrition_Auxos_FoCus.R")
+```
+
+### 11) Rasch Sampler
 
 ###### Load models() completeness >=85% and a contamination <=2)
 
@@ -266,7 +292,7 @@ source("Scripts/predict_auxos.R")
 source("Scripts/Rasch Sampler.R")
 ```
 
-### 11) Occurence of Auxotrophies together
+### 12) Occurence of Auxotrophies together
 
 ###### Load models() completeness >=85% and a contamination <=2)
 
