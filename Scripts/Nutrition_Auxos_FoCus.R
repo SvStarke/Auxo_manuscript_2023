@@ -10,7 +10,7 @@ nutr_info_AA$EP <- NULL
 nutr_info_AA$EPF <- NULL
 nutr_info_AA$ENA <- NULL
 nutr_info_AA$EEA <- NULL
-remove(nutr_info_AA)
+
 ####   AA/day (E%)
 library(dplyr)
 nutr_info_AA[,3:20] <- nutr_info_AA[,3:20]* 17
@@ -41,16 +41,13 @@ for (subi in subj) {
 
 nutr_info_auxo <- rbindlist(e) 
 View(nutr_info_auxo)
-rm(sumfreq_nutr_auxo)
 
-View(nutr_info_auxo)
+
 sumfreq_nutr_auxo <- aggregate(nutr_info_auxo$freq, by=list(subject=nutr_info_auxo$subject, AA=nutr_info_auxo$Compound), FUN=sum)
 nutri_all_info <- merge(sumfreq_nutr_auxo,nutr_info_AA, by.x="subject", by.y="new_id")
 
 
 colnames <- colnames(nutri_all_info)
-nrow(nutri_all_info[nutri_all_info$AA=="Gln"])
-
 newcol <- colnames[-c(1:4,23)]
 
 AAI <- unique(newcol)
@@ -76,15 +73,15 @@ for(AAi in AA) {
 
 nutr_auxo <- rbindlist(l)
 View(nutr_auxo)
-rm(nutr_auxo)
-nutr_auxo[Pvalue< 0.05, sign.label1 := "not adj.P < 0.05"]
+
+#nutr_auxo[Pvalue< 0.05, sign.label1 := "not adj.P < 0.05"]
 
 nutr_auxo[, padj := p.adjust(Pvalue, method = "fdr")]
 nutr_auxo[padj< 0.05, sign.label1 := "Padj < 0.05"]
 
 heatmap_EAA_auxo <- ggplot(nutr_auxo, aes(AA,day_int, fill = Estimate)) +
   geom_tile(linetype = 1.5, colour ="grey", lwd=0.2) +
-  geom_point(aes(shape=sign.label1), size=1) +
+  geom_point(aes(shape=sign.label1), size=1, show.legend = FALSE) +
   scale_fill_gradient2(high = "#ca0020", mid="white", low = "#0571b0") +
   theme_minimal() +
   theme(axis.text.x = element_text(colour="black", size = 10)) +
@@ -94,10 +91,12 @@ heatmap_EAA_auxo <- ggplot(nutr_auxo, aes(AA,day_int, fill = Estimate)) +
   scale_shape_manual(values = 8, na.translate = FALSE)+
   xlab("Amino acid auxotrophies") +
   ylab("E(%)") +
+  labs(shape = "") +
   theme(panel.background = element_blank())
 
 heatmap_EAA_auxo
-ggsave("output/plots/heatmap_nutr_AA.pdf", plot = heatmap_EAA_auxo,
+
+ggsave("output/plots/heatmap_nutr_AA_adj_pvalue.pdf", plot = heatmap_EAA_auxo,
        width = 9, height = 6)
 
 Tryp <- nutri_all_info[nutri_all_info$AA == "Trp",]
