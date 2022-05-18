@@ -9,6 +9,7 @@ library(MetBrewer)
 library(tidyverse)
 library(rstatix)
 library(RaschSampler)
+library(Hmisc)
 sybil::SYBIL_SETTINGS("SOLVER","cplexAPI")
 
 

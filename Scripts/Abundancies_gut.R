@@ -30,6 +30,7 @@ for (subi in sub) {
 
 u <- rbindlist(p) 
 sumfreq <- aggregate(u$freq, by=list(subject=u$subject, AA=u$Compound), FUN=sum)
+describe(sumfreq$subject)
 sumfreqAA <- aggregate(sumfreq$x, by=list(Aminoacid = sumfreq$AA), FUN=median)
 
 #####################        visualization        ##############################

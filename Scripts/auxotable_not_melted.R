@@ -10,6 +10,7 @@ o <- unique(Auxotrophy$count)
 #for analysis of completeness pathways
 Auxo_info <- merge(Auxotrophy, Metadata, by.x = "Genomes",
                    by.y = "HRGM name")
+fwrite(Auxo_info, file = "Auxo_info.csv")
 #for any other analysis
 Auxotrophy_12 <- merge(Auxotrophy, Metadata, by.x = "Genomes",
                        by.y = "HRGM name")
@@ -20,7 +21,7 @@ Auxotrophy_12$Status <- ifelse(Auxotrophy_12$count == 0, 1, 0)
 Auxotrophy_12[, phylum := str_match(`GTDB Taxonomy`, "p__.*;c__")[,1]]
 Auxotrophy_12[, phylum := gsub("p__|;c__","", phylum)]
 
-
+Auxotrophy_12$phylum[Auxotrophy_12$phylum == "Firmicutes_C"] <- "Firmicutes"
 Auxotrophy_12$phylum[Auxotrophy_12$phylum == "Firmicutes_A"] <- "Firmicutes"
 Auxotrophy_12$phylum[Auxotrophy_12$phylum == "Firmicutes_B"] <- "Firmicutes"
 Auxotrophy_12$phylum[Auxotrophy_12$phylum== "Firmicutes_G"] <- "Firmicutes"

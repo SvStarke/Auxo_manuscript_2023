@@ -344,6 +344,30 @@ il1
 ggsave("output/plots/Completeness_Ile1_pathway.pdf", plot = il1,
        width =7, height = 5.5)
 
+##### Instituskolloquium
+il1_inst <- ggplot(ile1, aes(x =Enzymes, y =perc, fill =factor(ifelse(Enzymes == "4.3.1.19/4.2.1.16", "not shared", "shared enzyme"))))+
+  geom_bar(stat="identity", width=0.8) +
+  ylab("Missing in auxotrophic microbiota [%]") +
+  xlab("Enzymes") +
+  ggtitle("Isoleucine biosynthesis I") +
+  theme(title = element_text(size = 18, face = "bold")) +
+  theme(axis.line = element_line(size=0.2, colour = "black")) +
+  theme(panel.background = element_rect(fill="white", colour= "white")) +
+  theme(axis.title.y = element_text(colour = "black", size = 16, face = "bold", margin = margin(0,10,0,0)))+
+  theme(axis.title.x = element_text(colour = "black", size = 16, face = "bold", margin = margin(10,0,0,0))) +
+  theme(axis.text.x = element_text(size=16, colour = "black", hjust = 1,  angle = 45, margin = margin(10,0,0,0))) +
+  theme(axis.text.y = element_text(size = 16, colour = "black")) +
+  theme(plot.margin= margin(0.5,0.5,0.5,0.5, "cm")) +
+  coord_cartesian(ylim=c(0,100)) +
+  scale_x_discrete(limits = c("4.3.1.19/4.2.1.16","2.2.1.6/4.1.3.18","1.1.1.86/1.1.1.89","4.2.1.9","2.6.1.42")) +
+  scale_fill_manual(name = "Enzymes", values=c("#fcbba1","#99000d")) +
+  theme(legend.text = element_text(size=6))  +
+  theme(legend.title = element_text(size=6)) +
+  theme(legend.position = "none")
+il1_inst
+
+ggsave("output/plots/Institutsk_Completeness_Ile1_pathway.pdf", plot = il1_inst,
+       width =5, height = 5.5)
 
 ############PWY-5101#################
 pwys_cov_Ile <- get_pathway_coverage(models,rxns,pwys, pathways.of.interest = c("PWY-5101"))
@@ -623,6 +647,30 @@ le
 
 ggsave("output/plots/Completeness_Leu_pathway.pdf", plot = le,
        width =7, height = 5.5)
+
+########Institutskolloquium
+le_inst <- ggplot(leu, aes(x =Enzymes, y =perc, fill =factor(ifelse(Enzymes == "2.6.1.6/2.6.1.42", "shared", "not shared"))))+
+  geom_bar(stat="identity", width=0.8) +
+  ylab("Missing in auxotrophic microbiota%]") +
+  xlab("Enzymes") +
+  ggtitle("Leucine biosynthesis") +
+  theme(title = element_text(size=18, face = "bold")) +
+  theme(axis.line = element_line(size=0.2, colour = "black")) +
+  theme(panel.background = element_rect(fill="white", colour= "white")) +
+  theme(axis.title.y = element_text(colour = "black", size = 16, face = "bold", margin = margin(0,10,0,0)))+
+  theme(axis.title.x = element_text(colour = "black", size = 16, face = "bold", margin = margin(10,0,0,0))) +
+  theme(axis.text.x = element_text(size=16, colour = "black", hjust = 1,  angle = 45, margin = margin(10,0,0,0))) +
+  theme(axis.text.y = element_text(size =16, colour = "black")) +
+  theme(plot.margin= margin(0.5,0.5,0.5,0.5, "cm")) +
+  coord_cartesian(ylim=c(0,100)) +
+  scale_x_discrete(limits = c("2.3.3.13/4.1.3.12","4.2.1.33","1.1.1.85","2.6.1.6/2.6.1.42")) +
+  scale_fill_manual(name = "Enzymes", values=c("#fcbba1","#99000d")) +
+  theme(legend.position = "none")
+le_inst
+
+
+ggsave("output/plots/Institutsk_Completeness_Leu_pathway.pdf", plot = le_inst,
+       width =5, height = 5.5)
 
 #Lysine
 relGenomes <- Auxo_info[Lys == 0, `Genomes`]
@@ -994,7 +1042,30 @@ va <- ggplot(val, aes(x = factor(Enzymes, levels = level_order_val), y =perc))+
 va
 ggsave("output/plots/Completeness_Val_pathway.pdf", plot = va,
        width =7, height = 5.5)
-ile1
+###institutskolloquium
+va_inst <- ggplot(val, aes(x = factor(Enzymes, levels = level_order_val), y =perc))+
+  geom_bar(width= 0.8,stat="identity", fill = "#99000d") +
+  ylab("Missing in auxotrophic microbiota [%]") +
+  xlab("Enzymes") +
+  ggtitle("Valine biosynthesis") +
+  theme(title = element_text(size = 18, face="bold")) +
+  theme(axis.line = element_line(size=0.2, colour = "black")) +
+  theme(panel.background = element_rect(fill="white", colour= "white")) +
+  theme(axis.title.y = element_text(colour = "black", size = 16, face = "bold", margin = margin(0,10,0,0)))+
+  theme(axis.title.x = element_text(colour = "black", size = 16, face = "bold", margin = margin(10,0,0,0))) +
+  theme(axis.text.x = element_text(size=16, colour = "black", hjust = 1,  angle = 45, margin = margin(10,0,0,0))) +
+  theme(axis.text.y = element_text(size = 16, colour = "black")) +
+  theme(plot.margin= margin(0.5,0.5,0.5,0.5, "cm")) +
+  coord_cartesian(ylim=c(0,100)) +
+  scale_x_discrete("Enzymes",labels= c("2.2.1.6/4.1.3.18" ="2.2.1.6/\n4.1.3.18","1.1.1.86/1.1.1.89"= "1.1.1.86/\n1.1.1.89","4.2.1.9" = "4.2.1.9", "2.6.1.42" = "2.6.1.42")) +
+  theme(legend.text = element_text(size=12))  +
+  theme(legend.title = element_text(size=14)) +
+  theme(legend.position = "top")
+va_inst
+
+ggsave("output/plots/Institutsk_Completeness_Val_pathway.pdf", plot = va_inst,
+       width =5, height = 5.5)
+
 #Bind all data together
 pathway_completeness <- rbind(arg1, asn1, chor, cys1, gln1, gly1, his, ile1, leu, lys1, met1, phe1, pro1, ser, thr, trp, tyr, val)
 View(pathway_completeness)

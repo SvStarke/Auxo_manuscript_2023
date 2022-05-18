@@ -1,8 +1,6 @@
 ############      data about patients with chronic inflammations    ############
-
 frequencies <- fread("/mnt/nuuk/2021/HRGM/TrypCID_16S_abundancies.csv")
 metainfo <- fread("/mnt/nuuk/2021/HRGM/TrypCID_16S_metaInfo.csv")
-
 gut_dis <- merge(frequencies, metainfo, by.x= "sample", by.y="sample")
 View(gut_dis)
 Auxotrophy_2[,c(4:16)] <- NULL
