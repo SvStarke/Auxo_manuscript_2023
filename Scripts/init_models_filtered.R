@@ -10,6 +10,7 @@ library(tidyverse)
 library(rstatix)
 library(RaschSampler)
 library(Hmisc)
+library(PResiduals)
 sybil::SYBIL_SETTINGS("SOLVER","cplexAPI")
 
 

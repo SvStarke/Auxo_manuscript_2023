@@ -45,9 +45,11 @@ View(nutr_info_auxo)
 
 sumfreq_nutr_auxo <- aggregate(nutr_info_auxo$freq, by=list(subject=nutr_info_auxo$subject, AA=nutr_info_auxo$Compound), FUN=sum)
 nutri_all_info <- merge(sumfreq_nutr_auxo,nutr_info_AA, by.x="subject", by.y="new_id")
+nutri_all_info <- merge(nutri_all_info,FoCus_data, by.x="subject", by.y="sample")
+FoCus_data <- fread("/mnt/nuuk/2021/HRGM/FOCUS_meta_info_v2.csv")
 
 
-colnames <- colnames(nutri_all_info)
+colnames <- colnames(nutri_all_info2)
 newcol <- colnames[-c(1:4,23)]
 
 AAI <- unique(newcol)
@@ -102,6 +104,60 @@ ggsave("output/plots/heatmap_nutr_AA_adj_pvalue.pdf", plot = heatmap_EAA_auxo,
 Tryp <- nutri_all_info[nutri_all_info$AA == "Trp",]
 cor.test(Tryp$x, Tryp$EALA, method = "spearman")
 
+
+#linear model
+colnames <- colnames(nutri_all_info2)
+newcol <- colnames[-c(1:4,23)]
+
+AAI <- unique(newcol)
+AA <- unique(nutri_all_info2$AA)
+rm(l)
+l <- list()
+k <- 1
+
+for(AAi in AA) {
+  print(AAi)
+  m0 <- lm(formula = x ~ Gender + age + BMI + parodontitis, data = nutri_all_info2[AA == AAi])
+  m0.sum <- summary(m0)
+  lin_mod <- m0.sum$coefficients
+  lin_mod <- data.table(lin_mod)
+  lin_mod$AA <- AAi
+  lin_mod$factor <- c("Intercept","sex", "age", "BMI","parodontitis")
+  lin_nutr[[k]] <- lin_mod
+  k <- k +1
+}
+
+
+linear_mod_parodontitis <- rbindlist(lin_parodontitis)
+remove(lin_parodontitis,m0,m0.sum,lin_mod)
+names(linear_mod_parodontitis)[names(linear_mod_parodontitis) == "Pr(>|t|)"] <- "pvalue"
+
+linear_mod_parodontitis_adjust <- linear_mod_parodontitis[factor == "parodontitis"]
+linear_mod_parodontitis_adjust$padjust = p.adjust(linear_mod_parodontitis_adjust$pvalue, method = "fdr")
+linear_mod_parodontitis_adjust[padjust < 0.05, sign.label1 := "P < 0.05"]
+linear_mod_parodontitis_adjust <- data.table(linear_mod_parodontitis_adjust)
+
+parodontitis <- ggplot(linear_mod_parodontitis_adjust, aes(AA, factor, fill = `t value`))+
+  geom_tile() +
+  labs(x = "Auxotrophy", y = "", shape = "")+
+  geom_point(aes(shape = sign.label1), size = 1) +
+  scale_fill_gradient2(high = "#b2182b", mid = "white", low = "#2166ac") +
+  scale_shape_manual(values = 8, na.translate = FALSE) +
+  theme_minimal() +
+  theme(legend.position = "bottom",
+        legend.justification = 	1,
+        axis.text.x = element_text(color = "black", angle = 45, hjust = 1, size = 10),
+        axis.text.y = element_text(color = "black", size = 10)) +
+  theme(axis.title.y = element_text(margin = margin(t =0, r = 20, b= 0, l = 0))) +
+  theme(axis.title.x = element_text(face  = "bold"))+
+  theme(panel.background = element_blank()) +
+  theme(legend.title = element_text(size=9)) +
+  labs(fill="") +
+  theme(legend.position = "right",
+        legend.justification = 	1) +
+  theme(legend.text = element_text(size=9)) +
+  theme(panel.grid.major = element_blank())
+parodontitis
 
 ##################### B-VITAMINS ###############################
 #### analysis for amino acids 

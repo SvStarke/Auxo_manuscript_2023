@@ -196,8 +196,8 @@ source("Scripts/Diseases_health_factors.R")
 source("Scripts/Abundancies_gut.R")
 
 #multivariate regression analysis and abundance of amino acid auxotrophies in the gut 
-fi7 <- ggarrange(b, linear_health_BMI_age1,all2, ncol=3,
-                   nrow=1, heights = c(1,1,1), widths= c(3,1,2),
+fi7 <- ggarrange(b, linear_health,dis_health, ncol=3,
+                   nrow=1, heights = c(1,1,1), widths= c(3,1.8,1.8),
                  labels = "AUTO", hjust = c(-0.5,1,-3))
 fi7
 ggsave("output/plots/figure7.pdf", plot = fi7,

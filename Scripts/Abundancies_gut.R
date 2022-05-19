@@ -72,7 +72,7 @@ ggsave("output/plots/Standarderror_frequency_gut.pdf", plot = r,
 AA
 Essentiality <- c("Essential" = "e66101", "Non-Essential" = "white")
 
-#####adding essetniality information
+#####adding essentiality information
 sumfreq <- as.data.table(sumfreq)
 sumfreq[AA %in% c("Val","Met","Leu","Ile","Trp","Phe","Lys","His","Thr"), is.essential := "essential"]
 sumfreq[is.na(is.essential), is.essential := "not essential"]
