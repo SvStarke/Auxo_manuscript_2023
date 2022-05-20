@@ -200,7 +200,7 @@ fi7 <- ggarrange(b, linear_health,dis_health, ncol=3,
                    nrow=1, heights = c(1,1,1), widths= c(3,1.8,1.8),
                  labels = "AUTO", hjust = c(-0.5,1,-3))
 fi7
-ggsave("output/plots/figure7.pdf", plot = fi7,
+ggsave("output/plots/figure7-Part_Spearman.pdf", plot = fi7,
        width = 10, height = 5)
 
 
