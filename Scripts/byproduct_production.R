@@ -90,13 +90,13 @@ for(cpdi in relCompounds) {
 stat_BP_x_auxo <- rbindlist(stat_BP_x_auxo)
 stat_BP_x_auxo[, fisher.padj := p.adjust(fisher.p, method = "fdr")]
 stat_BP_x_auxo[, wilcox.padj := p.adjust(wilcox.p, method = "fdr")]
-stat_BP_x_auxo[, fisher.or.log10 := log10(fisher.or)]
+stat_BP_x_auxo[, fisher.or.log2 := -log2(fisher.or)]
 stat_BP_x_auxo[fisher.padj < 0.05, sign.label1 := "Padj < 0.05"]
 stat_BP_x_auxo[wilcox.padj < 0.05, sign.label2 := "Padj < 0.05"]
 
 #export data in csv
 ferm_byprod <- stat_BP_x_auxo[,!c(5,6,7,9,11,12)]
-write.csv(ferm_byprod, "output/plots/fermentation_byproducts.csv")
+write.csv(ferm_byprod, "output/files/fermentation_byproducts.csv")
 
 p <- ggplot(stat_BP_x_auxo[auxo.compound != "Gly"], aes(auxo.compound, by.product,
                                 fill = -log2(fisher.or))) +

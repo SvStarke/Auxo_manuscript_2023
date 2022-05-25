@@ -45,45 +45,361 @@ View(nutr_info_auxo)
 
 sumfreq_nutr_auxo <- aggregate(nutr_info_auxo$freq, by=list(subject=nutr_info_auxo$subject, AA=nutr_info_auxo$Compound), FUN=sum)
 nutri_all_info <- merge(sumfreq_nutr_auxo,nutr_info_AA, by.x="subject", by.y="new_id")
-nutri_all_info <- merge(nutri_all_info,FoCus_data, by.x="subject", by.y="sample")
 FoCus_data <- fread("/mnt/nuuk/2021/HRGM/FOCUS_meta_info_v2.csv")
+nutri_all_info <- merge(nutri_all_info,FoCus_data, by.x="subject", by.y="sample")
+nutri_all_info <- data.table(nutri_all_info)
+
+#exclude all people with diabetes
+nutri_all_info <- nutri_all_info[diabetes!=1, ]
+View(nutri_all_info)
 
 
-colnames <- colnames(nutri_all_info2)
-newcol <- colnames[-c(1:4,23)]
-
-AAI <- unique(newcol)
+##### ALA
+AAI
 AA <- unique(nutri_all_info$AA)
 rm(l)
-l <- list()
+ALA <- list()
 k <- 1
 
 for(AAi in AA) {
   print(AAi)
-  for(AAIi in AAI){
-    table <- nutri_all_info[nutri_all_info$AA == AAi, ]
-    res <- cor.test(table$x, table[[AAIi]], method = "spearman", exact = FALSE)
-    table_corr <- data.table(Pvalue = res$p.value,
+    n <- partial_Spearman(x|EALA ~ Gender + age + BMI, data = nutri_all_info[AA == AAi])
+    nutri_all_info$Estimate_Part_Spear <- n$TS$TB$ts
+    nutri_all_info$pvalue_Part_Spear <- n$TS$TB$pval
+    table_corr <- data.table(Pvalue = n$TS$TB$pval,
                              AA = AAi,
-                             day_int = AAIi,
-                             Estimate = res$estimate)
-    l[[k]] <- table_corr
+                             day_int = "ALA",
+                             Estimate = n$TS$TB$ts)
+    ALA[[k]] <- table_corr
     k <- k+1
-  }
 }
 
+tmp_ALA <- rbindlist(ALA)
+#### ARGININE
+AA <- unique(nutri_all_info$AA)
+rm(l)
+ARG <- list()
+k <- 1
 
-nutr_auxo <- rbindlist(l)
-View(nutr_auxo)
+for(AAi in AA) {
+  print(AAi)
+  n <- partial_Spearman(x|EARG ~ Gender + age + BMI, data = nutri_all_info[AA == AAi])
+  nutri_all_info$Estimate_Part_Spear <- n$TS$TB$ts
+  nutri_all_info$pvalue_Part_Spear <- n$TS$TB$pval
+  table_corr <- data.table(Pvalue = n$TS$TB$pval,
+                           AA = AAi,
+                           day_int = "Arg",
+                           Estimate = n$TS$TB$ts)
+  ARG[[k]] <- table_corr
+  k <- k+1
+}
+tmp_ARG <- rbindlist(ARG)
+######Asparagine
+AA <- unique(nutri_all_info$AA)
+ASP <- list()
+k <- 1
 
-#nutr_auxo[Pvalue< 0.05, sign.label1 := "not adj.P < 0.05"]
+for(AAi in AA) {
+  print(AAi)
+  n <- partial_Spearman(x|EASP ~ Gender + age + BMI, data = nutri_all_info[AA == AAi])
+  nutri_all_info$Estimate_Part_Spear <- n$TS$TB$ts
+  nutri_all_info$pvalue_Part_Spear <- n$TS$TB$pval
+  table_corr <- data.table(Pvalue = n$TS$TB$pval,
+                           AA = AAi,
+                           day_int = "Asp",
+                           Estimate = n$TS$TB$ts)
+  ASP[[k]] <- table_corr
+  k <- k+1
+}
+tmp_ASP <- rbindlist(ASP)
+############Cysteine
+AA <- unique(nutri_all_info$AA)
+CYS <- list()
+k <- 1
 
-nutr_auxo[, padj := p.adjust(Pvalue, method = "fdr")]
-nutr_auxo[padj< 0.05, sign.label1 := "Padj < 0.05"]
+for(AAi in AA) {
+  print(AAi)
+  n <- partial_Spearman(x|ECYS ~ Gender + age + BMI, data = nutri_all_info[AA == AAi])
+  nutri_all_info$Estimate_Part_Spear <- n$TS$TB$ts
+  nutri_all_info$pvalue_Part_Spear <- n$TS$TB$pval
+  table_corr <- data.table(Pvalue = n$TS$TB$pval,
+                           AA = AAi,
+                           day_int = "Cys",
+                           Estimate = n$TS$TB$ts)
+  CYS[[k]] <- table_corr
+  k <- k+1
+}
+tmp_CYS <- rbindlist(CYS)
+###########Glutamate
+AA <- unique(nutri_all_info$AA)
+GLU <- list()
+k <- 1
 
-heatmap_EAA_auxo <- ggplot(nutr_auxo, aes(AA,day_int, fill = Estimate)) +
+for(AAi in AA) {
+  print(AAi)
+  n <- partial_Spearman(x|EGLU ~ Gender + age + BMI, data = nutri_all_info[AA == AAi])
+  nutri_all_info$Estimate_Part_Spear <- n$TS$TB$ts
+  nutri_all_info$pvalue_Part_Spear <- n$TS$TB$pval
+  table_corr <- data.table(Pvalue = n$TS$TB$pval,
+                           AA = AAi,
+                           day_int = "Glu",
+                           Estimate = n$TS$TB$ts)
+  GLU[[k]] <- table_corr
+  k <- k+1
+}
+tmp_GLU <- rbindlist(GLU)
+###########Glycin
+AA <- unique(nutri_all_info$AA)
+GLY<- list()
+k <- 1
+
+for(AAi in AA) {
+  print(AAi)
+  n <- partial_Spearman(x|EGLY ~ Gender + age + BMI, data = nutri_all_info[AA == AAi])
+  nutri_all_info$Estimate_Part_Spear <- n$TS$TB$ts
+  nutri_all_info$pvalue_Part_Spear <- n$TS$TB$pval
+  table_corr <- data.table(Pvalue = n$TS$TB$pval,
+                           AA = AAi,
+                           day_int = "Gly",
+                           Estimate = n$TS$TB$ts)
+  GLY[[k]] <- table_corr
+  k <- k+1
+}
+tmp_GLY <- rbindlist(GLY)
+###########Histidine
+AA <- unique(nutri_all_info$AA)
+HIS <- list()
+k <- 1
+
+for(AAi in AA) {
+  print(AAi)
+  n <- partial_Spearman(x|EHIS ~ Gender + age + BMI, data = nutri_all_info[AA == AAi])
+  nutri_all_info$Estimate_Part_Spear <- n$TS$TB$ts
+  nutri_all_info$pvalue_Part_Spear <- n$TS$TB$pval
+  table_corr <- data.table(Pvalue = n$TS$TB$pval,
+                           AA = AAi,
+                           day_int = "HIS",
+                           Estimate = n$TS$TB$ts)
+  HIS[[k]] <- table_corr
+  k <- k+1
+}
+tmp_HIS <- rbindlist(HIS)
+######Isoleucine
+AA <- unique(nutri_all_info$AA)
+ILE <- list()
+k <- 1
+
+for(AAi in AA) {
+  print(AAi)
+  n <- partial_Spearman(x|EILE ~ Gender + age + BMI, data = nutri_all_info[AA == AAi])
+  nutri_all_info$Estimate_Part_Spear <- n$TS$TB$ts
+  nutri_all_info$pvalue_Part_Spear <- n$TS$TB$pval
+  table_corr <- data.table(Pvalue = n$TS$TB$pval,
+                           AA = AAi,
+                           day_int = "Ile",
+                           Estimate = n$TS$TB$ts)
+  ILE[[k]] <- table_corr
+  k <- k+1
+}
+tmp_ILE <- rbindlist(ILE)
+########Leucine
+AA <- unique(nutri_all_info$AA)
+LEU <- list()
+k <- 1
+
+for(AAi in AA) {
+  print(AAi)
+  n <- partial_Spearman(x|ELEU ~ Gender + age + BMI, data = nutri_all_info[AA == AAi])
+  nutri_all_info$Estimate_Part_Spear <- n$TS$TB$ts
+  nutri_all_info$pvalue_Part_Spear <- n$TS$TB$pval
+  table_corr <- data.table(Pvalue = n$TS$TB$pval,
+                           AA = AAi,
+                           day_int = "Leu",
+                           Estimate = n$TS$TB$ts)
+  LEU[[k]] <- table_corr
+  k <- k+1
+}
+tmp_LEU <- rbindlist(LEU)
+##########lysine
+AA <- unique(nutri_all_info$AA)
+LYS <- list()
+k <- 1
+
+for(AAi in AA) {
+  print(AAi)
+  n <- partial_Spearman(x|ELYS ~ Gender + age + BMI, data = nutri_all_info[AA == AAi])
+  nutri_all_info$Estimate_Part_Spear <- n$TS$TB$ts
+  nutri_all_info$pvalue_Part_Spear <- n$TS$TB$pval
+  table_corr <- data.table(Pvalue = n$TS$TB$pval,
+                           AA = AAi,
+                           day_int = "Lys",
+                           Estimate = n$TS$TB$ts)
+  LYS[[k]] <- table_corr
+  k <- k+1
+}
+tmp_LYS <- rbindlist(LYS)
+######Methionine
+AA <- unique(nutri_all_info$AA)
+MET <- list()
+k <- 1
+
+for(AAi in AA) {
+  print(AAi)
+  n <- partial_Spearman(x|EMET ~ Gender + age + BMI, data = nutri_all_info[AA == AAi])
+  nutri_all_info$Estimate_Part_Spear <- n$TS$TB$ts
+  nutri_all_info$pvalue_Part_Spear <- n$TS$TB$pval
+  table_corr <- data.table(Pvalue = n$TS$TB$pval,
+                           AA = AAi,
+                           day_int = "Met",
+                           Estimate = n$TS$TB$ts)
+  MET[[k]] <- table_corr
+  k <- k+1
+}
+tmp_MET <- rbindlist(MET)
+###########Phenylalanine
+AA <- unique(nutri_all_info$AA)
+PHE <- list()
+k <- 1
+
+for(AAi in AA) {
+  print(AAi)
+  n <- partial_Spearman(x|EPHE ~ Gender + age + BMI, data = nutri_all_info[AA == AAi])
+  nutri_all_info$Estimate_Part_Spear <- n$TS$TB$ts
+  nutri_all_info$pvalue_Part_Spear <- n$TS$TB$pval
+  table_corr <- data.table(Pvalue = n$TS$TB$pval,
+                           AA = AAi,
+                           day_int = "Phe",
+                           Estimate = n$TS$TB$ts)
+  PHE[[k]] <- table_corr
+  k <- k+1
+}
+tmp_PHE <- rbindlist(PHE)
+#######Proline
+AA <- unique(nutri_all_info$AA)
+PRO <- list()
+k <- 1
+
+for(AAi in AA) {
+  print(AAi)
+  n <- partial_Spearman(x|EPRO ~ Gender + age + BMI, data = nutri_all_info[AA == AAi])
+  nutri_all_info$Estimate_Part_Spear <- n$TS$TB$ts
+  nutri_all_info$pvalue_Part_Spear <- n$TS$TB$pval
+  table_corr <- data.table(Pvalue = n$TS$TB$pval,
+                           AA = AAi,
+                           day_int = "Pro",
+                           Estimate = n$TS$TB$ts)
+  PRO[[k]] <- table_corr
+  k <- k+1
+}
+tmp_PRO <- rbindlist(PRO)
+#######Serine
+AA <- unique(nutri_all_info$AA)
+SER <- list()
+k <- 1
+
+for(AAi in AA) {
+  print(AAi)
+  n <- partial_Spearman(x|ESER ~ Gender + age + BMI, data = nutri_all_info[AA == AAi])
+  nutri_all_info$Estimate_Part_Spear <- n$TS$TB$ts
+  nutri_all_info$pvalue_Part_Spear <- n$TS$TB$pval
+  table_corr <- data.table(Pvalue = n$TS$TB$pval,
+                           AA = AAi,
+                           day_int = "Ser",
+                           Estimate = n$TS$TB$ts)
+  SER[[k]] <- table_corr
+  k <- k+1
+}
+tmp_SER <- rbindlist(SER)
+#########threonine
+AA <- unique(nutri_all_info$AA)
+THR <- list()
+k <- 1
+
+for(AAi in AA) {
+  print(AAi)
+  n <- partial_Spearman(x|ETHR ~ Gender + age + BMI, data = nutri_all_info[AA == AAi])
+  nutri_all_info$Estimate_Part_Spear <- n$TS$TB$ts
+  nutri_all_info$pvalue_Part_Spear <- n$TS$TB$pval
+  table_corr <- data.table(Pvalue = n$TS$TB$pval,
+                           AA = AAi,
+                           day_int = "Thr",
+                           Estimate = n$TS$TB$ts)
+  THR[[k]] <- table_corr
+  k <- k+1
+}
+tmp_THR <- rbindlist(THR)
+#######tryptophan
+AA <- unique(nutri_all_info$AA)
+TRP <- list()
+k <- 1
+
+for(AAi in AA) {
+  print(AAi)
+  n <- partial_Spearman(x|ETRP ~ Gender + age + BMI, data = nutri_all_info[AA == AAi])
+  nutri_all_info$Estimate_Part_Spear <- n$TS$TB$ts
+  nutri_all_info$pvalue_Part_Spear <- n$TS$TB$pval
+  table_corr <- data.table(Pvalue = n$TS$TB$pval,
+                           AA = AAi,
+                           day_int = "Trp",
+                           Estimate = n$TS$TB$ts)
+  TRP[[k]] <- table_corr
+  k <- k+1
+}
+tmp_TRP <- rbindlist(TRP)
+
+##########tyrosine
+AA <- unique(nutri_all_info$AA)
+TYR <- list()
+k <- 1
+
+for(AAi in AA) {
+  print(AAi)
+  n <- partial_Spearman(x|ETYR ~ Gender + age + BMI, data = nutri_all_info[AA == AAi])
+  nutri_all_info$Estimate_Part_Spear <- n$TS$TB$ts
+  nutri_all_info$pvalue_Part_Spear <- n$TS$TB$pval
+  table_corr <- data.table(Pvalue = n$TS$TB$pval,
+                           AA = AAi,
+                           day_int = "Tyr",
+                           Estimate = n$TS$TB$ts)
+  TYR[[k]] <- table_corr
+  k <- k+1
+}
+tmp_TYR <- rbindlist(TYR)
+########valine
+AA <- unique(nutri_all_info$AA)
+VAL <- list()
+k <- 1
+
+for(AAi in AA) {
+  print(AAi)
+  n <- partial_Spearman(x|EVAL ~ Gender + age + BMI, data = nutri_all_info[AA == AAi])
+  nutri_all_info$Estimate_Part_Spear <- n$TS$TB$ts
+  nutri_all_info$pvalue_Part_Spear <- n$TS$TB$pval
+  table_corr <- data.table(Pvalue = n$TS$TB$pval,
+                           AA = AAi,
+                           day_int = "VAL",
+                           Estimate = n$TS$TB$ts)
+  VAL[[k]] <- table_corr
+  k <- k+1
+}
+tmp_VAL <- rbindlist(VAL)
+
+###combine all AAA tables in one table
+Part_Spear_EAA <- rbind(tmp_ALA, tmp_ASP, tmp_CYS, tmp_GLU, tmp_VAL, tmp_HIS, tmp_ILE, tmp_LEU,
+                        tmp_LYS, tmp_MET, tmp_PHE, tmp_PRO, tmp_SER, tmp_THR, tmp_TRP, tmp_TYR, 
+                        tmp_ARG, tmp_GLY)
+
+##adjust pvalue
+Part_Spear_EAA$padjust = p.adjust(Part_Spear_EAA$Pvalue, method = "fdr")
+Part_Spear_EAA[padjust < 0.05, sign.label1 := "P < 0.05"]
+Part_Spear_EAA$padjust_2 = p.adjust(Part_Spear_EAA$Pvalue, method = "fdr")
+Part_Spear_EAA[padjust_2 < 0.1, sign.label2 := "P < 0.1"]
+
+View(Part_Spear_EAA)
+
+heatmap_AA <- ggplot(Part_Spear_EAA, aes(AA,day_int, fill = Estimate)) +
   geom_tile(linetype = 1.5, colour ="grey", lwd=0.2) +
-  geom_point(aes(shape=sign.label1), size=1, show.legend = FALSE) +
+  geom_point(aes(shape=sign.label2), size=1) +
   scale_fill_gradient2(high = "#ca0020", mid="white", low = "#0571b0") +
   theme_minimal() +
   theme(axis.text.x = element_text(colour="black", size = 10)) +
@@ -93,71 +409,13 @@ heatmap_EAA_auxo <- ggplot(nutr_auxo, aes(AA,day_int, fill = Estimate)) +
   scale_shape_manual(values = 8, na.translate = FALSE)+
   xlab("Amino acid auxotrophies") +
   ylab("E(%)") +
-  labs(shape = "") +
   theme(panel.background = element_blank())
+heatmap_AA
 
-heatmap_EAA_auxo
 
-ggsave("output/plots/heatmap_nutr_AA_adj_pvalue.pdf", plot = heatmap_EAA_auxo,
+ggsave("output/plots/heatmap_nutr_AA.pdf", plot = heatmap_AA,
        width = 9, height = 6)
 
-Tryp <- nutri_all_info[nutri_all_info$AA == "Trp",]
-cor.test(Tryp$x, Tryp$EALA, method = "spearman")
-
-
-#linear model
-colnames <- colnames(nutri_all_info2)
-newcol <- colnames[-c(1:4,23)]
-
-AAI <- unique(newcol)
-AA <- unique(nutri_all_info2$AA)
-rm(l)
-l <- list()
-k <- 1
-
-for(AAi in AA) {
-  print(AAi)
-  m0 <- lm(formula = x ~ Gender + age + BMI + parodontitis, data = nutri_all_info2[AA == AAi])
-  m0.sum <- summary(m0)
-  lin_mod <- m0.sum$coefficients
-  lin_mod <- data.table(lin_mod)
-  lin_mod$AA <- AAi
-  lin_mod$factor <- c("Intercept","sex", "age", "BMI","parodontitis")
-  lin_nutr[[k]] <- lin_mod
-  k <- k +1
-}
-
-
-linear_mod_parodontitis <- rbindlist(lin_parodontitis)
-remove(lin_parodontitis,m0,m0.sum,lin_mod)
-names(linear_mod_parodontitis)[names(linear_mod_parodontitis) == "Pr(>|t|)"] <- "pvalue"
-
-linear_mod_parodontitis_adjust <- linear_mod_parodontitis[factor == "parodontitis"]
-linear_mod_parodontitis_adjust$padjust = p.adjust(linear_mod_parodontitis_adjust$pvalue, method = "fdr")
-linear_mod_parodontitis_adjust[padjust < 0.05, sign.label1 := "P < 0.05"]
-linear_mod_parodontitis_adjust <- data.table(linear_mod_parodontitis_adjust)
-
-parodontitis <- ggplot(linear_mod_parodontitis_adjust, aes(AA, factor, fill = `t value`))+
-  geom_tile() +
-  labs(x = "Auxotrophy", y = "", shape = "")+
-  geom_point(aes(shape = sign.label1), size = 1) +
-  scale_fill_gradient2(high = "#b2182b", mid = "white", low = "#2166ac") +
-  scale_shape_manual(values = 8, na.translate = FALSE) +
-  theme_minimal() +
-  theme(legend.position = "bottom",
-        legend.justification = 	1,
-        axis.text.x = element_text(color = "black", angle = 45, hjust = 1, size = 10),
-        axis.text.y = element_text(color = "black", size = 10)) +
-  theme(axis.title.y = element_text(margin = margin(t =0, r = 20, b= 0, l = 0))) +
-  theme(axis.title.x = element_text(face  = "bold"))+
-  theme(panel.background = element_blank()) +
-  theme(legend.title = element_text(size=9)) +
-  labs(fill="") +
-  theme(legend.position = "right",
-        legend.justification = 	1) +
-  theme(legend.text = element_text(size=9)) +
-  theme(panel.grid.major = element_blank())
-parodontitis
 
 ##################### B-VITAMINS ###############################
 #### analysis for amino acids 

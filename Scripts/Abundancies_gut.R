@@ -32,7 +32,7 @@ u <- rbindlist(p)
 sumfreq <- aggregate(u$freq, by=list(subject=u$subject, AA=u$Compound), FUN=sum)
 describe(sumfreq$subject)
 sumfreqAA <- aggregate(sumfreq$x, by=list(Aminoacid = sumfreq$AA), FUN=median)
-
+View(u)
 #####################        visualization        ##############################
 a <- ggplot( sumfreqAA, aes(Aminoacid, x)) +
   geom_bar(stat="identity", fill = "#7E0018DD",colour = "black", width= 1) +

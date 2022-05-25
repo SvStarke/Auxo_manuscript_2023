@@ -980,12 +980,9 @@ parodontitis
 linear_health_marks <- rbind(linear_mod_age, linear_mod_BMI, linear_mod_sex, 
                        linear_mod_CRP_adjust,linear_mod_HOMA_adjust,linear_mod_hypertens_adjust, linear_mod_IL6_adjust, linear_mod_TG_adjust)
 View(linear_health_marks)
-ggplot(linear_health_marks, aes(factor, AA, fill = Estimate_Part_Spear)) +
-  geom_tile() +
-  scale_fill_continuous()
-  str(linear_health_marks)
-is.continuous(linear_health_marks$Estimate_Part_Spear)
+
 linear_health_marks$Estimate_Part_Spear = as.numeric(linear_health_marks$Estimate_Part_Spear)
+linear_health_marks[linear_health_marks == "P < 0.05"] <- "Padj <0.05"
  
 linear_health <- ggplot(linear_health_marks, aes(x = factor,y= AA, fill =`Estimate_Part_Spear`))+
   geom_tile() +
@@ -1021,15 +1018,16 @@ dis_health_FoCus <- rbind(linear_mod_IBS_adjust, linear_mod_IBD_adjust, linear_m
              linear_mod_chrond_adjust, linear_mod_cancer_adjust, linear_mod_liverdis_adjust, 
              linear_mod_rheumato_adjust,linear_mod_parodontitis_adjust)
 str(dis_health_FoCus)
+dis_health_FoCus[dis_health_FoCus == "P < 0.05"] <- "Padj <0.05"
 dis_health <- ggplot(dis_health_FoCus, aes(factor, AA, fill = `Estimate_Part_Spear`))+
   geom_tile() +
   labs(y = "", x = "Diseases", shape = "") +
   geom_point(aes(shape = sign.label2), size = 1) +
   scale_fill_gradient2(high = "#b2182b", mid = "white", low = "#2166ac") +
-  scale_shape_manual(values = 8, na.translate = FALSE, name = "Estimate") +
+  scale_shape_manual(values = 8, na.translate = FALSE) +
   theme_minimal() +
   scale_x_discrete("Diseases", labels = c("IBS" = "IBS", "IBD" = "IBD", "chrond" = "Chronic\nDiarrhea", "liverdis" = "Liver", "diabetes" = "Diabetes", "parodontitis" = "Parodontitis", "rheumato"="Rheumatism")) +
-  theme(legend.position = "top", legend.box = "horizontal",
+  theme(legend.position = "right",
         legend.justification = 	0.5,
         axis.text.x = element_text(color = "black", angle = 90, vjust = 0.2, size = 8),
         axis.text.y = element_text(color = "black", size = 8)) +
@@ -1040,10 +1038,12 @@ dis_health <- ggplot(dis_health_FoCus, aes(factor, AA, fill = `Estimate_Part_Spe
   theme(legend.title = element_text(size=9)) +
   labs(fill="Estimate", x = "") +
   theme(legend.text = element_text(size=7)) +
-  theme(panel.grid.major = element_blank())
+  theme(panel.grid.major = element_blank()) +
+  theme(legend.position = "top",
+      legend.justification = 	1)
 dis_health + guides(shape = guide_legend(order = 1))
 dis_health  <- dis_health + guides(shape= "none")
 dis_health
 
-ggsave("output/plots/health_diseases_linear_mod_diseases_healthparam.pdf", plot = dis_health_param,
+ggsave("output/plots/dis_health.pdf", plot = dis_health,
        width = 7, height = 5)
