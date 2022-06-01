@@ -3,7 +3,7 @@ data <- fread("/mnt/nuuk/2021/HRGM/FOCUS_HRGM_abundancies.csv.gz")
 describe(data$subject)
 focus_info <- fread("/mnt/nuuk/2021/HRGM/FOCUS_meta_info.csv")
 View(focus_info)
-describe(focus_info$IBD)
+describe(focus_info$diabetes)
 focus_all_info <- merge(data,focus_info, by.x="subject", by.y="subject")
 #filter for BL
 focus_all_info <- focus_all_info[focus.call == "BL"]

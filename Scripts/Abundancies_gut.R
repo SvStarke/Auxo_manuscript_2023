@@ -29,6 +29,9 @@ for (subi in sub) {
 }
 
 u <- rbindlist(p) 
+FoCus_data <- FoCus_data[FOC_rec_type!=1]
+u <- merge(u, FoCus_data, by.x="subject", by.y="sample")
+describe(FoCus_info$subject)
 sumfreq <- aggregate(u$freq, by=list(subject=u$subject, AA=u$Compound), FUN=sum)
 describe(sumfreq$subject)
 sumfreqAA <- aggregate(sumfreq$x, by=list(Aminoacid = sumfreq$AA), FUN=median)

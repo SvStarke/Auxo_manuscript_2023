@@ -1,6 +1,22 @@
 ###############   new FoCus cohort data   ##################
 
 FoCus_data <- fread("/mnt/nuuk/2021/HRGM/FOCUS_meta_info_v2.csv")
+Fo <- fread("/mnt/nuuk/2021/HRGM/FOCUS_meta_info_v2.csv")
+describe(Fo$FOC_rec_type)
+is.data.table(FoCus_data)
+
+#change the code for the diseases 1 is ill and 0 is healthy (=not ill)
+FoCus_data[diabetes == 2, diabetes:= 0]
+FoCus_data[cancer == 2, cancer:= 0]
+FoCus_data[chr_diarrh == 2, chr_diarrh:= 0]
+FoCus_data[IBD == 2, IBD:= 0]
+FoCus_data[IBS == 2, IBS:= 0]
+FoCus_data[rheumato == 2, rheumato:= 0]
+FoCus_data[liverdisease == 2, liverdisease:= 0]
+FoCus_data[parodontitis == 2, parodontitis:= 0]
+FoCus_data[hypertens == 2, hypertens:= 0]
+FoCus_data <- FoCus_data[FOC_rec_type!=2]
+View(FoCus_data)
 describe(FoCus_data$sample)
 #checking distribution of data
 hist(FoCus_data$IL6)
@@ -67,9 +83,10 @@ View(info_auxo)
 sumfreq_all <- aggregate(info_auxo$freq, by=list(subject=info_auxo$subject, AA=info_auxo$Compound,
                                                  BMI=info_auxo$BMI, sex=info_auxo$Gender,age=info_auxo$age), FUN=sum)
 describe(sumfreq_all$subject)
+#sumfreq_all <- data.table(sumfreq_all)
+#test <- lm(formula = x ~ sex + age + BMI, data = sumfreq_all[AA == "Cys"])
+#summary(test)
 sumfreq_all <- data.table(sumfreq_all)
-test <- lm(formula = x ~ sex + age + BMI, data = sumfreq_all[AA == "Cys"])
-summary(test)
 relAA1 <- unique(sumfreq_all$AA)
 lin <- list()
 k <- 1
@@ -91,8 +108,6 @@ for (AAi in relAA1){
   
 }
 
-test5 <- sumfreq_all[AA == "Cys"]
-pcor.test(test5$x, test5$age, c(test5$sex, test5$BMI), method = "spearman")
 
 
 linear_mod <- rbindlist(lin)
@@ -191,32 +206,32 @@ describe(sumfreq_diabetes_lin$subject)
 View(info_auxo)
 describe(sumfreq_diabetes_lin$diabetes)
 View(sumfreq_diabetes_lin)
-m0 <- lm(formula = x ~ sex + age + BMI + diabetes, data = sumfreq_diabetes_lin[AA == "Val"])
-n <- partial_Spearman(x|diabetes~ sex + age + BMI, data = sumfreq_diabetes_lin[AA == "Trp"])
-n
+#m0 <- lm(formula = x ~ sex + age + BMI + diabetes, data = sumfreq_diabetes_lin[AA == "Val"])
+#n <- partial_Spearman(x|diabetes~ sex + age + BMI, data = sumfreq_diabetes_lin[AA == "Trp"])
+#n
 
 relAA <- unique(sumfreq_diabetes_lin$AA)
 lin_diab <- list()
 k <- 1
 for (AAi in relAA){
   print(AAi)
-  m0 <- lm(formula = x ~ sex + age + BMI + diabetes, data = sumfreq_diabetes_lin[AA == AAi])
+  m0 <- glm(diabetes ~  x + sex + age + BMI, data = sumfreq_diabetes_lin[AA == AAi], family = binomial)
   m0.sum <- summary(m0)
   lin_mod <- m0.sum$coefficients
   lin_mod <- data.table(lin_mod)
   lin_mod$AA <- AAi
-  lin_mod$factor <- c("Intercept","sex", "age", "BMI","diabetes")
-  n <- partial_Spearman(x|diabetes~ sex + age + BMI, data = sumfreq_diabetes_lin[AA == AAi])
-  lin_mod$Estimate_Part_Spear <- n$TS$TB$ts
-  lin_mod$pvalue_Part_Spear <- n$TS$TB$pval
+  lin_mod$factor <- c("Intercept","x","sex", "age","BMI")
+  #n <- partial_Spearman(x|diabetes~ sex + age + BMI, data = sumfreq_diabetes_lin[AA == AAi])
+  #lin_mod$Estimate_Part_Spear <- n$TS$TB$ts
+ # lin_mod$pvalue_Part_Spear <- n$TS$TB$pval
   lin_diab[[k]] <- lin_mod
   k <- k +1
 }
-
+warnings()
 linear_mod_diab <- rbindlist(lin_diab)
 remove(lin_diab,m0,m0.sum,lin_mod,n)
-names(linear_mod_diab)[names(linear_mod_diab) == "Pr(>|t|)"] <- "pvalue"
-
+names(linear_mod_diab)[names(linear_mod_diab) == "Pr(>|z|)"] <- "pvalue"
+linear_mod_diab[factor == "x", factor :="diabetes"]
 
 linear_mod_diab_adjust <- linear_mod_diab[factor == "diabetes"]
 linear_mod_diab_adjust$padjust = p.adjust(linear_mod_diab_adjust$pvalue, method = "fdr")
@@ -225,7 +240,7 @@ linear_mod_diab_adjust$padjust_Spear = p.adjust(linear_mod_diab_adjust$pvalue_Pa
 linear_mod_diab_adjust[padjust_Spear < 0.05, sign.label2 := "P < 0.05"]
 linear_mod_diab_adjust <- data.table(linear_mod_diab_adjust)
 
-d<- ggplot(linear_mod_diab_adjust[factor == "diabetes"], aes(AA, factor, fill = `t value`))+
+d<- ggplot(linear_mod_diab_adjust[factor == "diabetes"], aes(AA, factor, fill = `z value`))+
   geom_tile() +
   labs(x = "Auxotrophy", y = "", shape = "")+
   geom_point(aes(shape = sign.label1), size = 1) +
@@ -240,7 +255,6 @@ d<- ggplot(linear_mod_diab_adjust[factor == "diabetes"], aes(AA, factor, fill = 
   theme(axis.title.x = element_text(face  = "bold"))+
   theme(panel.background = element_blank()) +
   theme(legend.title = element_text(size=9)) +
-  labs(fill="") +
   theme(legend.position = "right",
         legend.justification = 	1) +
   theme(legend.text = element_text(size=9)) +
@@ -264,21 +278,23 @@ lin_IBD <- list()
 k <- 1
 for (AAi in relAA){
   print(AAi)
-  m0 <- lm(formula = x ~ sex + age + BMI + IBD, data = sumfreq_IBD_lin[AA == AAi])
+  m0 <- glm(IBD~x + sex + age + BMI, data = sumfreq_IBD_lin[AA == AAi], family = binomial)
   m0.sum <- summary(m0)
   lin_mod <- m0.sum$coefficients
   lin_mod <- data.table(lin_mod)
   lin_mod$AA <- AAi
-  lin_mod$factor <- c("Intercept","sex", "age", "BMI","IBD")
-  n <- partial_Spearman(x|IBD~ sex + age + BMI, data = sumfreq_IBD_lin[AA == AAi])
-  lin_mod$Estimate_Part_Spear <- n$TS$TB$ts
-  lin_mod$pvalue_Part_Spear <- n$TS$TB$pval
+  lin_mod$factor <- c("Intercept","x", "sex", "age", "BMI")
+  #n <- partial_Spearman(x|IBD~ sex + age + BMI, data = sumfreq_IBD_lin[AA == AAi])
+ # lin_mod$Estimate_Part_Spear <- n$TS$TB$ts
+  #lin_mod$pvalue_Part_Spear <- n$TS$TB$pval
   lin_IBD[[k]] <- lin_mod
   k <- k +1
 }
+
 linear_mod_IBD <- rbindlist(lin_IBD)
 remove(lin_IBD,m0, m0.sum,lin_mod,n)
-names(linear_mod_IBD)[names(linear_mod_IBD) == "Pr(>|t|)"] <- "pvalue"
+names(linear_mod_IBD)[names(linear_mod_IBD) == "Pr(>|z|)"] <- "pvalue"
+linear_mod_diab[factor == "x", factor :="IBD"]
 
 linear_mod_IBD_adjust <- linear_mod_IBD[factor == "IBD"]
 linear_mod_IBD_adjust$padjust = p.adjust(linear_mod_IBD_adjust$pvalue, method = "fdr")
@@ -287,7 +303,7 @@ linear_mod_IBD_adjust$padjust_Spear = p.adjust(linear_mod_IBD_adjust$pvalue_Part
 linear_mod_IBD_adjust[padjust_Spear < 0.05, sign.label2 := "P < 0.05"]
 linear_mod_IBD_adjust <- data.table(linear_mod_IBD_adjust)
 
-i <- ggplot(linear_mod_IBD_adjust, aes(AA, factor, fill = `t value`))+
+i <- ggplot(linear_mod_IBD_adjust, aes(AA, factor, fill = `z value`))+
   geom_tile() +
   labs(x = "Auxotrophy", y = "", shape = "")+
   geom_point(aes(shape = sign.label1), size = 1) +
@@ -323,21 +339,23 @@ lin_chrond <- list()
 k <- 1
 for (AAi in relAA){
   print(AAi)
-  m0 <- lm(formula = x ~ sex + age + BMI + chrond, data = sumfreq_chrond_lin[AA == AAi])
+  m0 <- glm(chrond ~ x + sex + age + BMI, data = sumfreq_chrond_lin[AA == AAi], family = binomial)
   m0.sum <- summary(m0)
   lin_mod <- m0.sum$coefficients
   lin_mod <- data.table(lin_mod)
   lin_mod$AA <- AAi
-  lin_mod$factor <- c("Intercept","sex", "age", "BMI","chrond")
-  n <- partial_Spearman(x|chrond~ sex + age + BMI, data = sumfreq_chrond_lin[AA == AAi])
-  lin_mod$Estimate_Part_Spear <- n$TS$TB$ts
-  lin_mod$pvalue_Part_Spear <- n$TS$TB$pval
+  lin_mod$factor <- c("Intercept","x","sex", "age", "BMI")
+  #n <- partial_Spearman(x|chrond~ sex + age + BMI, data = sumfreq_chrond_lin[AA == AAi])
+  #lin_mod$Estimate_Part_Spear <- n$TS$TB$ts
+ # lin_mod$pvalue_Part_Spear <- n$TS$TB$pval
   lin_chrond[[k]] <- lin_mod
   k <- k +1
 }
+
 linear_mod_chrond <- rbindlist(lin_chrond)
 remove(lin_chrond,m0,m0.sum,lin_mod)
-names(linear_mod_chrond)[names(linear_mod_chrond) == "Pr(>|t|)"] <- "pvalue"
+names(linear_mod_chrond)[names(linear_mod_chrond) == "Pr(>|z|)"] <- "pvalue"
+linear_mod_diab[factor == "x", factor :="chrond"]
 
 linear_mod_chrond_adjust <- linear_mod_chrond[factor == "chrond"]
 linear_mod_chrond_adjust$padjust = p.adjust(linear_mod_chrond_adjust$pvalue, method = "fdr")
@@ -346,7 +364,7 @@ linear_mod_chrond_adjust$padjust_Spear = p.adjust(linear_mod_chrond_adjust$pvalu
 linear_mod_chrond_adjust[padjust_Spear < 0.05, sign.label2 := "P < 0.05"]
 linear_mod_chrond_adjust <- data.table(linear_mod_chrond_adjust)
 
-c <- ggplot(linear_mod_chrond_adjust, aes(AA, factor, fill = `t value`))+
+c <- ggplot(linear_mod_chrond_adjust, aes(AA, factor, fill = `z value`))+
   geom_tile() +
   labs(x = "Auxotrophy", y = "", shape = "")+
   geom_point(aes(shape = sign.label1), size = 1) +
@@ -381,21 +399,22 @@ lin_IBS <- list()
 k <- 1
 for (AAi in relAA){
   print(AAi)
-  m0 <- lm(formula = x ~ sex + age + BMI + IBS, data = sumfreq_IBS_lin[AA == AAi])
+  m0 <- glm(IBS ~ x + sex + age + BMI, data = sumfreq_IBS_lin[AA == AAi], family = binomial)
   m0.sum <- summary(m0)
   lin_mod <- m0.sum$coefficients
   lin_mod <- data.table(lin_mod)
   lin_mod$AA <- AAi
-  lin_mod$factor <- c("Intercept","sex", "age", "BMI","IBS")
-  n <- partial_Spearman(x|IBS~ sex + age + BMI, data = sumfreq_IBS_lin[AA == AAi])
-  lin_mod$Estimate_Part_Spear <- n$TS$TB$ts
-  lin_mod$pvalue_Part_Spear <- n$TS$TB$pval
+  lin_mod$factor <- c("Intercept","x","sex", "age", "BMI")
+  #n <- partial_Spearman(x|IBS~ sex + age + BMI, data = sumfreq_IBS_lin[AA == AAi])
+ # lin_mod$Estimate_Part_Spear <- n$TS$TB$ts
+  #lin_mod$pvalue_Part_Spear <- n$TS$TB$pval
   lin_IBS[[k]] <- lin_mod
   k <- k +1
 }
 linear_mod_IBS <- rbindlist(lin_IBS)
 remove(lin_IBS,m0,m0.sum,lin_mod)
-names(linear_mod_IBS)[names(linear_mod_IBS) == "Pr(>|t|)"] <- "pvalue"
+names(linear_mod_IBS)[names(linear_mod_IBS) == "Pr(>|z|)"] <- "pvalue"
+linear_mod_IBS[factor == "x", factor :="IBS"]
 
 linear_mod_IBS_adjust <- linear_mod_IBS[factor == "IBS"]
 linear_mod_IBS_adjust$padjust = p.adjust(linear_mod_IBS_adjust$pvalue, method = "fdr")
@@ -404,7 +423,7 @@ linear_mod_IBS_adjust$padjust_Spear = p.adjust(linear_mod_IBS_adjust$pvalue_Part
 linear_mod_IBS_adjust[padjust_Spear < 0.05, sign.label2 := "P < 0.05"]
 linear_mod_IBS_adjust <- data.table(linear_mod_IBS_adjust)
 
-ibs <- ggplot(linear_mod_IBS_adjust, aes(AA, factor, fill = `t value`))+
+ibs <- ggplot(linear_mod_IBS_adjust, aes(AA, factor, fill = `z value`))+
   geom_tile() +
   labs(x = "Auxotrophy", y = "", shape = "")+
   geom_point(aes(shape = sign.label1), size = 1) +
@@ -697,21 +716,22 @@ lin_cancer <- list()
 k <- 1
 for (AAi in relAA){
   print(AAi)
-  m0 <- lm(formula = x ~ sex + age + BMI + Cancer, data = sumfreq_cancer_lin[AA == AAi])
+  m0 <- glm(Cancer ~  x + sex + age + BMI, data = sumfreq_cancer_lin[AA == AAi], family = binomial)
   m0.sum <- summary(m0)
   lin_mod <- m0.sum$coefficients
   lin_mod <- data.table(lin_mod)
   lin_mod$AA <- AAi
-  lin_mod$factor <- c("Intercept","sex", "age", "BMI","Cancer")
-  n <- partial_Spearman(x|Cancer~ sex + age + BMI, data = sumfreq_cancer_lin[AA == AAi])
-  lin_mod$Estimate_Part_Spear <- n$TS$TB$ts
-  lin_mod$pvalue_Part_Spear <- n$TS$TB$pval
+  lin_mod$factor <- c("Intercept","x","sex", "age", "BMI")
+  #n <- partial_Spearman(x|Cancer~ sex + age + BMI, data = sumfreq_cancer_lin[AA == AAi])
+  #lin_mod$Estimate_Part_Spear <- n$TS$TB$ts
+  #lin_mod$pvalue_Part_Spear <- n$TS$TB$pval
   lin_cancer[[k]] <- lin_mod
   k <- k +1
 }
 linear_mod_cancer <- rbindlist(lin_cancer)
 remove(lin_cancer,m0,m0.sum,lin_mod)
-names(linear_mod_cancer)[names(linear_mod_cancer) == "Pr(>|t|)"] <- "pvalue"
+names(linear_mod_cancer)[names(linear_mod_cancer) == "Pr(>|z|)"] <- "pvalue"
+linear_mod_cancer[factor=="x", factor:="Cancer"]
 
 linear_mod_cancer_adjust <- linear_mod_cancer[factor == "Cancer"]
 linear_mod_cancer_adjust$padjust = p.adjust(linear_mod_cancer_adjust$pvalue, method = "fdr")
@@ -754,21 +774,22 @@ lin_liverdis <- list()
 k <- 1
 for (AAi in relAA){
   print(AAi)
-  m0 <- lm(formula = x ~ sex + age + BMI + liverdis, data = sumfreq_liverdis_lin[AA == AAi])
+  m0 <- glm(liverdis ~  x + sex + age + BMI, data = sumfreq_liverdis_lin[AA == AAi], family = binomial)
   m0.sum <- summary(m0)
   lin_mod <- m0.sum$coefficients
   lin_mod <- data.table(lin_mod)
   lin_mod$AA <- AAi
-  lin_mod$factor <- c("Intercept","sex", "age", "BMI","liverdis")
-  n <- partial_Spearman(x|liverdis~ sex + age + BMI, data = sumfreq_liverdis_lin[AA == AAi])
-  lin_mod$Estimate_Part_Spear <- n$TS$TB$ts
-  lin_mod$pvalue_Part_Spear <- n$TS$TB$pval
+  lin_mod$factor <- c("Intercept","x","sex", "age", "BMI")
+  #n <- partial_Spearman(x|liverdis~ sex + age + BMI, data = sumfreq_liverdis_lin[AA == AAi])
+  #lin_mod$Estimate_Part_Spear <- n$TS$TB$ts
+  #lin_mod$pvalue_Part_Spear <- n$TS$TB$pval
   lin_liverdis[[k]] <- lin_mod
   k <- k +1
 }
 linear_mod_liverdis <- rbindlist(lin_liverdis)
 remove(lin_liverdis,m0,m0.sum,lin_mod)
-names(linear_mod_liverdis)[names(linear_mod_liverdis) == "Pr(>|t|)"] <- "pvalue"
+names(linear_mod_liverdis)[names(linear_mod_liverdis) == "Pr(>|z|)"] <- "pvalue"
+linear_mod_liverdis[factor== "x", factor:="liverdis"]
 
 linear_mod_liverdis_adjust <- linear_mod_liverdis[factor == "liverdis"]
 linear_mod_liverdis_adjust$padjust = p.adjust(linear_mod_liverdis_adjust$pvalue, method = "fdr")
@@ -811,21 +832,22 @@ lin_rheumato <- list()
 k <- 1
 for (AAi in relAA){
   print(AAi)
-  m0 <- lm(formula = x ~ sex + age + BMI + rheumato, data = sumfreq_rheumato_lin[AA == AAi])
+  m0 <- glm(rheumato ~  x + sex + age + BMI, data = sumfreq_rheumato_lin[AA == AAi], family = binomial)
   m0.sum <- summary(m0)
   lin_mod <- m0.sum$coefficients
   lin_mod <- data.table(lin_mod)
   lin_mod$AA <- AAi
-  lin_mod$factor <- c("Intercept","sex", "age", "BMI","rheumato")
-  n <- partial_Spearman(x|rheumato~ sex + age + BMI, data = sumfreq_rheumato_lin[AA == AAi])
-  lin_mod$Estimate_Part_Spear <- n$TS$TB$ts
-  lin_mod$pvalue_Part_Spear <- n$TS$TB$pval
+  lin_mod$factor <- c("Intercept","x","sex", "age", "BMI")
+  #n <- partial_Spearman(x|rheumato~ sex + age + BMI, data = sumfreq_rheumato_lin[AA == AAi])
+  #lin_mod$Estimate_Part_Spear <- n$TS$TB$ts
+  #lin_mod$pvalue_Part_Spear <- n$TS$TB$pval
   lin_rheumato[[k]] <- lin_mod
   k <- k +1
 }
 linear_mod_rheumato <- rbindlist(lin_rheumato)
 remove(lin_rheumato,m0,m0.sum,lin_mod)
-names(linear_mod_rheumato)[names(linear_mod_rheumato) == "Pr(>|t|)"] <- "pvalue"
+names(linear_mod_rheumato)[names(linear_mod_rheumato) == "Pr(>|z|)"] <- "pvalue"
+linear_mod_rheumato[factor == "x", factor:="rheumato"]
 
 linear_mod_rheumato_adjust <- linear_mod_rheumato[factor == "rheumato"]
 linear_mod_rheumato_adjust$padjust = p.adjust(linear_mod_rheumato_adjust$pvalue, method = "fdr")
@@ -869,15 +891,15 @@ lin_hypertens <- list()
 k <- 1
 for (AAi in relAA){
   print(AAi)
-  m0 <- lm(formula = x ~ sex + age + BMI + hypertens, data = sumfreq_hypertens_lin[AA == AAi])
+  m0 <- glm(hypertens ~  x + sex + age + BMI, data = sumfreq_hypertens_lin[AA == AAi], family = binomial)
   m0.sum <- summary(m0)
   lin_mod <- m0.sum$coefficients
   lin_mod <- data.table(lin_mod)
   lin_mod$AA <- AAi
-  lin_mod$factor <- c("Intercept","sex", "age", "BMI","hypertens")
-  n <- partial_Spearman(x|hypertens~ sex + age + BMI, data = sumfreq_hypertens_lin[AA == AAi])
-  lin_mod$Estimate_Part_Spear <- n$TS$TB$ts
-  lin_mod$pvalue_Part_Spear <- n$TS$TB$pval
+  lin_mod$factor <- c("Intercept","x","sex", "age", "BMI")
+  #n <- partial_Spearman(x|hypertens~ sex + age + BMI, data = sumfreq_hypertens_lin[AA == AAi])
+  #lin_mod$Estimate_Part_Spear <- n$TS$TB$ts
+  #lin_mod$pvalue_Part_Spear <- n$TS$TB$pval
   lin_hypertens[[k]] <- lin_mod
   k <- k +1
 }
@@ -887,7 +909,8 @@ pcor.test(sumfreq_hypertens_lin$x, sumfreq_hypertens_lin$hypertens)
 
 linear_mod_hypertens <- rbindlist(lin_hypertens)
 remove(lin_hypertens,m0,m0.sum,lin_mod)
-names(linear_mod_hypertens)[names(linear_mod_hypertens) == "Pr(>|t|)"] <- "pvalue"
+names(linear_mod_hypertens)[names(linear_mod_hypertens) == "Pr(>|z|)"] <- "pvalue"
+linear_mod_hypertens[factor == "x", factor:="hypertens"]
 
 linear_mod_hypertens_adjust <- linear_mod_hypertens[factor == "hypertens"]
 linear_mod_hypertens_adjust$padjust = p.adjust(linear_mod_hypertens_adjust$pvalue, method = "fdr")
@@ -930,21 +953,22 @@ lin_parodontitis <- list()
 k <- 1
 for (AAi in relAA){
   print(AAi)
-  m0 <- lm(formula = x ~ sex + age + BMI + parodontitis, data = sumfreq_parodontitis_lin[AA == AAi])
+  m0 <- glm(parodontitis ~  x + sex + age + BMI, data = sumfreq_parodontitis_lin[AA == AAi], family = binomial)
   m0.sum <- summary(m0)
   lin_mod <- m0.sum$coefficients
   lin_mod <- data.table(lin_mod)
   lin_mod$AA <- AAi
-  lin_mod$factor <- c("Intercept","sex", "age", "BMI","parodontitis")
-  n <- partial_Spearman(x|parodontitis~ sex + age + BMI, data = sumfreq_parodontitis_lin[AA == AAi])
-  lin_mod$Estimate_Part_Spear <- n$TS$TB$ts
-  lin_mod$pvalue_Part_Spear <- n$TS$TB$pval
+  lin_mod$factor <- c("Intercept","x","sex", "age", "BMI")
+  #n <- partial_Spearman(x|parodontitis~ sex + age + BMI, data = sumfreq_parodontitis_lin[AA == AAi])
+ # lin_mod$Estimate_Part_Spear <- n$TS$TB$ts
+  #lin_mod$pvalue_Part_Spear <- n$TS$TB$pval
   lin_parodontitis[[k]] <- lin_mod
   k <- k +1
 }
 linear_mod_parodontitis <- rbindlist(lin_parodontitis)
 remove(lin_parodontitis,m0,m0.sum,lin_mod)
-names(linear_mod_parodontitis)[names(linear_mod_parodontitis) == "Pr(>|t|)"] <- "pvalue"
+names(linear_mod_parodontitis)[names(linear_mod_parodontitis) == "Pr(>|z|)"] <- "pvalue"
+linear_mod_parodontitis[factor == "x", factor:="parodontitis"]
 
 linear_mod_parodontitis_adjust <- linear_mod_parodontitis[factor == "parodontitis"]
 linear_mod_parodontitis_adjust$padjust = p.adjust(linear_mod_parodontitis_adjust$pvalue, method = "fdr")
@@ -953,7 +977,7 @@ linear_mod_parodontitis_adjust$padjust_Spear = p.adjust(linear_mod_parodontitis_
 linear_mod_parodontitis_adjust[padjust_Spear < 0.05, sign.label2 := "P < 0.05"]
 linear_mod_parodontitis_adjust <- data.table(linear_mod_parodontitis_adjust)
 
-parodontitis <- ggplot(linear_mod_parodontitis_adjust, aes(AA, factor, fill = `t value`))+
+parodontitis <- ggplot(linear_mod_parodontitis_adjust, aes(AA, factor, fill = `z value`))+
   geom_tile() +
   labs(x = "Auxotrophy", y = "", shape = "")+
   geom_point(aes(shape = sign.label1), size = 1) +
@@ -978,7 +1002,7 @@ parodontitis
 ########   heatmap for different diseases and health parameters
 #health markers
 linear_health_marks <- rbind(linear_mod_age, linear_mod_BMI, linear_mod_sex, 
-                       linear_mod_CRP_adjust,linear_mod_HOMA_adjust,linear_mod_hypertens_adjust, linear_mod_IL6_adjust, linear_mod_TG_adjust)
+                       linear_mod_CRP_adjust,linear_mod_HOMA_adjust, linear_mod_IL6_adjust, linear_mod_TG_adjust)
 View(linear_health_marks)
 
 linear_health_marks$Estimate_Part_Spear = as.numeric(linear_health_marks$Estimate_Part_Spear)
@@ -1016,17 +1040,17 @@ linear_health
 ### diseases 
 dis_health_FoCus <- rbind(linear_mod_IBS_adjust, linear_mod_IBD_adjust, linear_mod_diab_adjust, 
              linear_mod_chrond_adjust, linear_mod_cancer_adjust, linear_mod_liverdis_adjust, 
-             linear_mod_rheumato_adjust,linear_mod_parodontitis_adjust)
+             linear_mod_rheumato_adjust,linear_mod_parodontitis_adjust, linear_mod_hypertens_adjust)
 str(dis_health_FoCus)
 dis_health_FoCus[dis_health_FoCus == "P < 0.05"] <- "Padj <0.05"
-dis_health <- ggplot(dis_health_FoCus, aes(factor, AA, fill = `Estimate_Part_Spear`))+
+dis_health <- ggplot(dis_health_FoCus, aes(factor, AA, fill = `z value`))+
   geom_tile() +
   labs(y = "", x = "Diseases", shape = "") +
-  geom_point(aes(shape = sign.label2), size = 1) +
+  geom_point(aes(shape = sign.label1), size = 1) +
   scale_fill_gradient2(high = "#b2182b", mid = "white", low = "#2166ac") +
   scale_shape_manual(values = 8, na.translate = FALSE) +
   theme_minimal() +
-  scale_x_discrete("Diseases", labels = c("IBS" = "IBS", "IBD" = "IBD", "chrond" = "Chronic\nDiarrhea", "liverdis" = "Liver", "diabetes" = "Diabetes", "parodontitis" = "Parodontitis", "rheumato"="Rheumatism")) +
+  scale_x_discrete("Diseases", labels = c("IBS" = "IBS", "IBD" = "IBD", "chrond" = "Chronic\nDiarrhea", "liverdis" = "Liver", "diabetes" = "Diabetes", "parodontitis" = "Parodontitis", "rheumato"="Rheumatism", "hypertens" ="Hypertension")) +
   theme(legend.position = "right",
         legend.justification = 	0.5,
         axis.text.x = element_text(color = "black", angle = 90, vjust = 0.2, size = 8),
@@ -1036,7 +1060,7 @@ dis_health <- ggplot(dis_health_FoCus, aes(factor, AA, fill = `Estimate_Part_Spe
   theme(axis.title.y = element_text(face  = "bold", size = 10))+
   theme(panel.background = element_blank()) +
   theme(legend.title = element_text(size=9)) +
-  labs(fill="Estimate", x = "") +
+  labs(fill="z Value", x = "") +
   theme(legend.text = element_text(size=7)) +
   theme(panel.grid.major = element_blank()) +
   theme(legend.position = "top",

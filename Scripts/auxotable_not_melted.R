@@ -14,9 +14,16 @@ fwrite(Auxo_info, file = "Auxo_info.csv")
 #for any other analysis
 Auxotrophy_12 <- merge(Auxotrophy, Metadata, by.x = "Genomes",
                        by.y = "HRGM name")
+
+
 #change column name
 names(Auxotrophy_12) [names(Auxotrophy_12) == "Completeness (%)"] <- "Completeness"
+names(Auxotrophy_12) [names(Auxotrophy_12) == "Genome type"] <- "Genometype"
 
+#get percentage 
+describe(Auxotrophy_12$Genometype)
+
+###new columns for taxonomic classification
 Auxotrophy_12$Status <- ifelse(Auxotrophy_12$count == 0, 1, 0)
 Auxotrophy_12[, phylum := str_match(`GTDB Taxonomy`, "p__.*;c__")[,1]]
 Auxotrophy_12[, phylum := gsub("p__|;c__","", phylum)]

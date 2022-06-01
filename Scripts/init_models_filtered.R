@@ -20,4 +20,3 @@ relGenomes <- Metadata[`Completeness (%)`>= 85 & `Contamination (%)` <=2 & !grep
 
 models <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models/", IDs = relGenomes)
 
-
