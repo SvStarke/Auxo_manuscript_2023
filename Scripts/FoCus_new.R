@@ -1,7 +1,6 @@
 ###############   new FoCus cohort data   ##################
 
 FoCus_data <- fread("/mnt/nuuk/2021/HRGM/FOCUS_meta_info_v2.csv")
-Fo <- fread("/mnt/nuuk/2021/HRGM/FOCUS_meta_info_v2.csv")
 describe(Fo$FOC_rec_type)
 is.data.table(FoCus_data)
 
@@ -15,7 +14,7 @@ FoCus_data[rheumato == 2, rheumato:= 0]
 FoCus_data[liverdisease == 2, liverdisease:= 0]
 FoCus_data[parodontitis == 2, parodontitis:= 0]
 FoCus_data[hypertens == 2, hypertens:= 0]
-FoCus_data <- FoCus_data[FOC_rec_type!=2]
+#FoCus_data <- FoCus_data[FOC_rec_type!=2]
 View(FoCus_data)
 describe(FoCus_data$sample)
 #checking distribution of data
@@ -81,11 +80,12 @@ View(info_auxo)
 
 #############################    BMI,age,sex  ##################################
 sumfreq_all <- aggregate(info_auxo$freq, by=list(subject=info_auxo$subject, AA=info_auxo$Compound,
-                                                 BMI=info_auxo$BMI, sex=info_auxo$Gender,age=info_auxo$age), FUN=sum)
+                                               BMI=info_auxo$BMI, sex=info_auxo$Gender,age=info_auxo$age), FUN=sum)
 describe(sumfreq_all$subject)
 #sumfreq_all <- data.table(sumfreq_all)
 #test <- lm(formula = x ~ sex + age + BMI, data = sumfreq_all[AA == "Cys"])
 #summary(test)
+remove(sumfreq_all)
 sumfreq_all <- data.table(sumfreq_all)
 relAA1 <- unique(sumfreq_all$AA)
 lin <- list()
@@ -109,23 +109,18 @@ for (AAi in relAA1){
 }
 
 
+remove(lin_mod)
 
 linear_mod <- rbindlist(lin)
-remove(lin,m0,m0.sum,lin_mod)
+remove(lin,m0,m0.sum,lin_mod, n2, n3)
 names(linear_mod)[names(linear_mod) == "Pr(>|t|)"] <- "pvalue"
 
-linear_mod_sex <- linear_mod[factor == "sex"]
+
 linear_mod_age <- linear_mod[factor == "age"]
 linear_mod_BMI <- linear_mod[factor == "BMI"]
 
 
-##sex
-linear_mod_sex$padjust = p.adjust(linear_mod_sex$pvalue, method = "fdr")
-linear_mod_sex[padjust < 0.05, sign.label1 := "P < 0.05"]
-linear_mod_sex$padjust_Spear = p.adjust(linear_mod_sex$pvalue_Part_Spear, method = "fdr")
-linear_mod_sex[padjust_Spear < 0.05, sign.label2 := "P < 0.05"]
-
-##age
+#age
 linear_mod_age$padjust = p.adjust(linear_mod_age$pvalue, method = "fdr")
 linear_mod_age[padjust < 0.05, sign.label1 := "P < 0.05"]
 linear_mod_age$padjust_Spear = p.adjust(linear_mod_age$pvalue_Part_Spear, method = "fdr")
@@ -196,6 +191,43 @@ linear_health_BMI_age1
 # linear_mod_sex 
 # ggsave("output/plots/health_diseases_lin_sex.pdf", plot = linear_mod_sex,
 #        width = 6, height = 3)
+############### sex ###############################
+sumfreq_all <- aggregate(info_auxo$freq, by=list(subject=info_auxo$subject, AA=info_auxo$Compound,
+                                                 BMI=info_auxo$BMI, sex=info_auxo$Gender,age=info_auxo$age), FUN=sum)
+sumfreq_all<- data.table(sumfreq_all)
+#m0 <- lm(formula = x ~ sex + age + BMI + diabetes, data = sumfreq_diabetes_lin[AA == "Val"])
+#n <- partial_Spearman(x|diabetes~ sex + age + BMI, data = sumfreq_diabetes_lin[AA == "Trp"])
+#n
+sumfreq_all$sex <- as.factor(sumfreq_all$sex)
+View(sumfreq_all)
+class(sumfreq_all$sex)
+relAA <- unique(sumfreq_all$AA)
+lin_sex <- list()
+k <- 1
+for (AAi in relAA){
+  print(AAi)
+  m0 <- glm(sex ~ x + age + BMI, data = sumfreq_all[AA == AAi], family = binomial)
+  m0.sum <- summary(m0)
+  lin_mod<- m0.sum$coefficients
+  lin_mod <- data.table(lin_mod)
+  lin_mod$AA <- AAi
+  lin_mod$factor <- c("Intercept","x","age","BMI")
+  #n <- partial_Spearman(x|diabetes~ sex + age + BMI, data = sumfreq_diabetes_lin[AA == AAi])
+  #lin_mod$Estimate_Part_Spear <- n$TS$TB$ts
+  # lin_mod$pvalue_Part_Spear <- n$TS$TB$pval
+  lin_sex[[k]] <- lin_mod
+  k <- k +1
+}
+
+linear_mod_sex <- rbindlist(lin_sex)
+remove(lin_diab,m0,m0.sum,lin_mod,n)
+names(linear_mod_sex)[names(linear_mod_sex) == "Pr(>|z|)"] <- "pvalue"
+linear_mod_sex[factor == "x", factor :="sex"]
+
+linear_mod_sex_adjust <- linear_mod_sex[factor == "sex"]
+linear_mod_sex_adjust$padjust = p.adjust(linear_mod_sex_adjust$pvalue, method = "fdr")
+linear_mod_sex_adjust[padjust < 0.05, sign.label1 := "P < 0.05"]
+linear_mod_sex_adjust <- data.table(linear_mod_sex_adjust)
 
 
 #visualization for diabetes
@@ -294,7 +326,7 @@ for (AAi in relAA){
 linear_mod_IBD <- rbindlist(lin_IBD)
 remove(lin_IBD,m0, m0.sum,lin_mod,n)
 names(linear_mod_IBD)[names(linear_mod_IBD) == "Pr(>|z|)"] <- "pvalue"
-linear_mod_diab[factor == "x", factor :="IBD"]
+linear_mod_IBD[factor == "x", factor :="IBD"]
 
 linear_mod_IBD_adjust <- linear_mod_IBD[factor == "IBD"]
 linear_mod_IBD_adjust$padjust = p.adjust(linear_mod_IBD_adjust$pvalue, method = "fdr")
@@ -333,6 +365,7 @@ sumfreq_chrond_lin <- aggregate(info_auxo$freq, by=list(subject=info_auxo$subjec
                                                         BMI=info_auxo$BMI, sex=info_auxo$Gender,age=info_auxo$age, chrond =info_auxo$chr_diarrh), FUN=sum)
 sumfreq_chrond_lin <- data.table(sumfreq_chrond_lin)
 View(sumfreq_chrond_lin)
+describe(sumfreq_chrond_lin$chrond)
 
 relAA <- unique(sumfreq_chrond_lin$AA)
 lin_chrond <- list()
@@ -355,7 +388,7 @@ for (AAi in relAA){
 linear_mod_chrond <- rbindlist(lin_chrond)
 remove(lin_chrond,m0,m0.sum,lin_mod)
 names(linear_mod_chrond)[names(linear_mod_chrond) == "Pr(>|z|)"] <- "pvalue"
-linear_mod_diab[factor == "x", factor :="chrond"]
+linear_mod_chrond[factor == "x", factor :="chrond"]
 
 linear_mod_chrond_adjust <- linear_mod_chrond[factor == "chrond"]
 linear_mod_chrond_adjust$padjust = p.adjust(linear_mod_chrond_adjust$pvalue, method = "fdr")
@@ -671,33 +704,33 @@ d <- ggplot(linear_mod_TG_adjust[factor == "TG"], aes(AA, factor, fill = `t valu
   theme(panel.grid.major = element_blank())
 d
 ################## all heatmap conbined of the linear modeling #################
-all <- rbind(linear_mod_IBS_adjust, linear_mod_IBD_adjust, linear_mod_diab_adjust, linear_mod_chrond_adjust, linear_mod_HOMA_adjust, linear_mod_IL6_adjust, linear_mod_CRP_adjust, linear_mod_TG_adjust)
-all1 <- ggplot(all, aes(factor, AA, fill = `t value`))+
-  geom_tile() +
-  labs(y = "", x = "Diseases", shape = "")+
-  geom_point(aes(shape = sign.label1), size = 1) +
-  scale_fill_gradient2(high = "#b2182b", mid = "white", low = "#2166ac") +
-  scale_shape_manual(values = 8, na.translate = FALSE) +
-  theme_minimal() +
-  scale_x_discrete("Diseases and inflammatory markers", labels = c("IBS" = "IBS", "IBD" = "IBD", "diabetes" = "Diab.", "chrond" = "Chron.\nDiarr.")) +
-  theme(legend.position = "top", legend.box = "horizontal",
-        legend.justification = 	0.5,
-        axis.text.x = element_text(color = "black", angle = 90, vjust = 0.2, size = 8),
-        axis.text.y = element_text(color = "black", size = 8)) +
-  theme(axis.title.y = element_text(margin = margin(t =0, r = 20, b= 0, l = 0))) +
-  theme(axis.title.x = element_text(face  = "bold", size = 10, margin = margin(t=20, r = 0, b= 0, l = 0))) +
-  theme(axis.title.y = element_text(face  = "bold", size = 10))+
-  theme(panel.background = element_blank()) +
-  theme(legend.title = element_text(size=9)) +
-  labs(fill="", x = "") +
-  theme(legend.text = element_text(size=7)) +
-  theme(panel.grid.major = element_blank())
-all1 + guides(shape = guide_legend(order = 1))
-all2 <- all1 + guides(shape= "none")
-all2
-
-ggsave("output/plots/health_diseases_linear_mod_all.pdf", plot = all2,
-       width = 6, height = 3)
+# all <- rbind(linear_mod_IBS_adjust, linear_mod_IBD_adjust, linear_mod_diab_adjust, linear_mod_chrond_adjust, linear_mod_HOMA_adjust, linear_mod_IL6_adjust, linear_mod_CRP_adjust, linear_mod_TG_adjust)
+# all1 <- ggplot(all, aes(factor, AA, fill = `t value`))+
+#   geom_tile() +
+#   labs(y = "", x = "Diseases", shape = "")+
+#   geom_point(aes(shape = sign.label1), size = 1) +
+#   scale_fill_gradient2(high = "#b2182b", mid = "white", low = "#2166ac") +
+#   scale_shape_manual(values = 8, na.translate = FALSE) +
+#   theme_minimal() +
+#   scale_x_discrete("Diseases and inflammatory markers", labels = c("IBS" = "IBS", "IBD" = "IBD", "diabetes" = "Diab.", "chrond" = "Chron.\nDiarr.")) +
+#   theme(legend.position = "top", legend.box = "horizontal",
+#         legend.justification = 	0.5,
+#         axis.text.x = element_text(color = "black", angle = 90, vjust = 0.2, size = 8),
+#         axis.text.y = element_text(color = "black", size = 8)) +
+#   theme(axis.title.y = element_text(margin = margin(t =0, r = 20, b= 0, l = 0))) +
+#   theme(axis.title.x = element_text(face  = "bold", size = 10, margin = margin(t=20, r = 0, b= 0, l = 0))) +
+#   theme(axis.title.y = element_text(face  = "bold", size = 10))+
+#   theme(panel.background = element_blank()) +
+#   theme(legend.title = element_text(size=9)) +
+#   labs(fill="", x = "") +
+#   theme(legend.text = element_text(size=7)) +
+#   theme(panel.grid.major = element_blank())
+# all1 + guides(shape = guide_legend(order = 1))
+# all2 <- all1 + guides(shape= "none")
+# all2
+# 
+# ggsave("output/plots/health_diseases_linear_mod_all.pdf", plot = all2,
+#        width = 6, height = 3)
 
 
 
@@ -904,8 +937,6 @@ for (AAi in relAA){
   k <- k +1
 }
 
-test5 <- sumfreq_hypertens_lin[AA == "Arg"]
-pcor.test(sumfreq_hypertens_lin$x, sumfreq_hypertens_lin$hypertens)
 
 linear_mod_hypertens <- rbindlist(lin_hypertens)
 remove(lin_hypertens,m0,m0.sum,lin_mod)
@@ -1001,7 +1032,7 @@ parodontitis
 
 ########   heatmap for different diseases and health parameters
 #health markers
-linear_health_marks <- rbind(linear_mod_age, linear_mod_BMI, linear_mod_sex, 
+linear_health_marks <- rbind(linear_mod_age, linear_mod_BMI, #linear_mod_sex, 
                        linear_mod_CRP_adjust,linear_mod_HOMA_adjust, linear_mod_IL6_adjust, linear_mod_TG_adjust)
 View(linear_health_marks)
 
@@ -1050,7 +1081,7 @@ dis_health <- ggplot(dis_health_FoCus, aes(factor, AA, fill = `z value`))+
   scale_fill_gradient2(high = "#b2182b", mid = "white", low = "#2166ac") +
   scale_shape_manual(values = 8, na.translate = FALSE) +
   theme_minimal() +
-  scale_x_discrete("Diseases", labels = c("IBS" = "IBS", "IBD" = "IBD", "chrond" = "Chronic\nDiarrhea", "liverdis" = "Liver", "diabetes" = "Diabetes", "parodontitis" = "Parodontitis", "rheumato"="Rheumatism", "hypertens" ="Hypertension")) +
+  scale_x_discrete("Diseases", labels = c("IBS" = "IBS", "IBD" = "IBD", "chrond" = "Chr.Diarrhea", "liverdis" = "Liver", "diabetes" = "Diabetes", "parodontitis" = "Parodontitis", "rheumato"="Rheumatism", "hypertens" ="Hypertension")) +
   theme(legend.position = "right",
         legend.justification = 	0.5,
         axis.text.x = element_text(color = "black", angle = 90, vjust = 0.2, size = 8),
