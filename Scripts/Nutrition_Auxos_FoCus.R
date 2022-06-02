@@ -44,6 +44,7 @@ View(nutr_info_auxo)
 
 
 sumfreq_nutr_auxo <- aggregate(nutr_info_auxo$freq, by=list(subject=nutr_info_auxo$subject, AA=nutr_info_auxo$Compound), FUN=sum)
+describe(sumfreq_nutr_auxo$subject)
 nutri_all_info <- merge(sumfreq_nutr_auxo,nutr_info_AA, by.x="subject", by.y="new_id")
 FoCus_data <- fread("/mnt/nuuk/2021/HRGM/FOCUS_meta_info_v2.csv")
 nutri_all_info <- merge(nutri_all_info,FoCus_data, by.x="subject", by.y="sample")
@@ -51,6 +52,7 @@ nutri_all_info <- data.table(nutri_all_info)
 
 #exclude all people with diabetes
 nutri_all_info <- nutri_all_info[diabetes!=1, ]
+describe(nutri_all_info$subject)
 View(nutri_all_info)
 
 

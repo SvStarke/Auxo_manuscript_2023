@@ -51,6 +51,7 @@ data <- data[focus.call == "BL"]
 ####merge data
 FoCus_info <- merge(data, FoCus_data, by.x="subject", by.y="sample")
 describe(FoCus_info$subject)
+describe(FoCus_info$cancer)
 
 #include only relevant information
 Auxotrophy_2[,c(4:16)] <- NULL
@@ -76,12 +77,22 @@ for (subi in sub) {
 }
 info_auxo <- rbindlist(h) 
 describe(info_auxo$subject)
+describe(info_auxo$cancer == "1")
+describe(info_auxo$chr_diarrh == "1")
+describe(info_auxo$diabetes == "1")
+describe(info_auxo$hypertens == "1")
+describe(info_auxo$IBD == "1")
+describe(info_auxo$IBS == "1")
+describe(info_auxo$liverdisease == "1")
+describe(info_auxo$parodontitis == "1")
+describe(info_auxo$rheumato == "1")
 View(info_auxo)
 
 #############################    BMI,age,sex  ##################################
 sumfreq_all <- aggregate(info_auxo$freq, by=list(subject=info_auxo$subject, AA=info_auxo$Compound,
                                                BMI=info_auxo$BMI, sex=info_auxo$Gender,age=info_auxo$age), FUN=sum)
 describe(sumfreq_all$subject)
+
 #sumfreq_all <- data.table(sumfreq_all)
 #test <- lm(formula = x ~ sex + age + BMI, data = sumfreq_all[AA == "Cys"])
 #summary(test)
@@ -229,6 +240,34 @@ linear_mod_sex_adjust$padjust = p.adjust(linear_mod_sex_adjust$pvalue, method = 
 linear_mod_sex_adjust[padjust < 0.05, sign.label1 := "P < 0.05"]
 linear_mod_sex_adjust <- data.table(linear_mod_sex_adjust)
 
+####visualiaztion
+
+linear_sex <- ggplot(linear_mod_sex_adjust, aes(factor, AA, fill =`z value`))+
+  geom_tile() +
+  labs(y = "Auxotrophy", x = "sex", shape = "")+
+  geom_point(aes(shape = sign.label1), size = 1) +
+  scale_fill_gradient2(high = "#b2182b", mid = "white", low = "#2166ac") +
+  scale_shape_manual(values = 8, na.translate = FALSE) +
+  theme_minimal() +
+  theme(legend.position = "top",
+        legend.justification = 	0.5,
+        axis.text.x = element_text(color = "black", angle = 90, vjust = 0.2, size = 8, face= "bold"),
+        axis.text.y = element_text(color = "black", size = 8)) +
+  theme(axis.title.y = element_text(face= "bold",margin = margin(t =0, r = 20, b= 0, l = 0))) +
+  theme(axis.title.x = element_text(face  = "bold", size = 10, margin = margin(t=20, r = 0, b= 0, l = 0))) +
+  theme(panel.background = element_blank()) +
+  theme(legend.title = element_text(size=7, face = "bold")) + 
+  theme(legend.text = element_text(size=7)) +
+  labs(fill="z Value", x = "") +
+  theme(legend.text = element_text(size=7)) +
+  theme(panel.grid.major = element_blank()) 
+ 
+linear_sex +guides(shape = guide_legend(order = 1))
+linear_sex <- linear_sex + guides(shape= "none")
+linear_sex
+
+ggsave("output/plots/_lin_sex.pdf", plot = linear_sex,
+       width = 3, height = 5)
 
 #visualization for diabetes
 sumfreq_diabetes_lin <- aggregate(info_auxo$freq, by=list(subject=info_auxo$subject, AA=info_auxo$Compound,
@@ -1073,6 +1112,7 @@ dis_health_FoCus <- rbind(linear_mod_IBS_adjust, linear_mod_IBD_adjust, linear_m
              linear_mod_chrond_adjust, linear_mod_cancer_adjust, linear_mod_liverdis_adjust, 
              linear_mod_rheumato_adjust,linear_mod_parodontitis_adjust, linear_mod_hypertens_adjust)
 str(dis_health_FoCus)
+View(dis_health_FoCus)
 dis_health_FoCus[dis_health_FoCus == "P < 0.05"] <- "Padj <0.05"
 dis_health <- ggplot(dis_health_FoCus, aes(factor, AA, fill = `z value`))+
   geom_tile() +
@@ -1081,7 +1121,7 @@ dis_health <- ggplot(dis_health_FoCus, aes(factor, AA, fill = `z value`))+
   scale_fill_gradient2(high = "#b2182b", mid = "white", low = "#2166ac") +
   scale_shape_manual(values = 8, na.translate = FALSE) +
   theme_minimal() +
-  scale_x_discrete("Diseases", labels = c("IBS" = "IBS", "IBD" = "IBD", "chrond" = "Chr.Diarrhea", "liverdis" = "Liver", "diabetes" = "Diabetes", "parodontitis" = "Parodontitis", "rheumato"="Rheumatism", "hypertens" ="Hypertension")) +
+  scale_x_discrete("Diseases", labels = c("IBS" = "IBS", "IBD" = "IBD", "chrond" = "Chr.Diarrhea", "liverdis" = "Liver", "diabetes" = "Diabetes", "parodontitis" = "Periodontitis", "rheumato"="Rheumatism", "hypertens" ="Hypertension")) +
   theme(legend.position = "right",
         legend.justification = 	0.5,
         axis.text.x = element_text(color = "black", angle = 90, vjust = 0.2, size = 8),
