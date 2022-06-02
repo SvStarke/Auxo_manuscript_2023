@@ -243,7 +243,7 @@ source("Scripts/auxotable_melted_merged.R")
 ###### Analyze associations with diseases or health factors(BMI, weight, age)
 
 ```R
-source("Scripts/Diseases_health_factors.R")
+source("Scripts/FoCus_new.R")
 ```
 
 ### 10) Intake of amino acids and abundance of auxotrophic gut bacteria
