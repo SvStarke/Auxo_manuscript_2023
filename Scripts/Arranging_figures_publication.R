@@ -213,5 +213,5 @@ prop_all
 prop_all <- ggarrange(Asp, Asn, Leu,Ile,Glu,Gln,Val,Thr,Chor,Trp,Ser,Cys,Tyr,Phe,Met,Gly,Lys,Arg, Ala,Pro,His,
                       nrow=7, ncol = 3, common.legend = TRUE)
 ggsave("output/plots/suppfigure2_03.06.pdf", plot = prop_all,
-       width = 17, height = 15)
+       width = 10, height = 20)
 
