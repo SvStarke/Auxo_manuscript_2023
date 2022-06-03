@@ -417,37 +417,43 @@ Chor
 
 
 
-plot1 <- ggarrange(Asp, Asn, Glu, Gln,
-                   ncol=2, nrow= 2)
-plot1
-ggsave("output/plots/plot1_proportions.pdf", plot = plot1,
-       width = 6, height = 6)
-
-plot2 <- ggarrange(Leu, Ile, Val, Thr,
-                   ncol=2, nrow= 2)
-plot2
-ggsave("output/plots/plot2_proportions.pdf", plot = plot2,
-       width = 6, height = 6)
-plot3 <- ggarrange(Chor, Trp, Tyr, Phe,
-                   ncol=2, nrow= 2)
-plot3
-ggsave("output/plots/plot3_proportions.pdf", plot = plot3,
-       width = 6, height = 6)
-plot4 <- ggarrange(Ser, Cys,Met,Gly,
-                   ncol=2, nrow= 2)
-plot4
-ggsave("output/plots/plot4_proportions.pdf", plot = plot4,
-       width = 6, height = 6)
-plot5 <- ggarrange(Lys, Arg, Pro, His,
-                   ncol=2, nrow= 2, common.legend = TRUE, legend = "none")
-plot5
-ggsave("output/plots/plot5_proportions.pdf", plot = plot5,
-       width = 6, height = 6)
-
-#single plot for Alanine (no auxotrophies)
-plot6 <- ggarrange(Ala,
-                   ncol=2, nrow= 2, common.legend = TRUE, legend = "bottom")
-plot6
-ggsave("output/plots/Ala_proportions.pdf", plot = Ala,
-       width = 4, height = 4)
+# plot1 <- ggarrange(Asp, Asn, Glu, Gln,
+#                    ncol=2, nrow= 2)
+# plot1
+# ggsave("output/plots/plot1_proportions.pdf", plot = plot1,
+#        width = 6, height = 6)
+# 
+# plot2 <- ggarrange(Leu, Val,
+#                    ncol=2, nrow= 2)
+# plot2
+# ggsave("output/plots/plot2_proportions.pdf", plot = plot2,
+#        width = 6, height = 6)
+# 
+# plot3 <- ggarrange(Chor, Trp, Tyr, Phe,
+#                    ncol=2, nrow= 2)
+# plot3
+# ggsave("output/plots/plot3_proportions.pdf", plot = plot3,
+#        width = 6, height = 6)
+# 
+# plot4 <- ggarrange(Ser,Met,
+#                    ncol=2, nrow= 2)
+# plot4
+# ggsave("output/plots/plot4_proportions.pdf", plot = plot4,
+#        width = 6, height = 6)
+# plot5 <- ggarrange(Lys, Arg, Pro, His,
+#                    ncol=2, nrow= 2, common.legend = TRUE, legend = "none")
+# plot5
+# ggsave("output/plots/plot5_proportions.pdf", plot = plot5,
+#        width = 6, height = 6)
+# 
+# plot6 <- ggarrange(Ala,Ile,
+#                    ncol=2, nrow= 2, common.legend = TRUE, legend = "bottom")
+# 
+# plot6
+# 
+# plot7 <- ggarrange(Thr, Cys,
+#                    ncol=2, nrow= 2, common.legend = TRUE, legend = "bottom")
+# plot7
+# ggsave("output/plots/Ala_proportions.pdf", plot = Ala,
+#        width = 4, height = 4)
 

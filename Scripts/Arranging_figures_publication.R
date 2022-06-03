@@ -206,9 +206,12 @@ ggsave("output/plots/figure7_01.06.22_new_Abund_gut.pdf", plot = fi7,
 
 ###### supplementary material figure 2 ######
 
-prop_all_auxo <- ggarrange(plot1,plot2,plot3,plot4,plot5,plot6,
+prop_all <- ggarrange(plot1,plot2,plot3,plot4,plot5,plot6,
                            nrow=3, ncol = 2, common.legend = TRUE)
+prop_all
 
-ggsave("output/plots/suppfigure2.pdf", plot = prop_all_auxo,
+prop_all <- ggarrange(Asp, Asn, Leu,Ile,Glu,Gln,Val,Thr,Chor,Trp,Ser,Cys,Tyr,Phe,Met,Gly,Lys,Arg, Ala,Pro,His,
+                      nrow=7, ncol = 3, common.legend = TRUE)
+ggsave("output/plots/suppfigure2_03.06.pdf", plot = prop_all,
        width = 17, height = 15)
 
