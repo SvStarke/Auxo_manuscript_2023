@@ -76,6 +76,7 @@ for (subi in sub) {
   }
 }
 info_auxo <- rbindlist(h) 
+info_auxo <- info_auxo[Compound != "Gly"]
 describe(info_auxo$subject)
 describe(info_auxo$cancer == "1")
 describe(info_auxo$chr_diarrh == "1")
@@ -1121,7 +1122,7 @@ dis_health <- ggplot(dis_health_FoCus, aes(factor, AA, fill = `z value`))+
   scale_fill_gradient2(high = "#b2182b", mid = "white", low = "#2166ac") +
   scale_shape_manual(values = 8, na.translate = FALSE) +
   theme_minimal() +
-  scale_x_discrete("Diseases", labels = c("IBS" = "IBS", "IBD" = "IBD", "chrond" = "Chr.Diarrhea", "liverdis" = "Liver", "diabetes" = "Diabetes", "parodontitis" = "Periodontitis", "rheumato"="Rheumatism", "hypertens" ="Hypertension")) +
+  scale_x_discrete("Diseases", labels = c("IBS" = "IBS", "IBD" = "IBD", "chrond" = "Chr.Diarrhea", "liverdis" = "Liverdisease", "diabetes" = "Diabetes", "parodontitis" = "Periodontitis", "rheumato"="Rheumatism", "hypertens" ="Hypertension")) +
   theme(legend.position = "right",
         legend.justification = 	0.5,
         axis.text.x = element_text(color = "black", angle = 90, vjust = 0.2, size = 8),
