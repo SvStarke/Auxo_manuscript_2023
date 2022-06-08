@@ -89,20 +89,160 @@ Fried_Focus[padjust < 0.05, sign.label1 := "P < 0.05"]
 
 
 ### visualization
-
+##val
 auxos_time_Val <- ggplot(sumfreq_type_Focus[AA == "Val"], aes(x = subject, y=x, group = FoCus_call)) +
-  geom_line(aes(color=FoCus_call)) +
-  geom_point(aes(color=FoCus_call)) +
+  geom_line(aes(color=FoCus_call), size =0.2) +
+  geom_point(aes(color=FoCus_call), size =1) +
   theme(legend.position = "right",
         legend.justification = 	0.5,
         axis.text.x = element_text(color = "black", angle = 90, vjust = 0.2, size = 8),
         axis.text.y = element_text(color = "black", size = 8)) +
   theme(axis.text.x = element_blank()) +
   theme(axis.ticks.x = element_blank() ) +
-  theme(panel.background = element_blank()) 
-auxos_time_Val + annotate("text", x=60, y=0.9, label = "Leucine, padj <0.05")
+  theme(panel.background = element_blank()) +
+  theme(axis.title.y = element_text(size=6)) +
+  theme(axis.title.x = element_text(size=6)) +
+  labs(y="Frequence of\n auxotrophies",x = "") +
+  theme(axis.line.x = element_line(color="black", size = 0.4),
+        axis.line.y = element_line(color = "black", size =0.4)) +
+  annotate("text", x=60, y=0.9, size =2, label = "Valine, padj <0.05")
+
+##leu
+auxos_time_Leu <- ggplot(sumfreq_type_Focus[AA == "Leu"], aes(x = subject, y=x, group = FoCus_call)) +
+  geom_line(aes(color=FoCus_call), size =0.2) +
+  geom_point(aes(color=FoCus_call), size =1) +
+  theme(legend.position = "right",
+        legend.justification = 	0.5,
+        axis.text.x = element_text(color = "black", angle = 90, vjust = 0.2, size = 8),
+        axis.text.y = element_text(color = "black", size = 8)) +
+  theme(axis.text.x = element_blank()) +
+  theme(axis.ticks.x = element_blank() ) +
+  theme(axis.title.y = element_text(size=6)) +
+  theme(axis.title.x = element_text(size=6)) +
+  theme(panel.background = element_blank()) +
+  labs(y="Frequence of\n auxotrophies",x = "") +
+  theme(axis.line.x = element_line(color="black", size = 0.4),
+        axis.line.y = element_line(color = "black", size =0.4)) +
+  annotate("text", x=60, y=0.9, size =2, label = "Leucine, padj <0.05")
 
 
+#phe
+auxos_time_Phe <- ggplot(sumfreq_type_Focus[AA == "Phe"], aes(x = subject, y=x, group = FoCus_call)) +
+  geom_line(aes(color=FoCus_call), size =0.2) +
+  geom_point(aes(color=FoCus_call), size =1) +
+  theme(legend.position = "right",
+        legend.justification = 	0.5,
+        axis.text.x = element_text(color = "black", angle = 90, vjust = 0.2, size = 8),
+        axis.text.y = element_text(color = "black", size = 8)) +
+  theme(axis.text.x = element_blank()) +
+  theme(axis.ticks.x = element_blank() ) +
+  theme(axis.title.y = element_text(size=6)) +
+  theme(axis.title.x = element_text(size=6)) +
+  theme(panel.background = element_blank()) +
+  labs(y="Frequence of\n auxotrophies",x = "") +
+  theme(axis.line.x = element_line(color="black", size = 0.4),
+        axis.line.y = element_line(color = "black", size =0.4)) +
+  annotate("text", x=60, y=0.9, size =2, label = "Phenylalanine, padj <0.05")
+
+#Tyr
+auxos_time_Tyr <- ggplot(sumfreq_type_Focus[AA == "Tyr"], aes(x = subject, y=x, group = FoCus_call)) +
+  geom_line(aes(color=FoCus_call), size =0.2) +
+  geom_point(aes(color=FoCus_call), size =1) +
+  theme(legend.position = "right",
+        legend.justification = 	0.5,
+        axis.text.x = element_text(color = "black", angle = 90, vjust = 0.2, size = 8),
+        axis.text.y = element_text(color = "black", size = 8)) +
+  theme(axis.text.x = element_blank()) +
+  theme(axis.ticks.x = element_blank() ) +
+  theme(axis.title.y = element_text(size=6)) +
+  theme(axis.title.x = element_text(size=6)) +
+  theme(panel.background = element_blank()) +
+  labs(y="Frequence of\n auxotrophies",x = "") +
+  theme(axis.line.x = element_line(color="black", size = 0.4),
+        axis.line.y = element_line(color = "black", size =0.4)) +
+annotate("text", x=60, y=0.9, size =2, label = "Tyrosine, padj <0.05")
+
+##Gln
+auxos_time_Gln <- ggplot(sumfreq_type_Focus[AA == "Gln"], aes(x = subject, y=x, group = FoCus_call)) +
+  geom_line(aes(color=FoCus_call), size =0.2) +
+  geom_point(aes(color=FoCus_call), size =1) +
+  theme(legend.position = "right",
+        legend.justification = 	0.5,
+        axis.text.x = element_text(color = "black", angle = 90, vjust = 0.2, size = 8),
+        axis.text.y = element_text(color = "black", size = 8)) +
+  theme(axis.text.x = element_blank()) +
+  theme(axis.ticks.x = element_blank() ) +
+  theme(axis.title.y = element_text(size=6)) +
+  theme(axis.title.x = element_text(size=6)) +
+  theme(panel.background = element_blank()) +
+  labs(y="Frequence of\n auxotrophies",x = "") +
+  theme(axis.line.x = element_line(color="black", size = 0.4),
+        axis.line.y = element_line(color = "black", size =0.4)) +
+  annotate("text", x=60, y=0.9, size =2, label = "Glutamine, padj <0.05")
+
+##Ser
+auxos_time_Ser <- ggplot(sumfreq_type_Focus[AA == "Ser"], aes(x = subject, y=x, group = FoCus_call)) +
+  geom_line(aes(color=FoCus_call), size =0.2) +
+  geom_point(aes(color=FoCus_call), size =1) +
+  theme(legend.position = "right",
+        legend.justification = 	0.5,
+        axis.text.x = element_text(color = "black", angle = 90, vjust = 0.2, size = 8),
+        axis.text.y = element_text(color = "black", size = 8)) +
+  theme(axis.text.x = element_blank()) +
+  theme(axis.ticks.x = element_blank() ) +
+  theme(axis.title.y = element_text(size=6)) +
+  theme(axis.title.x = element_text(size=6)) +
+  theme(panel.background = element_blank()) +
+  labs(y="Frequence of\n auxotrophies",x = "") +
+  theme(axis.line.x = element_line(color="black", size = 0.4),
+        axis.line.y = element_line(color = "black", size =0.4)) +
+  annotate("text", x=60, y=0.9, size =2, label = "Serine, padj <0.05")
+
+##Cys
+auxos_time_Cys <- ggplot(sumfreq_type_Focus[AA == "Cys"], aes(x = subject, y=x, group = FoCus_call)) +
+  geom_line(aes(color=FoCus_call), size =0.2) +
+  geom_point(aes(color=FoCus_call), size =1) +
+  theme(legend.position = "right",
+        legend.justification = 	0.5,
+        axis.text.x = element_text(color = "black", angle = 90, vjust = 0.2, size = 8),
+        axis.text.y = element_text(color = "black", size = 8)) +
+  theme(axis.text.x = element_blank()) +
+  theme(axis.ticks.x = element_blank() ) +
+  theme(axis.title.y = element_text(size=6)) +
+  theme(axis.title.x = element_text(size=6)) +
+  theme(panel.background = element_blank()) +
+  labs(y="Frequence of\n auxotrophies",x = "") +
+  theme(axis.line.x = element_line(color="black", size = 0.4),
+        axis.line.y = element_line(color = "black", size =0.4)) +
+  annotate("text", x=60, y=0.9, size =2, label = "Cysteine, padj <0.05")
+
+##Asn
+auxos_time_Asn <- ggplot(sumfreq_type_Focus[AA == "Asn"], aes(x = subject, y=x, group = FoCus_call)) +
+  geom_line(aes(color=FoCus_call), size =0.2) +
+  geom_point(aes(color=FoCus_call), size =1) +
+  theme(legend.position = "right",
+        legend.justification = 	0.5,
+        axis.text.x = element_text(color = "black", angle = 90, vjust = 0.2, size = 8),
+        axis.text.y = element_text(color = "black", size = 8)) +
+  theme(axis.text.x = element_blank()) +
+  theme(axis.ticks.x = element_blank() ) +
+  theme(axis.title.y = element_text(size=6)) +
+  theme(axis.title.x = element_text(size=6)) +
+  theme(panel.background = element_blank()) +
+  labs(y="Frequence of\n auxotrophies",x = "") +
+  theme(axis.line.x = element_line(color="black", size = 0.4),
+        axis.line.y = element_line(color = "black", size =0.4)) +
+  annotate("text", x=60, y=0.9, size =2, label = "Asparagine, padj <0.05")
+
+
+###ggplot
+auxos_over_time <- ggarrange(auxos_time_Val, auxos_time_Leu, auxos_time_Phe,auxos_time_Tyr,auxos_time_Gln,auxos_time_Ser,auxos_time_Cys,auxos_time_Asn,
+                 ncol=2,
+                 nrow=4, heights = c(1,1,1,1), widths= c(1,1),
+                 labels = "AUTO", common.legend = TRUE, legend = c("bottom"))
+auxos_over_time
+ggsave("output/plots/Auxos_Over_time_only_signf_V2.pdf", plot = auxos_over_time,
+       width = 10, height = 6)
 
 
 ### pairwise wilcox test
