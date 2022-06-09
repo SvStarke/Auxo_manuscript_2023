@@ -9,9 +9,9 @@ data_F1 <- data[focus.call == "F1", unique(subject)]
 data_F2 <- data[focus.call == "F2", unique(subject)]
 
 x <- intersect(data_BL, intersect(data_F1,data_F2))
-
+View(x)
 data_new <- data[subject %in% x]
-
+View(data_new)
 
 ##add information about auxotrophies
 Auxotrophy_2[,c(4:17)] <- NULL
@@ -105,7 +105,8 @@ auxos_time_Val <- ggplot(sumfreq_type_Focus[AA == "Val"], aes(x = subject, y=x, 
   labs(y="Frequence of\n auxotrophies",x = "") +
   theme(axis.line.x = element_line(color="black", size = 0.4),
         axis.line.y = element_line(color = "black", size =0.4)) +
-  annotate("text", x=60, y=0.9, size =2, label = "Valine, padj <0.05")
+  annotate("text", x=60, y=0.9, size =2, label = "Valine, padj <0.05") +
+  scale_color_manual(values = c("BL" = "#E69F00", "F1" = "#56B4E9", "F2" = "#009E73"))
 
 ##leu
 auxos_time_Leu <- ggplot(sumfreq_type_Focus[AA == "Leu"], aes(x = subject, y=x, group = FoCus_call)) +
@@ -123,7 +124,8 @@ auxos_time_Leu <- ggplot(sumfreq_type_Focus[AA == "Leu"], aes(x = subject, y=x, 
   labs(y="Frequence of\n auxotrophies",x = "") +
   theme(axis.line.x = element_line(color="black", size = 0.4),
         axis.line.y = element_line(color = "black", size =0.4)) +
-  annotate("text", x=60, y=0.9, size =2, label = "Leucine, padj <0.05")
+  annotate("text", x=60, y=0.9, size =2, label = "Leucine, padj <0.05")+
+  scale_color_manual(values = c("BL" = "#E69F00", "F1" = "#56B4E9", "F2" = "#009E73"))
 
 
 #phe
@@ -142,7 +144,8 @@ auxos_time_Phe <- ggplot(sumfreq_type_Focus[AA == "Phe"], aes(x = subject, y=x, 
   labs(y="Frequence of\n auxotrophies",x = "") +
   theme(axis.line.x = element_line(color="black", size = 0.4),
         axis.line.y = element_line(color = "black", size =0.4)) +
-  annotate("text", x=60, y=0.9, size =2, label = "Phenylalanine, padj <0.05")
+  annotate("text", x=60, y=0.9, size =2, label = "Phenylalanine, padj <0.05") +
+  scale_color_manual(values = c("BL" = "#E69F00", "F1" = "#56B4E9", "F2" = "#009E73"))
 
 #Tyr
 auxos_time_Tyr <- ggplot(sumfreq_type_Focus[AA == "Tyr"], aes(x = subject, y=x, group = FoCus_call)) +
@@ -160,7 +163,8 @@ auxos_time_Tyr <- ggplot(sumfreq_type_Focus[AA == "Tyr"], aes(x = subject, y=x, 
   labs(y="Frequence of\n auxotrophies",x = "") +
   theme(axis.line.x = element_line(color="black", size = 0.4),
         axis.line.y = element_line(color = "black", size =0.4)) +
-annotate("text", x=60, y=0.9, size =2, label = "Tyrosine, padj <0.05")
+annotate("text", x=60, y=0.9, size =2, label = "Tyrosine, padj <0.05") +
+  scale_color_manual(values = c("BL" = "#E69F00", "F1" = "#56B4E9", "F2" = "#009E73"))
 
 ##Gln
 auxos_time_Gln <- ggplot(sumfreq_type_Focus[AA == "Gln"], aes(x = subject, y=x, group = FoCus_call)) +
@@ -178,7 +182,8 @@ auxos_time_Gln <- ggplot(sumfreq_type_Focus[AA == "Gln"], aes(x = subject, y=x, 
   labs(y="Frequence of\n auxotrophies",x = "") +
   theme(axis.line.x = element_line(color="black", size = 0.4),
         axis.line.y = element_line(color = "black", size =0.4)) +
-  annotate("text", x=60, y=0.9, size =2, label = "Glutamine, padj <0.05")
+  annotate("text", x=60, y=0.9, size =2, label = "Glutamine, padj <0.05") +
+  scale_color_manual(values = c("BL" = "#E69F00", "F1" = "#56B4E9", "F2" = "#009E73"))
 
 ##Ser
 auxos_time_Ser <- ggplot(sumfreq_type_Focus[AA == "Ser"], aes(x = subject, y=x, group = FoCus_call)) +
@@ -196,7 +201,8 @@ auxos_time_Ser <- ggplot(sumfreq_type_Focus[AA == "Ser"], aes(x = subject, y=x, 
   labs(y="Frequence of\n auxotrophies",x = "") +
   theme(axis.line.x = element_line(color="black", size = 0.4),
         axis.line.y = element_line(color = "black", size =0.4)) +
-  annotate("text", x=60, y=0.9, size =2, label = "Serine, padj <0.05")
+  annotate("text", x=60, y=0.9, size =2, label = "Serine, padj <0.05") +
+  scale_color_manual(values = c("BL" = "#E69F00", "F1" = "#56B4E9", "F2" = "#009E73"))
 
 ##Cys
 auxos_time_Cys <- ggplot(sumfreq_type_Focus[AA == "Cys"], aes(x = subject, y=x, group = FoCus_call)) +
@@ -214,7 +220,8 @@ auxos_time_Cys <- ggplot(sumfreq_type_Focus[AA == "Cys"], aes(x = subject, y=x, 
   labs(y="Frequence of\n auxotrophies",x = "") +
   theme(axis.line.x = element_line(color="black", size = 0.4),
         axis.line.y = element_line(color = "black", size =0.4)) +
-  annotate("text", x=60, y=0.9, size =2, label = "Cysteine, padj <0.05")
+  annotate("text", x=60, y=0.9, size =2, label = "Cysteine, padj <0.05") +
+  scale_color_manual(values = c("BL" = "#E69F00", "F1" = "#56B4E9", "F2" = "#009E73"))
 
 ##Asn
 auxos_time_Asn <- ggplot(sumfreq_type_Focus[AA == "Asn"], aes(x = subject, y=x, group = FoCus_call)) +
@@ -232,7 +239,8 @@ auxos_time_Asn <- ggplot(sumfreq_type_Focus[AA == "Asn"], aes(x = subject, y=x, 
   labs(y="Frequence of\n auxotrophies",x = "") +
   theme(axis.line.x = element_line(color="black", size = 0.4),
         axis.line.y = element_line(color = "black", size =0.4)) +
-  annotate("text", x=60, y=0.9, size =2, label = "Asparagine, padj <0.05")
+  annotate("text", x=60, y=0.9, size =2, label = "Asparagine, padj <0.05") +
+  scale_color_manual(values = c("BL" = "#E69F00", "F1" = "#56B4E9", "F2" = "#009E73"))
 
 
 ###ggplot
@@ -250,24 +258,6 @@ c <- list()
 k <- 1
 relAA <- unique(sumfreq_type_Focus$AA)
 
-for (AAi in relAA) {
-  print(AAi)
-  wilcox_auxo <- sumfreq_type_Focus[AA == AAi]
-  pair_wilcox_all <- pairwise.wilcox.test(wilcox_auxo$x, wilcox_auxo$FoCus_call, p.adjust = "fdr", exact = FALSE)
-  pairwise_wilcox <- pair_wilcox_all$p.value
-  test <- data.frame(pairwise_wilcox)
-  test$AA <- AAi
-  test$BL <- ifelse(test$BL < 0.05, "*", "N.S")
-  test$F1 <- ifelse(test$F1 < 0.05, "*", "N.S")
-  test$F2 <- ifelse(test$F2 < 0.05, "*", "N.S")
-  c[[k]] <- test
-  k <- k+1
-}
-
-c <- list()
-k <- 1
-relAA <- unique(sumfreq_type_Focus$AA)
-
 for(AAi in relAA) {
   print(AAi)
   wilcox_auxo <- sumfreq_type_Focus[AA == AAi]
@@ -281,8 +271,6 @@ for(AAi in relAA) {
 
 Wil_Focus <- rbindlist(c)
 
-
-ggplot(Wil_Focus, aes(group1,group2))
 ###alpha und beta-diversity
 
 
