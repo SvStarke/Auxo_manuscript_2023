@@ -100,6 +100,29 @@ cbPalette <- c( "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7"
 
 ###H2S production by cys auxotrophic bacteria
 
+cutoff_prodrate <- 1 # at which mmol/gDW the rate is considered as 'real'production
+
+exchange <- get_exchanges(models)
+names <- unique(exchange$name)
+fwrite(exchange, file = "exchange.csv")
+
+relCompounds <- c("H2S")
+
+H2S <- exchange[name %in% relCompounds]
+View(H2S)
+m_gr <- lapply(models, FUN = get_growth)
+head(m_gr)
+m_growth <- data.table(Genome = names(m_gr),
+                       Growth = unlist(m_gr))
+
+
+#merge the files
+relAuxos <- unique(Auxotrophy_2$Compound)
+
+H2S_prod1 <- merge(H2S, m_growth, by.x = "model",
+                    by.y = "Genome")
+H2S_prod1[, prod_rate := flux / Growth]
+
 H2S_all <- merge(H2S_prod1,info_auxo, by.x="model", by.y="model")
 H2S_Prod <- H2S_all[prod_rate <0, prod_rate:=0]
 H2S_Prod$realH2S_prod <- H2S_Prod$prod_rate*H2S_Prod$freq
