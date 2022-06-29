@@ -81,7 +81,7 @@ sumfreq[AA %in% c("Val","Met","Leu","Ile","Trp","Phe","Lys","His","Thr"), is.ess
 sumfreq[is.na(is.essential), is.essential := "not essential"]
 
 #boxplot
-b <- ggplot(sumfreq, aes(AA, x*100, fill = is.essential)) +
+b <- ggplot(sumfreq[AA != "Gly"], aes(AA, x*100, fill = is.essential)) +
   geom_boxplot(outlier.shape = NA) +
   #geom_jitter(alpha = 0.05, width = 0.2, color = "black") +
   ylab("Abundance of Auxotrophies in the gut [%]")+

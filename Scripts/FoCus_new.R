@@ -18,7 +18,7 @@ FoCus_data[hypertens == 2, hypertens:= 0]
 View(FoCus_data)
 describe(FoCus_data$sample)
 #checking distribution of data
-hist(FoCus_data$IL6)
+hist(FoCus_data$HOMA)
 describe(FoCus_data$IL6)
 FoCus_data$IL6
 View(FoCus_data)

@@ -194,14 +194,23 @@ source("Scripts/Diseases_health_factors.R")
 #Analyze associations with diseases or health factors(BMI, weight, age)
 
 source("Scripts/Abundancies_gut.R")
-
-#multivariate regression analysis and abundance of amino acid auxotrophies in the gut 
-fi7 <- ggarrange(b, linear_health,dis_health, ncol=3,
-                   nrow=1, heights = c(1,1,1), widths= c(3,1.5,1.8),
-                 labels = "AUTO", hjust = c(-0.5,1,-3))
+fi7 <- ggarrange(ü, corr_health_plot, ncol=1,
+                   nrow=2, heights = c(1,1), widths= c(1,1),
+                 labels = c("B","C"), hjust = c(-0.5,-0.5))
 fi7
-ggsave("output/plots/figure7_01.06.22_new_Abund_gut.pdf", plot = fi7,
-       width = 10, height = 5)
+ggsave("output/plots/figure7_01.06.22_new_Abund_gut_DHZK.pdf", plot = fi7,
+      width = 5, height = 10)
+
+
+
+
+#partial spearman correlation and abundance of amino acid auxotrophies in the gut 
+# fi7 <- ggarrange(b, linear_health,dis_health, ncol=3,
+#                    nrow=1, heights = c(1,1,1), widths= c(3,1.5,1.8),
+#                  labels = "AUTO", hjust = c(-0.5,1,-3))
+# fi7
+# ggsave("output/plots/figure7_01.06.22_new_Abund_gut.pdf", plot = fi7,
+#        width = 10, height = 5)
 
 
 ###### supplementary material figure 2 ######

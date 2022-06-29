@@ -232,6 +232,7 @@ ggsave("output/plots/TRP_auxo_Trp_degradation.pdf", plot = p,
 
 met <- "EX_cpd00239_e0"
 #### get reactions with metabolite
-
+##make loop to include all models
+###function is only possible for one model --> create a loop
 get_reactions_with_metabolite(models, met = "EX_cpd00239[e0]")
 
