@@ -232,5 +232,6 @@ ggsave("output/plots/TRP_auxo_Trp_degradation.pdf", plot = p,
 
 met <- "EX_cpd00239_e0"
 #### get reactions with metabolite
-get_reactions_with_metabolite(NISW_Genome_0001, met)
+
+get_reactions_with_metabolite(models, met = "EX_cpd00239[e0]")
 
