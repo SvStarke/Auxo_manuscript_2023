@@ -1,6 +1,7 @@
 ############      data about patients with chronic inflammations    ############
 frequencies <- fread("/mnt/nuuk/2021/HRGM/TrypCID_16S_abundancies.csv")
 metainfo <- fread("/mnt/nuuk/2021/HRGM/TrypCID_16S_metaInfo.csv")
+View(metainfo)
 gut_dis <- merge(frequencies, metainfo, by.x= "sample", by.y="sample")
 View(gut_dis)
 Auxotrophy_2[,c(4:16)] <- NULL
@@ -239,6 +240,8 @@ ggsave("output/plots/barplot_frequence_gut_IBD_combined.pdf", plot = IBD,
 Kruskall <- sumfreq_all_diseases[diseases == "Psoriasis" | diseases == "Rheumatoid arthritis with rheumatoid factor" |
                                      diseases == "Ankylosing spondylitis" | diseases == "Systemic lupus erythematosus (SLE)" |
                                      diseases == "Crohn's disease [regional enteritis]" | diseases == "Ulcerative colitis"]
+describe(Kruskall)
+View(Kruskall)
 relAA <- unique(Kruskall$AA)
 remove(w)
 w <- list()
@@ -334,15 +337,15 @@ c
 wilcox_auxo <- wilcox_all[AA == "Lys"]
 pair_wilcox_all <- pairwise.wilcox.test(wilcox_auxo$x, wilcox_auxo$diseases, p.adjust = "fdr", exact = FALSE)
 ############################    visualization   ################################
-x1 <- ggplot(wilcox_all[AA == "Trp"], aes(diseases, x)) +
+cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+x1 <- ggplot(wilcox_all[AA == "Trp"], aes(diseases, x, fill =diseases)) +
           geom_boxplot(outlier.shape = NA) +
-  theme(axis.text.x = element_text(angle = 90)) +
   xlab("") +
-  ylab("Frequence of trp auxotrophic bacteria") +
+  ylab("Frequency of auxotrophic bacteria") +
   geom_signif(comparisons = list(c("Crohn's disease [regional enteritis]", "Psoriasis")),
               map_signif_level = TRUE, annotation = "*") +
   theme(axis.line = element_line(size =0.4, colour = "black")) +
-  theme(axis.text.x = element_text(colour = "black", angle = 90, vjust = 0.5)) +
+  #theme(axis.text.x = element_text(colour = "black", vjust = 0.5)) +
   theme(axis.text.y = element_text(colour = "black")) +
   scale_x_discrete("diseases", labels= c("Ankylosing spondylitis" = "Ankylosing\nspondylitis",
                                          "Crohn's disease [regional enteritis]" = "	Crohn's disease\n[regional enteritis]",
@@ -350,23 +353,30 @@ x1 <- ggplot(wilcox_all[AA == "Trp"], aes(diseases, x)) +
                                          "Rheumatoid arthritis with rheumatoid factor" = "Rheumatoid arthritis\nwith rheumatoid factor",
                                          "Systemic lupus erythematosus (SLE)" = "Systemic lupus\nerythematosus (SLE)",
                                          "Ulcerative colitis" = "Ulcerative colitis")) +
-  annotate(geom="text", x = 5.5, y = 0.8, size = 2, label = "adj.pvalue < 0.05 (Pairwise Wilcoxon Test)") +
+  #annotate(geom="text", x = 5.5, y = 0.8, size = 2, label = "adj.pvalue < 0.05 (Pairwise Wilcoxon Test)") +
   theme(panel.background = element_rect(fill = "white", colour = "white")) +
-  theme(axis.title.x = element_blank())
+  theme(axis.title.x = element_blank())+
+  theme(axis.title.y = element_text(face="bold")) +
+  scale_fill_manual(values = cbPalette) +
+  theme(legend.position = "none") +
+  theme(axis.text.x = element_blank()) +
+  facet_grid(. ~ AA, scales = "free_x", space= "free_x") +
+  theme(strip.text.x = element_text(size=12, face="bold")) +
+  theme(legend.title = element_text(color="black", face = "bold"))
+  
 x1
 ggsave("output/plots/boxplot_diseases_Trp.pdf", plot = x1,
-       width = 6, height = 5)
+       width = 9, height = 5)
 
 
-x2 <- ggplot(wilcox_all[AA == "Lys"], aes(diseases, x)) +
+x2 <- ggplot(wilcox_all[AA == "Lys"], aes(diseases, x, fill = diseases)) +
   geom_boxplot(outlier.shape = NA) +
-  theme(axis.text.x = element_text(angle = 90)) +
   xlab("Diseases") +
-  ylab("Frequence of lys auxotrophic bacteria") +
+  ylab("") +
   theme(axis.line = element_line(size =0.4, colour = "black")) +
   geom_signif(comparisons = list(c("Crohn's disease [regional enteritis]", "Psoriasis")),
               map_signif_level = TRUE, annotation = "*") +
-  theme(axis.text.x = element_text(colour = "black", angle = 90, vjust = 0.5)) +
+  #theme(axis.text.x = element_text(colour = "black", vjust = 0.5)) +
   theme(axis.text.y = element_text(colour = "black")) +
   scale_x_discrete("diseases", labels= c("Ankylosing spondylitis" = "Ankylosing\nspondylitis",
                                          "Crohn's disease [regional enteritis]" = "	Crohn's disease\n[regional enteritis]",
@@ -374,17 +384,25 @@ x2 <- ggplot(wilcox_all[AA == "Lys"], aes(diseases, x)) +
                                          "Rheumatoid arthritis with rheumatoid factor" = "Rheumatoid arthritis\nwith rheumatoid factor",
                                          "Systemic lupus erythematosus (SLE)" = "Systemic lupus\nerythematosus (SLE)",
                                          "Ulcerative colitis" = "Ulcerative colitis")) +
-  annotate(geom="text", x = 5.5, y = 0.09, size = 2, label = "adj.pvalue < 0.05 (Pairwise Wilcoxon Test)") +
+  #annotate(geom="text", x = 5.5, y = 0.09, size = 2, label = "adj.pvalue < 0.05 (Pairwise Wilcoxon Test)") +
   theme(panel.background = element_rect(fill = "white", colour = "white")) +
-  theme(axis.title.x = element_blank()) 
-ggsave("output/plots/boxplot_diseases_lys.pdf", plot = x2,
-       width = 6, height = 5)
+  theme(axis.title.x = element_blank()) +
+  scale_fill_manual(values = cbPalette) +
+  theme(legend.position = "none") +
+  theme(axis.text.x = element_blank()) +
+  facet_grid(. ~ AA, scales = "free_x", space= "free_x")+
+  theme(strip.text.x = element_text(size=12, face="bold"))+
+  theme(legend.title = element_text(color="black", face = "bold"))
 
-x3 <- ggplot(wilcox_all[AA == "Gln"], aes(diseases, x)) +
+x2
+
+ggsave("output/plots/boxplot_diseases_lys.pdf", plot = x2,
+       width = 9, height = 5)
+
+x3 <- ggplot(wilcox_all[AA == "Gln"], aes(diseases, x, fill=diseases)) +
   geom_boxplot(outlier.shape = NA) +
-  theme(axis.text.x = element_text(angle = 90)) +
   xlab("Diseases") +
-  ylab("Frequence of gln auxotrophic bacteria") +
+  ylab("") +
   theme(axis.line = element_line(size =0.4, colour = "black")) +
   theme(panel.background = element_rect(fill = "white", colour = "white"))+
   geom_signif(comparisons = list(c("Ankylosing spondylitis", "Systemic lupus erythematosus (SLE)"),
@@ -392,7 +410,7 @@ x3 <- ggplot(wilcox_all[AA == "Gln"], aes(diseases, x)) +
                                  c("Rheumatoid arthritis with rheumatoid factor", "Systemic lupus erythematosus (SLE)"),
                                  c("Ulcerative colitis", "Systemic lupus erythematosus (SLE)")),
               map_signif_level = TRUE, annotation = "*", step_increase = 0.12) +
-  theme(axis.text.x = element_text(colour = "black", angle = 90, vjust = 0.5)) +
+  #theme(axis.text.x = element_text(colour = "black",vjust = 0.5)) +
   theme(axis.text.y = element_text(colour = "black")) +
   scale_x_discrete("diseases", labels= c("Ankylosing spondylitis" = "Ankylosing\nspondylitis",
                                       "Crohn's disease [regional enteritis]" = "	Crohn's disease\n[regional enteritis]",
@@ -400,20 +418,27 @@ x3 <- ggplot(wilcox_all[AA == "Gln"], aes(diseases, x)) +
                                       "Rheumatoid arthritis with rheumatoid factor" = "Rheumatoid arthritis\nwith rheumatoid factor",
                                       "Systemic lupus erythematosus (SLE)" = "Systemic lupus\nerythematosus (SLE)",
                                       "Ulcerative colitis" = "Ulcerative colitis")) +
-  annotate(geom="text", x = 5.5, y = 0.09, size = 2, label = "adj.pvalue < 0.05 (Pairwise Wilcoxon Test)") +
+  #annotate(geom="text", x = 5.5, y = 0.11, size = 2, label = "adj.pvalue < 0.05 (Pairwise Wilcoxon Test)") +
   theme(panel.background = element_rect(fill = "white", colour = "white")) +
-  theme(axis.title.x = element_blank()) 
+  theme(axis.title.x = element_blank()) +
+  scale_fill_manual(values = cbPalette) +
+  theme(legend.position = "none") +
+  theme(axis.text.x = element_blank()) +
+  facet_grid(. ~ AA, scales = "free_x", space= "free_x") +
+  theme(strip.text.x = element_text(size=12, face="bold")) +
+  theme(legend.title = element_text(color="black", face = "bold"))
 
-  
+x3
 ggsave("output/plots/boxplot_diseases_gln.pdf", plot = x3,
-       width = 6, height = 5)
+       width = 9, height = 5)
 
 
+x4 <- ggarrange(x1,x2,x3, labels = "A",
+          ncol=3, nrow=1, common.legend = TRUE,
+          legend = c("bottom"))
 
-
-
-
-
+ggsave("output/plots/boxplot_chron_diseases_all.pdf", plot = x4,
+       width =11, height = 5)
 
 
 
