@@ -46,7 +46,7 @@ for(AAi in AA){
 }
 d1 <- rbindlist(d)
 d1
-
+cortet <- cor.test(divers_auxos_Trp$x, divers_auxos_Trp$D.Shannon, method = "spearman", exact = FALSE)
 
 d1
 d1$padjust = p.adjust(d1$pvalue, method = "fdr")
@@ -74,7 +74,7 @@ diversity_auxo <- ggplot(d1, aes(index, AA, fill = Estimate))+
   theme(axis.title.y = element_text(face  = "bold", size = 10))+
   theme(panel.background = element_blank()) +
   theme(legend.title = element_text(size=9)) +
-  labs(fill="Estimate", x = "", y="Auxotrophy") +
+  labs(fill="Estimate", x = "Diversity indices", y="Auxotrophy") +
   theme(legend.text = element_text(size=7)) +
   theme(panel.grid.major = element_blank()) +
   theme(legend.position = "top",
@@ -82,3 +82,5 @@ diversity_auxo <- ggplot(d1, aes(index, AA, fill = Estimate))+
 diversity_auxo + guides(shape = guide_legend(order = 1))
 diversity_auxo <- diversity_auxo + guides(shape= "none")
 diversity_auxo
+
+citation("vegan")

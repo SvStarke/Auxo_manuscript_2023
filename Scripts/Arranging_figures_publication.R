@@ -194,12 +194,12 @@ source("Scripts/Diseases_health_factors.R")
 #Analyze associations with diseases or health factors(BMI, weight, age)
 
 source("Scripts/Abundancies_gut.R")
-fi7 <- ggarrange(ü, corr_health_plot, ncol=1,
-                   nrow=2, heights = c(1,1), widths= c(1,1),
-                 labels = c("B","C"), hjust = c(-0.5,-0.5))
-fi7
-ggsave("output/plots/figure7_01.06.22_new_Abund_gut_DHZK.pdf", plot = fi7,
-      width = 5, height = 10)
+fi7.1 <- ggarrange(ü, corr_health_plot,diversity_auxo, ncol=1,
+                   nrow=3, heights = c(1,1,1), widths= c(1,1,1),
+                 labels = c("B","C", "D"), hjust = c(-0.5,-0.5, -0.5))
+fi7.1
+ggsave("output/plots/figure7_01.06.22_new_Abund_gut_DHZK.pdf", plot = fi7.1,
+      width = 5, height = 13)
 
 
 
