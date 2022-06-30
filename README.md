@@ -243,7 +243,7 @@ source("Scripts/auxotable_melted_merged.R")
 ###### Analyze associations with and health markers
 
 ```R
-source("Scripts/DZHK_Health_Diseases.R")
+source("Scripts/DZHK_Healthmarkers.R")
 ```
 
 ### 10) Abundancies of auxotrophic bacteria in DZHK cohorte
