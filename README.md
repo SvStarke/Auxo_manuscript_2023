@@ -194,12 +194,12 @@ source("Scripts/auxotable_melted_merged.R")
 source("Scripts/byproduct_production.R")
 ```
 
-### 8) Abundancies in the gut
+### 8) Effect of auxotrophic bacteria on the diversity of microbial communities
 
-###### Load models (completeness >=85% and a contamination <=2)
+###### Load models from DZHK cohorte
 
 ```R
-source("Scripts/init_models_filtered.R")
+source("Scripts/DZHK_data_init.R")
 ```
 
 ###### Predict auxotrophies
@@ -214,44 +214,18 @@ source("Scripts/predict_auxos.R")
 source("Scripts/auxotable_melted_merged.R")
 ```
 
-###### Analyze the abundance of auxotrophies in the gut by data from the FoCus cohorte
+###### Effect of auxotrophic bateria on the diversity 
 
 ```R
-source("Scripts/Abundancies_gut.R")
+source("Scripts/diversity_Auxos.R")
 ```
 
-### 9) Association of auxotrophies with diseases and different health factors from FoCus cohorte
+### 9) Association of auxotrophies with Health markers in DZHK cohorte
 
-###### Load models (completeness >=85% and a contamination <=2)
-
-```R
-source("Scripts/init_models_filtered.R")
-```
-
-###### Predict auxotrophies
+###### Load models from DZHK cohorte
 
 ```R
-source("Scripts/predict_auxos.R")
-```
-
-###### Add information about the genomes
-
-```R
-source("Scripts/auxotable_melted_merged.R")
-```
-
-###### Analyze associations with diseases or health factors(BMI, weight, age)
-
-```R
-source("Scripts/FoCus_new.R")
-```
-
-### 10) Intake of amino acids and abundance of auxotrophic gut bacteria
-
-###### Load models() completeness >=85% and a contamination <=2)
-
-```R
-source("Scripts/init_models_filtered.R")
+source("Scripts/DZHK_data_init.R")
 ```
 
 ###### Predict auxotrophies
@@ -266,10 +240,36 @@ source("Scripts/predict_auxos.R")
 source("Scripts/auxotable_melted_merged.R")
 ```
 
-###### Spearman correlation
+###### Analyze associations with and health markers
 
 ```R
-source("Scripts/Nutrition_Auxos_FoCus.R")
+source("Scripts/DZHK_Health_Diseases.R")
+```
+
+### 10) Abundancies of auxotrophic bacteria in DZHK cohorte
+
+###### Load models
+
+```R
+source("Scripts/DZHK_data_init.R")
+```
+
+###### Predict auxotrophies
+
+```R
+source("Scripts/predict_auxos.R")
+```
+
+###### Add information about the genomes
+
+```R
+source("Scripts/auxotable_melted_merged.R")
+```
+
+###### Get abundancies 
+
+```R
+source("Scripts/Abundancies_Gut_DZHK.R")
 ```
 
 ### 11) Rasch Sampler
@@ -312,9 +312,7 @@ source("Scripts/predict_auxos.R")
 source("Scripts/Occurence_Auxos_together.R")### 
 ```
 
-### Further scripts that may be used in the future but are yet not displayed in the flowchart
-
-### Association of auxotrophies with different diseases (not FoCus cohorte)
+### 13) Frequency of auxotrophic bacteria in chronic inflammatory diseases (TrypCID)
 
 ###### Load models (completeness >=85% and a contamination <=2)
 
@@ -337,8 +335,10 @@ source("Scripts/auxotable_melted_merged.R")
 ###### Analyze association with diseases
 
 ```R
-source("Scripts/Other_clinical_data(not_FoCus).R")
+source("Scripts/TrypCID.R")
 ```
+
+### Further scripts that may be used in the future but are yet not displayed in the flowchart
 
 ### Completeness of bile acid metabolism pathways
 
@@ -391,3 +391,83 @@ source("Scripts/auxotable_melted_merged.R")
 ```R
 source("Scripts/H2S_production_trp_auxo_statistics.R")
 ```
+
+### Abundancies in the gut (FoCus cohorte)
+
+###### Load models (completeness >=85% and a contamination <=2)
+
+```R
+source("Scripts/init_models_filtered.R")
+```
+
+###### Predict auxotrophies
+
+```R
+source("Scripts/predict_auxos.R")
+```
+
+###### Add information about the genomes
+
+```R
+source("Scripts/auxotable_melted_merged.R")
+```
+
+###### Analyze the abundance of auxotrophies in the gut by data from the FoCus cohorte
+
+```R
+source("Scripts/Abundancies_gut.R")
+```
+
+### Associations of auxotrophic bacteria and diseases (FoCus cohorte)
+
+###### Load models (completeness >=85% and a contamination <=2)
+
+```R
+source("Scripts/init_models_filtered.R")
+```
+
+###### Predict auxotrophies
+
+```R
+source("Scripts/predict_auxos.R")
+```
+
+###### Add information about the genomes
+
+```R
+source("Scripts/auxotable_melted_merged.R")
+```
+
+###### Analyze associations with diseases or health factors(BMI, weight, age)
+
+```R
+source("Scripts/FoCus_new.R")
+```
+
+### Intake of amino acids and abundance of auxotrophic gut bacteria
+
+###### Load models() completeness >=85% and a contamination <=2)
+
+```R
+source("Scripts/init_models_filtered.R")
+```
+
+###### Predict auxotrophies
+
+```R
+source("Scripts/predict_auxos.R")
+```
+
+###### Add information about the genomes
+
+```R
+source("Scripts/auxotable_melted_merged.R")
+```
+
+###### Spearman correlation
+
+```R
+source("Scripts/Nutrition_Auxos_FoCus.R")
+```
+
+
