@@ -83,4 +83,5 @@ diversity_auxo + guides(shape = guide_legend(order = 1))
 diversity_auxo <- diversity_auxo + guides(shape= "none")
 diversity_auxo
 
-citation("vegan")
+ggsave("output/plots/diversity_auxos_DHZK.pdf", plot = diversity_auxo,
+       width = 5, height = 6)
