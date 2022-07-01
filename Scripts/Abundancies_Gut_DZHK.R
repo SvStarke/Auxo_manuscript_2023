@@ -25,8 +25,10 @@ u <- rbindlist(p)
 sumfreq <- aggregate(u$prop, by=list(sample=u$sample, AA=u$Compound), FUN=sum)
 
 sumfreq <- as.data.table(sumfreq)
+
 sumfreq[AA %in% c("Val","Met","Leu","Ile","Trp","Phe","Lys","His","Thr"), is.essential := "essential"]
 sumfreq[is.na(is.essential), is.essential := "not essential"]
+
 
 #boxplot
 ü <- ggplot(sumfreq[AA != "Gly"], aes(AA, x*100, fill = is.essential)) +
@@ -52,6 +54,7 @@ sumfreq[is.na(is.essential), is.essential := "not essential"]
 ggsave("output/plots/boxplot_frequency_gut_DZHK.pdf", plot = ü,
        width = 6, height = 4)
 
-
+##get median 
+sumfreqAA <- aggregate(sumfreq$x, by=list(Aminoacid = sumfreq$AA), FUN=median)
 
 
