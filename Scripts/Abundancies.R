@@ -76,6 +76,31 @@ Freq_auxos <- as.data.frame.matrix(Auxo_abundance)
 colnames(Freq_auxos) <- c("A", "P")
 Freq_auxos$percentage <- (Freq_auxos$A / (nrow(Auxotrophy_2)/21)) * 100
 Freq_auxos$AA <- rownames(Freq_auxos)
+Freq_auxos <- data.table(Freq_auxos)
+Freq_auxos[AA %in% c("Val","Met","Leu","Ile","Trp","Phe","Lys","His","Thr"), is.essential := "essential"]
+Freq_auxos[is.na(is.essential), is.essential := "not essential"]
+Freq_auxos[order(Freq_auxos$is.essential)]
+Freq_auxos$AA <- factor(Freq_auxos$AA, levels = c("His","Ile","Leu","Lys","Met","Phe","Thr","Trp","Val","Ala",
+                                                                      "Arg","Asn","Asp","Chor", "Cys","Gln","Glu","Gly","Pro","Ser","Tyr"))
 ##visualization
-ggplot(Freq_auxos, aes(AA,percentage)) +
-   geom_bar(stat = "identity")
+Abun_HRGM <- ggplot(Freq_auxos, aes(AA,percentage, fill = is.essential)) +
+   geom_bar(stat = "identity") +
+  ylab("Auxotrophies [%]") +
+  xlab("Amino acids") +
+  guides(fill =guide_legend(title="Essentiality")) +
+  #theme_minimal() +
+  theme(legend.position = "right") +
+  theme(axis.line = element_line(size=0.2)) +
+  theme(panel.background = element_rect(fill="white", colour= "white")) +
+  theme(axis.text.x = element_text(size = 16, angle = 45, colour = "black", hjust = 1, margin = margin(10,0,0,0))) +
+  theme(axis.text.y = element_text(size = 16, colour = "black"))+
+  theme(axis.title.x = element_text(colour = "Black",size = 16, margin = margin(2,0,0,0))) +
+  theme(axis.title.y = element_text(colour = "Black",size = 16, margin = margin(0,10,0,0))) +
+  theme(legend.title = element_text(colour = "black", size = 16,  vjust = 1, margin = margin(10,5,5,0))) +
+  theme(legend.text = element_text(size = 16, colour = "black")) +
+  coord_cartesian() +
+  scale_fill_manual(values = c("#8c2d04",'#fdae6b'))
+Abun_HRGM
+
+ggsave("output/plots/Abundancies_HRGM_18.07.22.pdf", plot = Abun_HRGM,
+       width = 10, height = 5)

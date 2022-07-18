@@ -18,7 +18,7 @@ FoCus_data[hypertens == 2, hypertens:= 0]
 View(FoCus_data)
 describe(FoCus_data$sample)
 #checking distribution of data
-hist(FoCus_data$HOMA)
+hist(FoCus_data$IL6)
 describe(FoCus_data$IL6)
 FoCus_data$IL6
 View(FoCus_data)
@@ -335,7 +335,7 @@ d
 ggsave("output/plots/health_diseases_lin_sex.pdf", plot = d,
        width = 6, height = 3)
 
-
+describe()
 
 
 

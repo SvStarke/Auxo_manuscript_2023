@@ -32,24 +32,24 @@ source("Scripts/Scatterplot_corr_Genomelength_Numbauxos.R")
 source("Scripts/auxotable_melted_merged.R")
 
 #Analyze amino acid auxotrophies
-
-source("Scripts/Abundancies.R")
-
-#### create figure ####
-library(gridExtra)
-library(cowplot)
-library(ggplot2)
-fi <- grid.arrange(arrangeGrob(pt,length_count, ncol=2),
-             nrow=2,
-             abun
-             )
-fi2 <- as_ggplot(fi) +
-  draw_plot_label(label= c("A", "B","C"), size =12,
-                  x = c(0,0.5,0), y = c(1, 1, 0.5))
-fi2
-
-ggsave("output/plots/figure2.pdf", plot = fi2,
-       width = 10, height = 8)
+# 
+# source("Scripts/Abundancies.R")
+# 
+# #### create figure ####
+# library(gridExtra)
+# library(cowplot)
+# library(ggplot2)
+# fi <- grid.arrange(arrangeGrob(pt,length_count, ncol=2),
+#              nrow=2,
+#              abun
+#              )
+# fi2 <- as_ggplot(fi) +
+#   draw_plot_label(label= c("A", "B","C"), size =12,
+#                   x = c(0,0.5,0), y = c(1, 1, 0.5))
+# fi2
+# 
+# ggsave("output/plots/figure2.pdf", plot = fi2,
+#        width = 10, height = 8)
 
 #################figure 3#################
 #Load models (completeness >= 85% and contamination <=2)
@@ -74,7 +74,7 @@ fi3.1 <- ggarrange(o,t,
                  ncol=2, nrow= 1, common.legend = FALSE)
 fi3.1
 
-ggsave("output/plots/figure3_28.04.22.pdf", plot = fi3.1,
+ggsave("output/plots/figure3_18.07.22.pdf", plot = fi3.1,
        width = 9, height = 4.5)
 
 

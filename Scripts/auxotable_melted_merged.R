@@ -4,7 +4,7 @@
 Auxotrophy_2 <- melt(Auxotrophy, id.vars = "Genomes",
                      value.name = "Prototrophy", variable.name = "Compound")
 
-###only for HRGM
+################only for HRGM###############################################
 Metadata <- fread("/mnt/nuuk/2021/HRGM/REPR_Genomes_metadata.tsv")
 
 Auxotrophy_2 <- merge(Auxotrophy_2, Metadata, by.x = "Genomes",

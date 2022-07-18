@@ -20,7 +20,7 @@ for(i in 2:1001) {
   permut_mat[[i-1]] <- rsextrmat(res, i)
 }
 
-remove(permut_mat)
+
 ###take very long (n=1000)
 a <- list() # for distribution
 b <- list() # for median
@@ -56,7 +56,7 @@ for(aa1_ind in 1:(length(AAx)-1)) {
 a
 library(plyr)
 test2 <- rbind.fill(b)
-View(test2)
+#View(test2)
 test2 <- rbindlist(b, fill = TRUE)
 AAx2 <- AAx
 remove1 <- c("Chor")
@@ -172,12 +172,12 @@ new_table_p <- rbindlist(tmp_pvalue_rasch)
 new_table_p[, padj := p.adjust(p.value, method = "fdr")]
 new_table_p[padj < 0.05, sign.label1 := "Padj < 0.05"]
 new_table_p[,log2FC := log2(obs_freq/exp_freq_median)]
-new_table
+new_table_p
 
 
 
 #####################      visualization    ####################################
-t <- ggplot(new_table, aes(A1,A2, fill = log2FC)) +
+t <- ggplot(new_table_p, aes(A1,A2, fill = log2FC)) +
   geom_tile(color ="white", lwd= 0.5, linetype = 1.5) +
   scale_fill_gradient2(high = "#ca0020", mid = "white", low = "#0571b0") +
   guides(fill = guide_colourbar(barwidth = 12, barheight = 0.8, title ="log2FoldChange",
@@ -187,9 +187,9 @@ t <- ggplot(new_table, aes(A1,A2, fill = log2FC)) +
   scale_shape_manual(values = 8, na.translate = FALSE) +
   theme(axis.text.x = element_text(colour = "Black", size = 10, angle = 45, vjust = 0.5, hjust=0.5)) +
   theme(axis.text.y = element_text(colour = "black", size = 10, vjust = 0.5, hjust=0.5)) +
-  theme(axis.title.x = element_text(colour = "Black", face = "bold", size = 10, margin = margin(5,0,0,0))) +
-  theme(axis.title.y = element_text(colour = "Black", face = "bold", size = 10, margin = margin(0,5,0,0))) +
-  theme(legend.title = element_text(colour = "black", size = 8, face = "bold", vjust = 1, margin = margin(0,10,1,0))) +
+  theme(axis.title.x = element_text(colour = "Black", size = 10, margin = margin(5,0,0,0))) +
+  theme(axis.title.y = element_text(colour = "Black", size = 10, margin = margin(0,5,0,0))) +
+  theme(legend.title = element_text(colour = "black", size = 8, vjust = 1, margin = margin(0,10,1,0))) +
   theme(legend.text = element_text(size=8)) +
   xlab("Amino acid auxotrophy 1") +
   ylab("Amino acid auxotrophy 2") + 

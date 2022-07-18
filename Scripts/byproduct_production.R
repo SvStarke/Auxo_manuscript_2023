@@ -14,21 +14,21 @@ source("Scripts/auxotable_melted_merged.R")
 cutoff_prodrate <- 1 # at which mmol/gDW the rate is considered as 'real'production
 
 exchange <- get_exchanges(models)
-fwrite(exchange, file = "exchange.csv")
+#fwrite(exchange, file = "exchange.csv")
 
 relCompounds <- c("Butyrate","Propionate","Acetate","DL-Lactate",
                   "Succinate")
 
 SCFAs <- exchange[name %in% relCompounds]
-is.data.table(SCFAs)
+#is.data.table(SCFAs)
 
 
 #get growth rates
 m_gr <- get_growth(models)
-head(m_gr)
+#head(m_gr)
 m_growth <- data.table(Genome = names(m_gr),
                        Growth = unlist(m_gr))
-fwrite(m_growth, file = "m_grwoth.csv")
+#fwrite(m_growth, file = "m_grwoth.csv")
 
 #merge the files
 relAuxos <- unique(Auxotrophy_2$Compound)
@@ -112,8 +112,8 @@ p <- ggplot(stat_BP_x_auxo[auxo.compound != "Gly"], aes(auxo.compound, by.produc
         legend.justification = 	1,
         axis.text.x = element_text(color = "black", angle = 45, hjust = 1, size = 10),
         axis.text.y = element_text(color = "black", size = 10)) +
-  theme(axis.title.y = element_text(margin = margin(t = 0, r = 20, b= 0, l = 0), face = "bold")) +
-  theme(axis.title.x = element_text(face = "bold", margin = margin(t = 20, r = 0, b= 0, l = 0))) +
+  theme(axis.title.y = element_text(margin = margin(t = 0, r = 20, b= 0, l = 0))) +
+  theme(axis.title.x = element_text(margin = margin(t = 20, r = 0, b= 0, l = 0))) +
   theme(panel.background = element_blank())
 
 p +theme(plot.margin = unit(c(1,0.5,2,0.5), "cm")) +

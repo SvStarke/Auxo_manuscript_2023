@@ -31,12 +31,13 @@ fi <- ggplot(numb[phylum == "Firmicutes"], aes (count,abun, fill = "#fdae6b")) +
   theme(legend.position = "right") +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
   theme(legend.position = "none") +
-  theme(axis.title = element_text(face = "bold")) +
   scale_fill_manual(values = "#fdae6b") +
   coord_cartesian(ylim=c(0,60)) +
   theme(title = element_text(size = 10)) +
   theme(axis.text.x = element_text(colour = "black", size = 10)) +
-  theme(axis.text.y = element_text(colour = "black", size = 10))
+  theme(axis.text.y = element_text(colour = "black", size = 10)) +
+  facet_grid(cols= vars(phylum)) +
+  theme(strip.text.x = element_text(colour = "black", face ="bold"))
 fi
 
 #Actinobacteria
@@ -47,13 +48,13 @@ a <- ggplot(numb[phylum == "Actinobacteriota"], aes (count, abun, fill = "#feedd
   theme(legend.position = "right") +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
   theme(legend.position = "none") + 
-  theme(axis.title.x = element_text(face = "bold")) +
-  theme(axis.title.y = element_text(face = "bold")) +
   scale_fill_manual(values = "#feedde") +
   coord_cartesian(ylim=c(0,60)) +
   theme(title = element_text(size = 10)) +
   theme(axis.text.x = element_text(colour = "black", size = 10)) +
-  theme(axis.text.y = element_text(colour = "black", size = 10))
+  theme(axis.text.y = element_text(colour = "black", size = 10)) +
+  facet_grid(cols= vars(phylum)) +
+  theme(strip.text.x = element_text(colour = "black", face ="bold"))
 a
 
 #Bacteroidetes
@@ -62,15 +63,15 @@ b <- ggplot(numb[phylum == "Bacteroidota"], aes (count,abun, fill = "#fdd0a2")) 
   xlab("Auxotrophies per genome") +
   ylab("Abundance [%]") +
   theme(legend.position = "right") +
-  theme(axis.title.x = element_text(face = "bold")) +
-  theme(axis.title.y = element_text(face = "bold")) +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
   theme(legend.position = "none") +
   scale_fill_manual(values = "#fdd0a2") +
   coord_cartesian(ylim=c(0,60)) +
   theme(title = element_text(size = 10)) +
   theme(axis.text.x = element_text(colour = "black", size = 10)) +
-  theme(axis.text.y = element_text(colour = "black", size = 10))
+  theme(axis.text.y = element_text(colour = "black", size = 10)) +
+  facet_grid(cols= vars(phylum)) +
+  theme(strip.text.x = element_text(colour = "black", face ="bold"))
 b
 
 #Proteobacteria
@@ -81,13 +82,13 @@ p <- ggplot(numb[phylum == "Proteobacteria"], aes (count, abun, fill = "#d94801"
   theme(legend.position = "right") +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
   theme(legend.position = "none") +
-  theme(axis.title.x = element_text(face = "bold")) +
-  theme(axis.title.y = element_text(face = "bold")) +
   scale_fill_manual(values = "#d94801") +
   coord_cartesian(ylim=c(0,60)) +
   theme(title = element_text(size = 10)) +
   theme(axis.text.x = element_text(colour = "black", size = 10)) +
-  theme(axis.text.y = element_text(colour = "black", size = 10))
+  theme(axis.text.y = element_text(colour = "black", size = 10)) +
+  facet_grid(cols= vars(phylum)) +
+  theme(strip.text.x = element_text(colour = "black", face ="bold"))
 p
 #Fusobacteriota
 fu <- ggplot(numb[phylum == "Fusobacteriota"], aes (count, abun, fill = "#fd8d3c")) +
@@ -95,15 +96,15 @@ fu <- ggplot(numb[phylum == "Fusobacteriota"], aes (count, abun, fill = "#fd8d3c
   xlab("Auxotrophies per genome") +
   ylab("Abundance [%]") +
   theme(legend.position = "right") +
-  theme(axis.title.x = element_text(face = "bold")) +
-  theme(axis.title.y = element_text(face = "bold")) +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
   theme(legend.position = "none") +
   scale_fill_manual(values = "#fd8d3c") +
   coord_cartesian(ylim=c(0,60)) +
   theme(title = element_text(size = 10)) +
   theme(axis.text.x = element_text(colour = "black", size = 10)) +
-  theme(axis.text.y = element_text(colour = "black", size = 10))
+  theme(axis.text.y = element_text(colour = "black", size = 10)) +
+  facet_grid(cols= vars(phylum)) +
+  theme(strip.text.x = element_text(colour = "black", face ="bold"))
 fu
 #Other
 ot <- ggplot(numb[phylum == "Other"], aes (count, abun, fill = "#f16913")) +
@@ -111,16 +112,16 @@ ot <- ggplot(numb[phylum == "Other"], aes (count, abun, fill = "#f16913")) +
   xlab("Auxotrophies per genome") +
   ylab("Abundance [%]") +
   theme(legend.position = "right") +
-  theme(axis.title.x = element_text(face = "bold")) +
-  theme(axis.title.y = element_text(face = "bold")) +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
   theme(legend.position = "none") +
   scale_fill_manual(values = "#f16913") +
   coord_cartesian(ylim=c(0,60)) +
   theme(title = element_text(size = 10)) +
   theme(axis.text.x = element_text(colour = "black", size = 10)) +
-  theme(axis.text.y = element_text(colour = "black", size = 10))
-ot
+  theme(axis.text.y = element_text(colour = "black", size = 10)) +
+  facet_grid(cols= vars(phylum)) +
+  theme(strip.text.x = element_text(colour = "black", face ="bold"))
+ot 
 #arrange in one figure
 abun <- ggarrange(a,b,fi,fu,p,ot,
           ncol=3, nrow= 2)
@@ -128,8 +129,8 @@ abun
 
 abun1 <- annotate_figure(abun, fig.lab = "C")
 
-ggsave("output/plots/number_auxo_phylum_comparison.pdf", plot = abun1,
-       width = 5, height = 4)
+ggsave("output/plots/number_auxo_phylum_comparison.pdf", plot = abun,
+       width = 7, height = 5)
 
 ###number auxo per phylum and order
 #Firmicutes
