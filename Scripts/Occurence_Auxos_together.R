@@ -27,6 +27,8 @@ occurence2 <- occurence[!(occurence$Var1 == 1 | occurence$Var2 == 1), ]
 occurence2$Freq_all <-occurence2$Freq/nrow(Auxo)
 occurence2$Freq_filt <- ifelse(occurence2$A1 == occurence2$A2, NA, occurence2$Freq/nrow(Auxo))
 occurence2 <- occurence2[A1 < A2]
+occurence2 <- occurence2[A2 != "Gly"]
+occurence2 <- occurence2[A1 != "Gly"]
 #occurence2$P <- occurence2$Freq/occurence2$perc
 
 ####################      visualization      ###################################
