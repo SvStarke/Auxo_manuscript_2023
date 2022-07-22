@@ -34,8 +34,8 @@ sumfreq[is.na(is.essential), is.essential := "not essential"]
 ü <- ggplot(sumfreq[AA != "Gly"], aes(AA, x*100, fill = is.essential)) +
   geom_boxplot(outlier.shape = NA) +
   #geom_jitter(alpha = 0.05, width = 0.2, color = "black") +
-  ylab("Abundance of Auxotrophies in the gut [%]")+
-  xlab("Amino Acids") +
+  ylab("Relative abundance of auxotrophies [%]")+
+  xlab("Amino acids") +
   theme(axis.line = element_line(size=0.2, colour = "black")) +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
   theme(axis.title.y = element_text(colour = "black", size = 10, margin = margin(0,10,0,0)))+
