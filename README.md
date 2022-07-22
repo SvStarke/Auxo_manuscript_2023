@@ -337,6 +337,27 @@ source("Scripts/auxotable_melted_merged.R")
 ```R
 source("Scripts/TrypCID.R")
 ```
+### 14) Correlation between  the number of auxotrophies and the diversity
+
+###### Load models 
+
+```R
+source("Scripts/DZHK_data_init.R.R")
+```
+
+###### Predict auxotrophies
+
+```R
+source("Scripts/predict_auxos.R")
+```
+###### Load Script pathway number 8 
+
+###### Correlation analysis
+
+```R
+source("numb_auxos_div.R")
+```
+
 
 ### Further scripts that may be used in the future but are yet not displayed in the flowchart
 
