@@ -2,15 +2,15 @@
 
 dzhk_auxo <- merge(dzhk_info, dzhk_relabun, by.x= "sample", by.y="sample")
 describe(dzhk_auxo$sample)
-hist(dzhk_auxo$Neutrophils)
-hist(dzhk_auxo$Leucocytes)
-hist(dzhk_auxo$Lymphocytes)
-hist(dzhk_auxo$`HDL-Cholesterin`)
-hist(hist(dzhk_auxo$`LDL-Cholesterin`))
-hist(hist(dzhk_auxo$`Triglyceride`))
-hist(hist(dzhk_auxo$Monocytes))
-hist(hist(dzhk_auxo$Eosinophils))
-hist(hist(dzhk_auxo$Basophils))
+# hist(dzhk_auxo$Neutrophils)
+# hist(dzhk_auxo$Leucocytes)
+# hist(dzhk_auxo$Lymphocytes)
+# hist(dzhk_auxo$`HDL-Cholesterin`)
+# hist(hist(dzhk_auxo$`LDL-Cholesterin`))
+# hist(hist(dzhk_auxo$`Triglyceride`))
+# hist(hist(dzhk_auxo$Monocytes))
+# hist(hist(dzhk_auxo$Eosinophils))
+# hist(hist(dzhk_auxo$Basophils))
 
 
 neutro <- (quantile(dzhk_auxo$Triglyceride, prob = 0.75, na.rm = TRUE) - quantile(dzhk_auxo$Triglyceride, prob = 0.25, na.rm = TRUE)) * 2

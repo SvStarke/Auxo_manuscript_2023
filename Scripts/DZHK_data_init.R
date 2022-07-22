@@ -1,6 +1,18 @@
-library(data.table)
 library(vegan)
 library(stringr)
+library(MicrobiomeGS2)
+library(dplyr)
+library(ggplot2)
+library(data.table)
+library(ggpubr)
+library(MetBrewer)
+library(tidyverse)
+library(rstatix)
+library(RaschSampler)
+library(Hmisc)
+library(PResiduals)
+sybil::SYBIL_SETTINGS("SOLVER","cplexAPI")
+
 
 ###models
 
@@ -14,7 +26,7 @@ dzhk_diversity <- data.table(sample = colnames(dzhk_mags_abun),
                              D.Shannon = diversity(dzhk_mags_abun, MARGIN = 2),
                              D.Simpson = diversity(dzhk_mags_abun, MARGIN = 2, index = "simpson"),
                              D.invSimpson = diversity(dzhk_mags_abun, MARGIN = 2, index = "invsimpson"),
-                             D.richness = specnumber(dzhk_mags_abun, MARGIN = 2))
+                             D.richness = specnumber(dzhk_mags_abun, MARGIN = 2)) 
 
 # Calculate realtive abundancy table
 dzhk_relabun <- data.table(as.table(dzhk_mags_abun))
@@ -27,7 +39,5 @@ dzhk_info1 <- fread("/mnt/nuuk/2022/DZHK_MGX/sample_info/Metagenome_DZHK_NGS_EMG
 setnames(dzhk_info1, c("EMGE","sample"))
 dzhk_info2 <- fread("/mnt/nuuk/2022/DZHK_MGX/sample_info/DZHK_finaler_export_v5_mod.csv")
 dzhk_info <- merge(dzhk_info1,dzhk_info2)
-View(dzhk_info)
-rm(dzhk_info1)
-rm(dzhk_info2)
+
 

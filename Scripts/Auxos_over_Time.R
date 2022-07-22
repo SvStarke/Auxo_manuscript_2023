@@ -43,6 +43,9 @@ sumfreq_type_Focus <- aggregate(u$freq, by=list(sample=u$sample, AA=u$Compound, 
 sumfreq_type_Focus <- data.table(sumfreq_type_Focus)
 View(sumfreq_type_Focus)
 
+sumfreq_type_Focus[order(sumfreq_type_Focus$x, sumfreq_type_Focus$FoCus_call, decreasing = TRUE), ]
+reorder(sumfreq_type_Focus, x)
+unique(sumfreq_type_Focus$FoCus_call)
 
 ###visualization
 auxos_time <- ggplot(sumfreq_type_Focus[AA == "Leu"], aes(x = subject, y=x, group = FoCus_call)) +

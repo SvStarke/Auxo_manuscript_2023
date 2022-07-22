@@ -175,7 +175,7 @@ ggsave("output/plots/figure6_28.04.22.pdf", plot = fi6,
 
 
 ################# figure 7 ###########
-#Load models (completeness >=85% and a contamination <=2)
+#Load models 
 
 source("Scripts/init_models_filtered.R")
 
@@ -194,12 +194,12 @@ source("Scripts/Diseases_health_factors.R")
 #Analyze associations with diseases or health factors(BMI, weight, age)
 
 source("Scripts/Abundancies_gut.R")
-fi7.1 <- ggarrange(ü, corr_health_plot,diversity_auxo, ncol=1,
-                   nrow=3, heights = c(1,1,1), widths= c(1,1,1),
-                 labels = c("B","C", "D"), hjust = c(-0.5,-0.5, -0.5))
-fi7.1
-ggsave("output/plots/figure7_01.06.22_new_Abund_gut_DHZK.pdf", plot = fi7.1,
-      width = 5, height = 13)
+fi7 <- ggarrange(ü, corr_health_div_plot,div_auxos , ncol=1,
+                   nrow=3, heights = c(1,1.3,1.1), widths= c(1,1,1),
+                 labels = c("A","B", "C"), hjust = c(-0.5,-0.5, -0.5))
+fi7
+ggsave("output/plots/figure7_01.06.22_new_Abund_gut_DHZK.pdf", plot = fi7,
+      width = 7, height = 15)
 
 
 

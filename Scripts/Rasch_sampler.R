@@ -109,36 +109,36 @@ ggsave("output/plots/Rasch_Sampler.pdf", plot = t,
        width = 5, height = 5)
 
 
-##### statistical analysis
-#all_results <- rbindlist(a, fill = TRUE)
-remove(tmp_wilcox_rasch)
-tmp_wilcox_rasch <- list()
-k <- 1
-#get third element of the first list 
-for (i1 in  1:(length(AAx)-1)) {
-  AA1 <- AAx[i1]
-  print(AA1) 
-  for(i2 in (i1+1):length(AAx)) {
-    AA2 <- AAx[i2]
-    tmp_occu <- a[[c(AA1,AA2)]] 
-    #tmp_occu1 <- data.table(tmp_occu)
-    #colnames(tmp_occu1) <- "perc"
-    mu_occu <- occurence3[occurence3$A1 == AA1 & occurence3$A2 == AA2, Freq_all]
-    res <- wilcox.test(tmp_occu, mu = mu_occu)
-    tmp_wilcox <- data.table(A1 = AA1, A2 = AA2,
-                             p.value = res$p.value, 
-                             obs_freq = mu_occu, 
-                             exp_freq_median = median(tmp_occu))
-    tmp_wilcox_rasch[[k]] <- tmp_wilcox
-    k <- k+1
-  }
-}
-new_table <- rbindlist(tmp_wilcox_rasch)
-new_table[, padj := p.adjust(p.value, method = "fdr")]
-new_table[padj < 0.05, sign.label1 := "Padj < 0.05"]
-new_table[,log2FC := log2(obs_freq/exp_freq_median)]
-all_freq
-new_table
+# ##### statistical analysis
+# #all_results <- rbindlist(a, fill = TRUE)
+# remove(tmp_wilcox_rasch)
+# tmp_wilcox_rasch <- list()
+# k <- 1
+# #get third element of the first list 
+# for (i1 in  1:(length(AAx)-1)) {
+#   AA1 <- AAx[i1]
+#   print(AA1) 
+#   for(i2 in (i1+1):length(AAx)) {
+#     AA2 <- AAx[i2]
+#     tmp_occu <- a[[c(AA1,AA2)]] 
+#     #tmp_occu1 <- data.table(tmp_occu)
+#     #colnames(tmp_occu1) <- "perc"
+#     mu_occu <- occurence3[occurence3$A1 == AA1 & occurence3$A2 == AA2, Freq_all]
+#     res <- wilcox.test(tmp_occu, mu = mu_occu)
+#     tmp_wilcox <- data.table(A1 = AA1, A2 = AA2,
+#                              p.value = res$p.value, 
+#                              obs_freq = mu_occu, 
+#                              exp_freq_median = median(tmp_occu))
+#     tmp_wilcox_rasch[[k]] <- tmp_wilcox
+#     k <- k+1
+#   }
+# }
+# new_table <- rbindlist(tmp_wilcox_rasch)
+# new_table[, padj := p.adjust(p.value, method = "fdr")]
+# new_table[padj < 0.05, sign.label1 := "Padj < 0.05"]
+# new_table[,log2FC := log2(obs_freq/exp_freq_median)]
+# all_freq
+# new_table
 
 #########  new evaluation of the pvlaue  ###########
 
@@ -148,7 +148,6 @@ nsim <- 1000
 
 tmp_pvalue_rasch <- list()
 k <- 1
-library(data.table)
 #get third element of the first list 
 for (i1 in  1:(length(AAx)-1)) {
   AA1 <- AAx[i1]
@@ -174,7 +173,8 @@ new_table_p[padj < 0.05, sign.label1 := "Padj < 0.05"]
 new_table_p[,log2FC := log2(obs_freq/exp_freq_median)]
 new_table_p
 
-
+new_table_p <- new_table_p[A1 !="Gly"]
+new_table_p <- new_table_p[A2 !="Gly"]
 
 #####################      visualization    ####################################
 t <- ggplot(new_table_p, aes(A1,A2, fill = log2FC)) +

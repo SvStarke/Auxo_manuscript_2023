@@ -38,18 +38,21 @@ sumfreq[is.na(is.essential), is.essential := "not essential"]
   xlab("Amino Acids") +
   theme(axis.line = element_line(size=0.2, colour = "black")) +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
-  theme(axis.title.y = element_text(colour = "black", size = 10, face = "bold", margin = margin(0,10,0,0)))+
-  theme(axis.title.x = element_text(colour = "black", size = 10, face = "bold", margin = margin(10,0,0,0))) +
+  theme(axis.title.y = element_text(colour = "black", size = 10, margin = margin(0,10,0,0)))+
+  theme(axis.title.x = element_text(colour = "black", size = 10, margin = margin(10,0,0,0))) +
   theme(axis.text.x = element_text(size=8, colour = "black", hjust = 1,  angle = 45, margin = margin(10,0,0,0))) +
   theme(axis.text.y = element_text(size = 8, colour = "black")) +
   theme(plot.margin= margin(0.5,0.5,0.5,0.5, "cm")) +
   guides(fill = guide_legend(title = "Essentiality")) +
   scale_fill_manual(values = c("#fdb863", "white")) +
-  theme(legend.position = c(.98, .98), legend.justification =  c("right","top"), legend.box.just = "right") +
+  theme(legend.position = "none") +
   theme(legend.text = element_text(size=8)) +
-  theme(legend.title = element_text(size =9, face = "bold"))
+  theme(legend.title = element_text(size =10, face = "bold")) +
+  facet_grid(.~ is.essential, scales = "free_x", space = "free_x") +
+  theme(strip.text.x = element_text(size=10))
 
 ü
+
 
 ggsave("output/plots/boxplot_frequency_gut_DZHK.pdf", plot = ü,
        width = 6, height = 4)
