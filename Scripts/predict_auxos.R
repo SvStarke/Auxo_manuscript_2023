@@ -21,5 +21,3 @@ Genome <- rownames(Auxotrophy)
 Auxotrophy$Genomes <- Genome
 # ----
 Auxotrophy <- as.data.table(Auxotrophy)
- 
-

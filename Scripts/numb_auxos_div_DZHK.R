@@ -14,17 +14,17 @@ dzhk_div_numb_auxos <- merge(new, dzhk_diversity, by.x="sample", by.y="sample")
 cor.test(dzhk_div_numb_auxos$D.Shannon, dzhk_div_numb_auxos$V1, method = "spearman", exact = FALSE)
 
 ###visualization
-div_auxos <- ggplot(dzhk_div_numb_auxos, aes(D.Shannon, V1)) +
+div_auxos <- ggplot(dzhk_div_numb_auxos, aes(V1, D.Shannon)) +
   geom_point() +
   geom_smooth(method=lm) +
   theme_bw() +
-  xlab("Shannon diversity") +
-  ylab("Abundance-weighted average of auxotrophies per MAG") +
+  ylab("Shannon diversity") +
+  xlab("Abundance-weighted average of auxotrophies per MAG") +
   theme(axis.text.x = element_text(colour="black")) +
   theme(axis.text.y = element_text(colour= "black")) +
   theme(axis.title.y = element_text(size = 10, margin = margin(r = 10))) +
   theme(axis.title.x = element_text(size = 10, margin = margin(t = 10))) 
-
+div_auxos
 ggsave("output/plots/Numb_Auxos_Div.pdf", plot = div_auxos,
        width = 6, height = 5)
 

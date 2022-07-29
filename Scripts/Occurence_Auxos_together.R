@@ -37,7 +37,7 @@ library(MetBrewer)
 ###Frequencies in relation to the number of genomes
  o <- ggplot(occurence2, aes(A1,A2, fill = Freq_filt)) +
   geom_tile(color ="white", lwd= 0.5, linetype = 1.5) +
-  scale_fill_gradientn(colors = met.brewer("VanGogh3"), na.value = "gray94", limits = c(0, 0.4)) +
+  scale_fill_gradientn(colors = met.brewer("VanGogh3"), na.value = "gray94", limits = c(0, 0.5)) +
   guides(fill = guide_colourbar(barwidth = 15, barheight = 1, title ="Freq",
                                 label = TRUE, ticks = FALSE)) +
   theme(legend.position = "bottom") +

@@ -54,6 +54,7 @@ for(aa1_ind in 1:(length(AAx)-1)) {
 }
 
 a
+View(new_table_p)
 library(plyr)
 test2 <- rbind.fill(b)
 #View(test2)
@@ -167,6 +168,7 @@ for (i1 in  1:(length(AAx)-1)) {
     k <- k+1
   }
 }
+warnings()
 new_table_p <- rbindlist(tmp_pvalue_rasch)
 new_table_p[, padj := p.adjust(p.value, method = "fdr")]
 new_table_p[padj < 0.05, sign.label1 := "Padj < 0.05"]
@@ -175,7 +177,7 @@ new_table_p
 
 new_table_p <- new_table_p[A1 !="Gly"]
 new_table_p <- new_table_p[A2 !="Gly"]
-
+warnings()
 #####################      visualization    ####################################
 t <- ggplot(new_table_p, aes(A1,A2, fill = log2FC)) +
   geom_tile(color ="white", lwd= 0.5, linetype = 1.5) +
