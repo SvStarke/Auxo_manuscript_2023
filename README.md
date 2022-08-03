@@ -350,7 +350,7 @@ source("Scripts/DZHK_data_init.R.R")
 ```R
 source("Scripts/predict_auxos.R")
 ```
-###### Load Script pathway number 8 
+###### Load all scripts from flow number 8 
 
 ###### Correlation analysis
 
@@ -358,6 +358,26 @@ source("Scripts/predict_auxos.R")
 source("numb_auxos_div.R")
 ```
 
+### 15) Crossfeeding observations by calculating hamming distance
+
+###### Load models 
+
+```R
+source("Scripts/DZHK_data_init.R.R")
+```
+
+###### Predict auxotrophies
+
+```R
+source("Scripts/predict_auxos.R")
+```
+###### Load all scripts from flow number 8 
+
+###### Calculating hamming distance for correlation of diversity and hamming distance
+
+```R
+source("hamming_distance.R")
+```
 
 ### Further scripts that may be used in the future but are yet not displayed in the flowchart
 
