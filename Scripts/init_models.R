@@ -12,9 +12,7 @@ library(PResiduals)
 sybil::SYBIL_SETTINGS("SOLVER","cplexAPI")
 
 ###HRGM
-#models <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models/")
+models <- fetch_model_collection("/mnt/nuuk/2022/HRGM/models/")
 
 
-###DZHK
-#models <- fetch_model_collection("/mnt/nuuk/2022/DZHK_MGX/models/")
 
