@@ -10,7 +10,7 @@ Auxotrophie <- data.frame(model.auxo)
 
 #column und rows tauschen
 Auxotroph <- t(Auxotrophie)
-
+Auxotroph[which(is.na(Auxotroph), arr.ind = T)] <- 1
 #is.matrix(Auxotroph)
 #data frame erzeugen
 Auxotrophy <- data.frame(Auxotroph)

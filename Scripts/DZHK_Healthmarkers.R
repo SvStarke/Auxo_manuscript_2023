@@ -207,7 +207,6 @@ remove(lin_HDL,m0,m0.sum,lin_mod)
 
 corr_HDL_adjust <- corr_HDL[factor == "HDL"]
 names(corr_HDL_adjust)[names(corr_HDL_adjust) == "Pr(>|t|)"] <- "pvalue"
-corr_HDL_adjust[padjust < 0.05, sign.label1 := "P < 0.05"]
 corr_HDL_adjust$padjust_Spear = p.adjust(corr_HDL_adjust$pvalue_Part_Spear, method = "fdr")
 corr_HDL_adjust[padjust_Spear < 0.05, sign.label2 := "P < 0.05"]
 corr_HDL_adjust <- data.table(corr_HDL_adjust)
@@ -215,7 +214,7 @@ corr_HDL_adjust <- data.table(corr_HDL_adjust)
 HDL <- ggplot(corr_HDL_adjust, aes(AA, factor, fill = `Estimate`))+
   geom_tile() +
   labs(x = "Auxotrophy", y = "", shape = "")+
-  geom_point(aes(shape = sign.label1), size = 1) +
+  geom_point(aes(shape = sign.label2), size = 1) +
   scale_fill_gradient2(high = "#b2182b", mid = "white", low = "#2166ac") +
   scale_shape_manual(values = 8, na.translate = FALSE) +
   theme_minimal() +
@@ -240,7 +239,7 @@ sumfreq_TG <- aggregate(info_auxo_DZHK$prop, by=list(subject=info_auxo_DZHK$samp
 
 sumfreq_TG <- data.table(sumfreq_TG)
 sumfreq_TG <- sumfreq_TG[,`TG-Cholesterin` := TG]
-View(sumfreq_chrond_lin)
+#View(sumfreq_chrond_lin)
 
 relAA <- unique(sumfreq_TG$AA)
 lin_TG <- list()
