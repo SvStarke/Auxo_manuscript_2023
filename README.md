@@ -62,8 +62,6 @@ source("Scripts/auxotable_not_melted.R")
 source("Scripts/Completeness_pathways.R")
 ```
 
-### 
-
 ### 3)Proportions of auxotrophic to prototrophic MAGs  per phylum
 
 ##### Load models (Completeness >=85%, Contamination <=2)
