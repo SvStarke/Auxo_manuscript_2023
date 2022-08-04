@@ -26,8 +26,8 @@ sumfreq <- aggregate(u$prop, by=list(sample=u$sample, AA=u$Compound), FUN=sum)
 
 sumfreq <- as.data.table(sumfreq)
 
-sumfreq[AA %in% c("Val","Met","Leu","Ile","Trp","Phe","Lys","His","Thr"), is.essential := "essential"]
-sumfreq[is.na(is.essential), is.essential := "not essential"]
+sumfreq[AA %in% c("Val","Met","Leu","Ile","Trp","Phe","Lys","His","Thr"), is.essential := "essential (human)"]
+sumfreq[is.na(is.essential), is.essential := "not essential (human)"]
 
 
 #boxplot

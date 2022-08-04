@@ -49,4 +49,33 @@ ggsave("output/plots/hamming_Shannon.pdf", plot = Hamming_shannon,
 cor.test(Div_hamming$D.Shannon, Div_hamming$avgHamming, method = "spearman", exact = FALSE)
 
 
+##### Correlation between hamming distance and abunance-weight average of auxotrophies
 
+Auxotrophy$count <- rowSums(Auxotrophy == 0)
+
+numb_auxos_DZHK <- merge(Auxotrophy, dzhk_relabun, by.x= "Genomes", by.y="model")
+numb_auxos_DZHK <- data.table(numb_auxos_DZHK)
+
+numb_auxos_DZHK[is.na(count), count:= 0]
+
+new <- numb_auxos_DZHK[ ,sum(count*prop), by = sample]
+Hamming_numb_auxos <- merge(new, HammingDT, by.x="sample", by.y="sample")
+
+
+###### visualization ###########
+Hamming_numb <- ggplot(Hamming_numb_auxos, aes(V1, avgHamming)) +
+  geom_point() +
+  geom_smooth(method=lm) +
+  theme_bw() +
+  xlab("Abundance-weighted average of auxotrophies per MAG") +
+  ylab("Average Hamming distance") +
+  theme(axis.text.x = element_text(colour="black")) +
+  theme(axis.text.y = element_text(colour= "black")) +
+  theme(axis.title.y = element_text(size = 10, margin = margin(r = 10))) +
+  theme(axis.title.x = element_text(size = 10, margin = margin(t = 10))) 
+
+ggsave("output/plots/hamming_numb.pdf", plot = Hamming_numb,
+       width = 6, height = 5)
+
+##correlation
+cor.test(Div_hamming$D.Shannon, Div_hamming$avgHamming, method = "spearman", exact = FALSE)
