@@ -85,9 +85,9 @@ Freq_auxos$AA <- factor(Freq_auxos$AA, levels = c("His","Ile","Leu","Lys","Met",
 ##visualization
 Abun_HRGM <- ggplot(Freq_auxos, aes(AA,percentage, fill = is.essential)) +
    geom_bar(stat = "identity") +
-  ylab("Auxotrophies [%]") +
+  ylab("Auxotrophic [%]") +
   xlab("Amino acids") +
-  guides(fill =guide_legend(title="Essentiality")) +
+  guides(fill =guide_legend(title="Essentiality (human)")) +
   #theme_minimal() +
   theme(legend.position = "right") +
   theme(axis.line = element_line(size=0.2)) +

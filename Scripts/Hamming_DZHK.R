@@ -26,3 +26,27 @@ for(spli in unique(dzhk_relabun$sample)) {
 }
 
 HammingDT <- rbindlist(HammingDT)
+
+Div_hamming <- merge(HammingDT, dzhk_diversity, by.x= "sample", by.y="sample")
+
+
+###### visualization ###########
+Hamming_shannon <- ggplot(Div_hamming, aes(D.Shannon, avgHamming)) +
+  geom_point() +
+  geom_smooth(method=lm) +
+  theme_bw() +
+  xlab("Shannon diversity") +
+  ylab("Average Hamming distance") +
+  theme(axis.text.x = element_text(colour="black")) +
+  theme(axis.text.y = element_text(colour= "black")) +
+  theme(axis.title.y = element_text(size = 10, margin = margin(r = 10))) +
+  theme(axis.title.x = element_text(size = 10, margin = margin(t = 10))) 
+
+ggsave("output/plots/hamming_Shannon.pdf", plot = Hamming_shannon,
+       width = 6, height = 5)
+
+##correlation
+cor.test(Div_hamming$D.Shannon, Div_hamming$avgHamming, method = "spearman", exact = FALSE)
+
+
+
