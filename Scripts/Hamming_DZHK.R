@@ -63,7 +63,7 @@ Hamming_numb_auxos <- merge(new, HammingDT, by.x="sample", by.y="sample")
 
 
 ###### visualization ###########
-Hamming_numb <- ggplot(Hamming_numb_auxos, aes(V1, avgHamming)) +
+Hamming_numb <- ggplot(Hamming_numb_auxos, aes(V1, avgHamming,)) +
   geom_point() +
   geom_smooth(method=lm) +
   theme_bw() +
@@ -78,4 +78,4 @@ ggsave("output/plots/hamming_numb.pdf", plot = Hamming_numb,
        width = 6, height = 5)
 
 ##correlation
-cor.test(Div_hamming$D.Shannon, Div_hamming$avgHamming, method = "spearman", exact = FALSE)
+cor.test(Hamming_numb_auxos$V1, Hamming_numb_auxos$avgHamming, method = "spearman", exact = FALSE)

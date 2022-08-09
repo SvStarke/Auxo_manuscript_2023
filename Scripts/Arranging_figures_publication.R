@@ -189,18 +189,22 @@ source("Scripts/auxotable_melted_merged.R")
 
 #Analyze associations with diseases or health factors(BMI, weight, age)
 
-source("Scripts/Diseases_health_factors.R")
+source("Scripts/DZHK_healthmarkers.R")
 
 #Analyze associations with diseases or health factors(BMI, weight, age)
 
-source("Scripts/Abundancies_gut.R")
-fi7 <- ggarrange(ü, corr_health_div_plot,div_auxos , ncol=1,
-                   nrow=3, heights = c(1,1.3,1.1), widths= c(1,1,1),
-                 labels = c("A","B", "C"), hjust = c(-0.5,-0.5, -0.5))
+source("Scripts/Abundancies_Gut_DZHK.R")
+
+###diversity and frequency of auxos
+source("Scripts/diversity_Auxos.R")
+
+###combine all figures in one figure
+fi7 <- ggarrange(ü, corr_health_div_plot,div_auxos, Hamming_shannon, ncol=1,
+                   nrow=4, heights = c(1,1.3,1.1,1.1), widths= c(1,1,1,1),
+                 labels = c("A","B", "C", "D"), hjust = c(-0.5,-0.5, -0.5, -0.5))
 fi7
 ggsave("output/plots/figure7_01.06.22_new_Abund_gut_DHZK.pdf", plot = fi7,
-      width = 7, height = 15)
-
+      width = 7, height = 18)
 
 
 

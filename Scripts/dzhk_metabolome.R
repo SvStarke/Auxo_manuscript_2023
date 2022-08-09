@@ -77,10 +77,12 @@ rm(lstmp)
 dt_auxo_serumMets <- merge(dt_auxo_serumMets, BCdat$mets, by.x = "met",
                            by.y = "met_name")
 dt_auxo_serumMets[, padj := p.adjust(pval), by = .(auxo, met_class)]
+dt_auxo_serumMets[met_class == "Aminoacids", met_class:= "Amino Acids"]
+dt_auxo_serumMets[met_class == "Aminoacids Related", met_class:= "Amino Acids Related"]
 
 met_classes <- unique(dt_auxo_serumMets$met_class)
 
-ggplot(dt_auxo_serumMets[!(met_class %in% c("Triacylglycerols","Sphingolipids",
+met_DZHK <- ggplot(dt_auxo_serumMets[!(met_class %in% c("Triacylglycerols","Sphingolipids",
                                             "Glycerophospholipids","Ceramides",
                                             "Glycosylceramides",
                                             "Cholesterol Esters","Dihydroceramides",
@@ -96,6 +98,10 @@ ggplot(dt_auxo_serumMets[!(met_class %in% c("Triacylglycerols","Sphingolipids",
        shape = expression(p[adj] < 0.05)) +
   theme_bw() +
   theme(strip.background = element_blank(),
-        strip.text.y =  element_text(angle = 0, hjust = 0),
-        axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+        strip.text.y =  element_text(angle = 0, hjust = 0, colour = "black"),
+        axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1, colour = "black"),
+        axis.text.y = element_text(colour = "black")) 
+met_DZHK
+ggsave("output/plots/metabolome_DHZK.pdf", plot = met_DZHK,
+       width = 7, height = 10)
 

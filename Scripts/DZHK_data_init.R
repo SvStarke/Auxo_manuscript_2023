@@ -13,10 +13,16 @@ library(Hmisc)
 library(PResiduals)
 sybil::SYBIL_SETTINGS("SOLVER","cplexAPI")
 
+# get QC for MAGs
+completeness_cuttoff <- 85
+contamination_cutoff <- 2
 
+dzhk_MAGQC <- fread("/mnt/nuuk/2022/DZHK_MGX/atlas/completeness.tsv")
+dzhk_rel_mags <- dzhk_MAGQC[Completeness >= completeness_cuttoff & contamination_cutoff <= contamination_cutoff, `Bin Id`]
 ###models
 
-models <- fetch_model_collection("/mnt/nuuk/2022/DZHK_MGX/models/")
+models <- fetch_model_collection("/mnt/nuuk/2022/DZHK_MGX/models/",
+                                      IDs = dzhk_rel_mags)
 
 # Read bundancy table for DZHK (not yet normalalised)
 dzhk_mags_abun <- t(read.table("/mnt/nuuk/2022/DZHK_MGX/atlas/median_coverage_genomes.tsv"))

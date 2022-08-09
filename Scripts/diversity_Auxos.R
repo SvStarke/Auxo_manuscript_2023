@@ -45,10 +45,6 @@ for(AAi in AA){
   }
 }
 d1 <- rbindlist(d)
-d1
-cortet <- cor.test(divers_auxos_Trp$x, divers_auxos_Trp$D.Shannon, method = "spearman", exact = FALSE)
-
-d1
 d1$padjust = p.adjust(d1$pvalue, method = "fdr")
 d1[padjust < 0.05, sign.label1 := "Padj <0.05"]
 d1

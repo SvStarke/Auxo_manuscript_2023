@@ -51,7 +51,7 @@ dzhk_auxofreq <- merge(dzhk_auxofreq, dzhk_spl_info[, .(EMGE, sample)])
 #––––––––––––––––––––––#
 source("Scripts/readBiocrates.R")
 library(missForest)
-
+library(tidyxl)
 # serum metabolome data
 BCdat <- readBiocrates(file = "data/dzhk_metabolome/DZHK_Serum_Ergbnisse- 2021-05-07_UKSH_Serum_Februar2021.xlsx",
                        sheet = "Data Export",
