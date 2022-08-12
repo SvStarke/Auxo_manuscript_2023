@@ -49,6 +49,7 @@ d1$padjust = p.adjust(d1$pvalue, method = "fdr")
 d1[padjust < 0.05, sign.label1 := "Padj <0.05"]
 d1
 
+d1 <- d1[AA != "Gly"]
 
 diversity_auxo <- ggplot(d1, aes(index, AA, fill = Estimate))+
   geom_tile() +
@@ -57,10 +58,9 @@ diversity_auxo <- ggplot(d1, aes(index, AA, fill = Estimate))+
   scale_fill_gradient2(high = "#b2182b", mid = "white", low = "#2166ac") +
   scale_shape_manual(values = 8, na.translate = FALSE) +
   theme_minimal() +
- # scale_x_discrete("Diseases", labels = c("IBS" = "IBS", "IBD" = "IBD", "chrond" = "Chr.Diarrhea", "liverdis" = "Liverdisease", "diabetes" = "Diabetes", "parodontitis" = "Periodontitis", "rheumato"="Rheumatism", "hypertens" ="Hypertension")) +
   theme(legend.position = "right",
         legend.justification = 	0.5,
-        axis.text.x = element_text(color = "black", angle = 90, vjust = 0.2, size = 8),
+        axis.text.x = element_text(color = "black", angle =0, vjust = 0.2, size = 8),
         axis.text.y = element_text(color = "black", size = 8)) +
   theme(axis.title.y = element_text(margin = margin(t =0, r = 20, b= 0, l = 0))) +
   theme(axis.title.x = element_text(face  = "bold", size = 10, margin = margin(t=20, r = 0, b= 0, l = 0))) +
@@ -77,7 +77,38 @@ diversity_auxo <- diversity_auxo + guides(shape= "none")
 diversity_auxo
 
 ggsave("output/plots/diversity_auxos_DHZK.pdf", plot = diversity_auxo,
-       width = 5, height = 6)
+       width = 4, height = 6)
+
+
+###only shannon diversity
+diversity_auxo <- ggplot(d1[index == "D.Shannon"], aes(index, AA, fill = Estimate))+
+  geom_tile() +
+  labs(y = "", x = "Diseases", shape = "") +
+  geom_point(aes(shape = sign.label1), size = 1) +
+  scale_fill_gradient2(high = "#b2182b", mid = "white", low = "#2166ac") +
+  scale_shape_manual(values = 8, na.translate = FALSE) +
+  theme_minimal() +
+  theme(legend.position = "right",
+        legend.justification = 	0.5,
+        axis.text.x = element_text(color = "black", angle =0, vjust = 0.2, size = 13),
+        axis.text.y = element_text(color = "black", size = 13)) +
+  theme(axis.title.y = element_text(margin = margin(t =0, r = 20, b= 0, l = 0))) +
+  theme(axis.title.x = element_text(size = 14, margin = margin(t=20, r = 0, b= 0, l = 0))) +
+  theme(axis.title.y = element_text(size = 14))+
+  theme(panel.background = element_blank()) +
+  theme(legend.title = element_text(size=12)) +
+  labs(fill="Estimate", x = "Diversity index", y="Auxotrophy") +
+  theme(legend.text = element_text(size=10)) +
+  theme(panel.grid.major = element_blank()) +
+  theme(legend.position = "top",
+        legend.justification = 	1)
+diversity_auxo + guides(shape = guide_legend(order = 1))
+diversity_auxo <- diversity_auxo + guides(shape= "none")
+diversity_auxo
+
+ggsave("output/plots/diversity_auxos_DHZK_only_Shannon.pdf", plot = diversity_auxo,
+       width = 3, height = 7)
+
 
 
 ###add diversity results to big figure of healthmarkers and freq of auxotrophies
@@ -109,7 +140,7 @@ corr_health_div_all$parameter[corr_health_div_all$parameter == "Thr"] <- "Hemato
 unique(corr_health_div_all$index)
 
 ##visualization
-corr_health_div_plot <- ggplot(corr_health_div_all, aes(x = index,y= AA, fill =`Estimate`))+
+corr_health_div_plot <- ggplot(corr_health_div_all[AA != "Gly"], aes(x = index,y= AA, fill =`Estimate`))+
   geom_tile() +
   labs(y = "Auxotrophy", x = "", shape = "")+
   geom_point(aes(shape = sign.label1), size = 1) +
