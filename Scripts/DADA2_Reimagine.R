@@ -63,7 +63,7 @@ table(nchar(getSequences(seqtab)))
 ###remove chimeras
 seqtab.nochim <- removeBimeraDenovo(seqtab, method="consensus", multithread=TRUE, verbose=TRUE)
 dim(seqtab.nochim)
-
+View(seqtab.nochim)
 sum(seqtab.nochim)/sum(seqtab)
 
 
@@ -96,6 +96,7 @@ ggplot(table, aes( x=Genus, y=freq)) +
 ###species level
 taxa_spec <- addSpecies(taxa, "/home/svenja/sratoolkit.3.0.0-ubuntu64/Fastq-files/silva_species_assignment_v132.fa.gz")
 
+View(taxa_spec)
 ##inspection of taxonomic assignments
 taxa.print <- taxa # Removing sequence rownames for display only
 rownames(taxa.print) <- NULL
@@ -105,5 +106,6 @@ View(taxa.print)
 ####
 library(data.table)
 metadata_reimagine <- fread("/home/svenja/sratoolkit.3.0.0-ubuntu64/Fastq-files/SraRunTable_regions.csv")
-
-
+head(metadata_reimagine)
+describe(metadata_reimagine$Alias)
+View(metadata_reimagine)

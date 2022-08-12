@@ -1,8 +1,8 @@
 metadata_REIMAGINE <- fread("/home/svenja/Downloads/SraRunTable_3.txt")
 fwrite(metadata_REIMAGINE, file = "Metadata_Reimagine.csv")
-describe(metadata_REIMAGINE$BioSample)
-describe(metadata_REIMAGINE$Alias)
-describe(metadata_REIMAGINE$`Sample Name`)
+describe(metadata_REIMAGINE_regions$BioSample)
+describe(metadata_REIMAGINE_regions$Alias)
+describe(metadata_REIMAGINE_regions$`Sample Name`)
 View(metadata_REIMAGINE)         
 
 
