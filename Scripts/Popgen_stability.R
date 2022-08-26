@@ -1,4 +1,6 @@
-####
+
+
+
 ##prepare data table about meta information
 
 ##load info about all samples
@@ -12,6 +14,7 @@ head(popgen_F1)
 colnames(popgen_F1)
 
 popgen_F1 <- popgen_F1[,c(1,2,20)]
+
 ##load second timepoint
 popgen_F2 <- fread("/mnt/nuuk/2022/MR_popgen_MGX/meta/1.metadata2.tsv")
 popgen_F2$newID <- sub("$", "_F2", popgen_F2$new_id)
@@ -46,6 +49,13 @@ F1_names <- F1_names[F1_names %in% popgen_data_names]
 F2_names <- unique(popgen_F2$SampleID)
 F2_names <- F2_names[F2_names %in% popgen_data_names]
 
+
+
+test2 <- test[new_id == "2019-038_SPC_1788"]
+test2 <- test2[,2:571]
+test2 <- mutate_all(test2, function(x) as.numeric(as.character(x)))
+vegdist(test2, method = "bray")
+View(test)
 k <- 1
 Bray_all <- list()
 for(F1 in F1_names) {
@@ -58,7 +68,7 @@ for(F1 in F1_names) {
       df2 <- mutate_all(tmp2, function(x) as.numeric(as.character(x)))
       Bray_tmp <-vegdist(df2, method = "bray")
       #Bray_tmp
-      Bray <- data.table(Sample = tmp$new_id[[1]],
+      Bray <- data.table(Sample = F1,
                          Bray_dist = Bray_tmp)
       Bray_all[[k]] <- Bray
       k <- k+1
@@ -68,6 +78,7 @@ for(F1 in F1_names) {
 
 Bray_samples <- rbindlist(Bray_all)
 Bray_all
+View(Bray_samples)
 
 ###get abundance weight average of auxotrophies
 
@@ -80,8 +91,10 @@ numb_auxos_popgen <- data.table(numb_auxos_popgen)
 numb_auxos_popgen[is.na(count), count:= 0]
 
 new <- numb_auxos_popgen[ ,sum(count*prop), by = sample]
-popgen_div_numb_auxos <- merge(new, popgen_data, by.x="sample", by.y="atlas_name")
-popgen_div_numb_auxos <- popgen_div_numb_auxos[popgen_div_numb_auxos$SampleID %in% F1_names]
+tmp_popgen_div_numb_auxos <- merge(new, popgen_data, by.x="sample", by.y="atlas_name")
+
+#keep only auxotrophic data for F1 
+popgen_div_numb_auxos <- tmp_popgen_div_numb_auxos[tmp_popgen_div_numb_auxos$SampleID %in% F1_names]
 
 popgen_bray_numb_auxos <- merge(popgen_div_numb_auxos, Bray_samples, by.x="new_id", by.y="Sample")
 
@@ -102,3 +115,43 @@ stability <- ggplot(popgen_bray_numb_auxos, aes(V1, Bray_dist,)) +
   theme(axis.title.y = element_text(size = 10, margin = margin(r = 10))) +
   theme(axis.title.x = element_text(size = 10, margin = margin(t = 10))) 
 stability
+
+ggsave("output/plots/stability_auxos.pdf", plot = stability,
+       width = 5, height = 5)
+
+
+
+####
+
+###visualization of number of average
+
+### new column with information about timepoints
+tmp_popgen_div_numb_auxos[, Time := gsub("^.{9}", "", SampleID)]
+df <- tmp_popgen_div_numb_auxos
+View(tmp_popgen_div_numb_auxos)
+
+
+
+
+sel_order <- 
+  df %>% 
+  filter(Time == "F1") %>% 
+  arrange(desc(V1)) %>% 
+  mutate(new_id = factor(new_id))
+
+
+order_stability <- df %>% 
+  mutate(new_id = factor(new_id, levels = sel_order$new_id, ordered = TRUE)) %>% 
+  ggplot(aes(x = new_id, y = V1), group = new_id) +
+  geom_point(aes(colour = Time)) +
+  xlab("Samples") +
+  ylab("Abundance-weighted average of auxotrophies per MAG") +
+  theme(axis.text.x = element_blank()) +
+  labs(colour = "Timepoint") +
+  guides(fill=guide_legend(title="Timepoints")) +
+  theme(panel.background = element_rect(fill="white", colour= "white")) +
+  theme(axis.line = element_line(size=0.2))
+
+order_stability 
+ggsave("output/plots/order_stabilityx.pdf", plot = order_stability,
+       width = 10, height = 5)

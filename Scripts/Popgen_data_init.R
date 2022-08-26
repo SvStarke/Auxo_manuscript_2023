@@ -22,17 +22,17 @@ contamination_cutoff <- 2
 
 popgen_MAGQC <- fread("/mnt/nuuk/2022/MR_popgen_MGX/atlas/completeness.tsv")
 popgen_rel_mags <- popgen_MAGQC[Completeness >= completeness_cuttoff & contamination_cutoff <= contamination_cutoff, `Bin Id`]
-###models
+### load models
 
 models <- fetch_model_collection("/mnt/nuuk/2022/MR_popgen_MGX/models/",
                                  IDs = popgen_rel_mags)
 
-# Read bundancy table for popgen (not yet normalalised)
+# Read abundancy table for popgen (not yet normalalised)
 popgen_mags_abun <- t(read.table("/mnt/nuuk/2022/MR_popgen_MGX/atlas/median_coverage_genomes.tsv"))
 popgen_mags_abun1 <- data.frame(popgen_mags_abun)
 popgen_mags_abun1$MAGs <- row.names(popgen_mags_abun1)
 
-##filtering for genomes (QC)
+##filtering rel abundany table for fitlered models
 popgen_rel_mags <- data.frame(popgen_rel_mags)
 popgen_mags_abun1 <- merge(popgen_mags_abun1, popgen_rel_mags, by.x="MAGs", by.y="popgen_rel_mags")
 
