@@ -1,6 +1,3 @@
-
-
-
 ##prepare data table about meta information
 
 ##load info about all samples
@@ -49,12 +46,6 @@ F1_names <- F1_names[F1_names %in% popgen_data_names]
 F2_names <- unique(popgen_F2$SampleID)
 F2_names <- F2_names[F2_names %in% popgen_data_names]
 
-
-
-test2 <- test[new_id == "2019-038_SPC_1788"]
-test2 <- test2[,2:571]
-test2 <- mutate_all(test2, function(x) as.numeric(as.character(x)))
-vegdist(test2, method = "bray")
 View(test)
 k <- 1
 Bray_all <- list()
@@ -96,7 +87,7 @@ tmp_popgen_div_numb_auxos <- merge(new, popgen_data, by.x="sample", by.y="atlas_
 #keep only auxotrophic data for F1 
 popgen_div_numb_auxos <- tmp_popgen_div_numb_auxos[tmp_popgen_div_numb_auxos$SampleID %in% F1_names]
 
-popgen_bray_numb_auxos <- merge(popgen_div_numb_auxos, Bray_samples, by.x="new_id", by.y="Sample")
+popgen_bray_numb_auxos <- merge(popgen_div_numb_auxos, Bray_samples, by.x="SampleID", by.y="Sample")
 
 
 ##correlation analysis for stability
