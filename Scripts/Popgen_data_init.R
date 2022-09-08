@@ -43,5 +43,3 @@ popgen_relabun <- data.table(as.table(popgen_mags_abun))
 setnames(popgen_relabun, c("model","sample","prop"))
 popgen_relabun[, prop := prop/sum(prop), by = sample]
 
-
-

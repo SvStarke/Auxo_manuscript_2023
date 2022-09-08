@@ -3,7 +3,7 @@
 ##load info about all samples
 popgen_samples <- fread("/mnt/nuuk/2022/MR_popgen_MGX/atlas/atlas_samples.csv")
 popgen_samples$new_name <- sub("-L001|-L002", "", popgen_samples$Full_Name)
-
+View(popgen_samples)
 ##load first timepoint
 popgen_F1 <- fread("/mnt/nuuk/2022/MR_popgen_MGX/meta/1.metadata1.tsv")
 popgen_F1$newID <- sub("$", "_F1", popgen_F1$new_id)
@@ -20,12 +20,12 @@ colnames(popgen_F2) [2] <- "new_id"
 popgen_F2 <- popgen_F2[,c(1,2,19)]
 
 F1_F2 <- rbind(popgen_F2, popgen_F1)
-
+View(popgen_F1)
 ##merge information about time points with sample info
 
 popgen_data <- merge(F1_F2, popgen_samples, by.x= "newID", by.y="new_name")
 View(popgen_data)
-#delete sample ID with only  available information about one timepoint
+#delete sample ID with only  available information about one timepoint in original dataframe about samples
 popgen_data <- popgen_data[popgen_data$atlas_name != "S26" & popgen_data$atlas_name != "S38" & popgen_data$atlas_name!= "S66"]
 popgen_data
 
@@ -60,7 +60,7 @@ for(F1 in F1_names) {
       Bray_tmp <-vegdist(df2, method = "bray")
       #Bray_tmp
       Bray <- data.table(Sample = F1,
-                         Bray_dist = Bray_tmp)
+                         Bray_distance = Bray_tmp)
       Bray_all[[k]] <- Bray
       k <- k+1
      }
@@ -91,16 +91,16 @@ popgen_bray_numb_auxos <- merge(popgen_div_numb_auxos, Bray_samples, by.x="Sampl
 
 
 ##correlation analysis for stability
-cor.test(popgen_bray_numb_auxos$Bray_dist, popgen_bray_numb_auxos$V1, method = "spearman", exact = FALSE)
+cor.test(popgen_bray_numb_auxos$Bray_distance, popgen_bray_numb_auxos$V1, method = "spearman", exact = FALSE)
 
 
 ##visualization
-stability <- ggplot(popgen_bray_numb_auxos, aes(V1, Bray_dist,)) +
+stability <- ggplot(popgen_bray_numb_auxos, aes(V1, Bray_distance,)) +
   geom_point() +
   geom_smooth(method=lm) +
   theme_bw() +
   xlab("Abundance-weighted average of auxotrophies per MAG") +
-  ylab("Bray distance") +
+  ylab("Bray Curtis distance") +
   theme(axis.text.x = element_text(colour="black")) +
   theme(axis.text.y = element_text(colour= "black")) +
   theme(axis.title.y = element_text(size = 10, margin = margin(r = 10))) +
