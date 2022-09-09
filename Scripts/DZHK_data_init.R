@@ -37,6 +37,7 @@ dzhk_diversity <- data.table(sample = colnames(dzhk_mags_abun),
 # Calculate realtive abundancy table
 dzhk_relabun <- data.table(as.table(dzhk_mags_abun))
 setnames(dzhk_relabun, c("model","sample","prop"))
+dzhk_relabun <- dzhk_relabun[model %in% dzhk_rel_mags]
 dzhk_relabun[, prop := prop/sum(prop), by = sample]
 
 

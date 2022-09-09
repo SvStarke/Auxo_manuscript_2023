@@ -13,7 +13,7 @@ library(rstatix)
 library(RaschSampler)
 library(Hmisc)
 library(PResiduals)
-sybil::SYBIL_SETTINGS("SOLVER","cplexAPI")
+#sybil::SYBIL_SETTINGS("SOLVER","cplexAPI")
 
 
 # get QC for MAGs
@@ -41,5 +41,10 @@ popgen_mags_abun1 <- merge(popgen_mags_abun1, popgen_rel_mags, by.x="MAGs", by.y
 # Calculate realtive abundancy table
 popgen_relabun <- data.table(as.table(popgen_mags_abun))
 setnames(popgen_relabun, c("model","sample","prop"))
+popgen_rel_mags <- popgen_MAGQC[Completeness >= completeness_cuttoff & contamination_cutoff <= contamination_cutoff, `Bin Id`]
+popgen_relabun <- popgen_relabun[model %in% popgen_rel_mags]
 popgen_relabun[, prop := prop/sum(prop), by = sample]
+popgen_norm <- dcast(popgen_relabun, sample ~ model)
+
+
 
