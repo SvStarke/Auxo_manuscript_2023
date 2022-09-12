@@ -195,8 +195,6 @@ x<- merge(popgen_div_numb_auxos, Jac_samples, by.x="SampleID", by.y="Sample")
 ##correlation analysis for stability
 cor.test(x$Jac_distance, x$V1, method = "spearman", exact = FALSE)
 
-
-
 ### new column with information about timepoints
 tmp_popgen_div_numb_auxos[, Time := gsub("^.{9}", "", SampleID)]
 df <- tmp_popgen_div_numb_auxos
