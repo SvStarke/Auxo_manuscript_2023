@@ -4,6 +4,11 @@
 
 nutr_data_popgen <- fread("/mnt/nuuk/2022/MR_popgen_MGX/meta/11.food.groups.nutrients.f1.f2.tsv")
 
+####calculate energy-%
+nutr_data_popgen[,c(6:28)] <- nutr_data_popgen[,c(6:28)] * 17
+nutr_data_popgen <- nutr_data_popgen%>% mutate(across(c(6:28), .fns = ~./GJ)*100)
+
+
 #calculate total amount of every consumed amino acid
 ID <- unique(nutr_data_popgen$new_id)
 k <- 1
@@ -12,6 +17,7 @@ nutr_list <- list()
 for(id in ID) {
   tmp <- nutr_data_popgen[new_id == id]
   tmp <- tmp[,c(1,6:28)]
+  tmp[is.na(tmp)] <- 0
   tmp_sums <- colSums(tmp[,-1])
   tmp_sums <- data.frame(tmp_sums)
   tmp_sums_t <- data.frame(t(tmp_sums))
@@ -21,8 +27,11 @@ for(id in ID) {
 }
 nutr_popgen_sums_AA <- rbindlist(nutr_list)
 
+
+
 #exclude columns without AA data
 nutr_popgen_sums_AA <- nutr_popgen_sums_AA[,!c(5,8,14,15,16)]
+
 
 
 sub <- unique(popgen_relabun$sample)
@@ -68,7 +77,8 @@ popgen_F2 <- popgen_F2[,c(1,2,19)]
 F1_F2 <- rbind(popgen_F2, popgen_F1)
 #View(popgen_F1)
 ##merge information about time points with sample info
-
+popgen_samples <- fread("/mnt/nuuk/2022/MR_popgen_MGX/atlas/atlas_samples.csv")
+popgen_samples$new_name <- sub("-L001|-L002", "", popgen_samples$Full_Name)
 popgen_data <- merge(F1_F2, popgen_samples, by.x= "newID", by.y="new_name")
 #View(popgen_data)
 #delete sample ID with only  available information about one timepoint in original dataframe about samples
@@ -134,15 +144,19 @@ spear_Popgen_F1 <- rbindlist(spear_list)
 spear_Popgen_F1[, padj := p.adjust(pvalue, method = "fdr")]
 spear_Popgen_F1[padj < 0.05, sign.label1 := "P < 0.05"]
 
-nutrition_popgen_F1 <- ggplot(spear_Popgen_F1, aes(Auxo, Intake_AA, fill = rho)) +
+nutrition_popgen_F1 <- ggplot(spear_Popgen_F1[Auxo!="Gly"], aes(Auxo, Intake_AA, fill = rho)) +
   geom_tile() +
   geom_point(aes(shape = sign.label1)) +
   scale_fill_gradient2(high = "#ca0020", mid = "white", low = "#0571b0") +
-  scale_shape_manual(values = 8, na.translate = FALSE)
+  scale_shape_manual(values = 8, na.translate = FALSE) +
+  xlab("Auxotrophy") +
+  ylab("Intake of amino acids [E%]") +
+  theme(panel.background = element_rect(fill="white", colour= "white")) +
+  theme(axis.text.x = element_text(colour = "black"),
+  axis.text.y = element_text(colour = "black"))
 
 ggsave("output/plots/AA_intake_Auxos_popgen_F1.pdf", plot = nutrition_popgen_F1,
        width = 7, height = 5)
-
 
 
 #### Spearman correlation analysis F2
@@ -170,11 +184,17 @@ spear_Popgen_F2 <- rbindlist(spear_list)
 spear_Popgen_F2[, padj := p.adjust(pvalue, method = "fdr")]
 spear_Popgen_F2[padj < 0.05, sign.label1 := "P < 0.05"]
 
-nutrition_popgen_F2 <- ggplot(spear_Popgen_F2, aes(Auxo, Intake_AA, fill = rho)) +
+nutrition_popgen_F2 <- ggplot(spear_Popgen_F2[Auxo != "Gly"], aes(Auxo, Intake_AA, fill = rho)) +
   geom_tile() +
   geom_point(aes(shape = sign.label1)) +
   scale_fill_gradient2(high = "#ca0020", mid = "white", low = "#0571b0") +
-  scale_shape_manual(values = 8, na.translate = FALSE)
+  scale_shape_manual(values = 8, na.translate = FALSE) +
+  xlab("Auxotrophy") +
+  ylab("Intake of amino acids [E%]") +
+  theme(panel.background = element_rect(fill="white", colour= "white")) +
+  theme(axis.text.x = element_text(colour = "black"),
+        axis.text.y = element_text(colour = "black"))
+
 
 ggsave("output/plots/AA_intake_Auxos_popgen_F2.pdf", plot = nutrition_popgen_F2,
        width = 7, height = 5)

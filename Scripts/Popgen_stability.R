@@ -40,6 +40,7 @@ rownames(popgen_mags_abun1) <- popgen_mags_abun1[,1]
 popgen_mags_abun1 <- t(popgen_mags_abun1)
 popgen_mags_abun1 <- data.frame(popgen_mags_abun1)
 popgen_mags_abun1$sample <- row.names(popgen_mags_abun1)
+
 #View(popgen_mags_abun1)
 test <- merge(popgen_mags_abun1, popgen_data, by.x= "sample", by.y = "atlas_name")
 test <- data.table(test)
