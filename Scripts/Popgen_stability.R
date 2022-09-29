@@ -36,7 +36,6 @@ popgen_data <- popgen_data[popgen_data$atlas_name != "S26" & popgen_data$atlas_n
 popgen_data
 
 ###calculate bray curtis dissimilarity between two time points
-rownames(popgen_mags_abun1) <- popgen_mags_abun1[,1]
 popgen_mags_abun1 <- t(popgen_mags_abun1)
 popgen_mags_abun1 <- data.frame(popgen_mags_abun1)
 popgen_mags_abun1$sample <- row.names(popgen_mags_abun1)
@@ -146,16 +145,16 @@ stability <- ggplot(popgen_bray_numb_auxos2, aes(V1, Bray_distance)) +
   geom_point() +
   geom_smooth(method=lm) +
   theme_bw() +
-  xlab("Abundance-weighted average of auxotrophies per MAG") +
+  xlab("Abundance-weighted average \n of auxotrophies per MAG") +
   ylab("Bray Curtis distance") +
   theme(axis.text.x = element_text(colour="black")) +
   theme(axis.text.y = element_text(colour= "black")) +
-  theme(axis.title.y = element_text(size = 10, margin = margin(r = 10))) +
-  theme(axis.title.x = element_text(size = 10, margin = margin(t = 10))) 
+  theme(axis.title.y = element_text(size = 12, margin = margin(r = 10))) +
+  theme(axis.title.x = element_text(size = 12, margin = margin(t = 10))) 
 stability
 
 ggsave("output/plots/stability_auxos.pdf", plot = stability,
-       width = 5, height = 5)
+       width = 4, height = 4)
 
 
 ###############           Jaccard distance              ################
