@@ -377,6 +377,84 @@ source("Scripts/predict_auxos.R")
 source("hamming_distance.R")
 ```
 
+### 16) Metabolome levels and frequency of auxotrophic bacteria
+
+###### Load models 
+
+```R
+source("Scripts/DZHK_data_init.R.R")
+```
+
+###### Predict auxotrophies
+
+```R
+source("Scripts/predict_auxos.R")
+```
+
+###### Add information about the genomes
+
+```R
+source("Scripts/auxotable_melted_merged.R")
+```
+
+###### Association between the frequency of auxotrophic bacteria and serum levels
+
+```R
+source("dzhk_metabolome.R")
+```
+
+### 17) Metabolome levels and frequency of auxotrophic bacteria
+
+###### Load models 
+
+```R
+source("Scripts/DZHK_data_init.R.R")
+```
+
+###### Predict auxotrophies
+
+```R
+source("Scripts/predict_auxos.R")
+```
+
+###### Add information about the genomes
+
+```R
+source("Scripts/auxotable_melted_merged.R")
+```
+
+###### Auxotrophic bacteria and stability 
+
+```R
+source("Popgen_stability.R")
+```
+
+### 18) Metabolome levels and frequency of auxotrophic bacteria
+
+###### Load models 
+
+```R
+source("Scripts/DZHK_data_init.R.R")
+```
+
+###### Predict auxotrophies
+
+```R
+source("Scripts/predict_auxos.R")
+```
+
+###### Add information about the genomes
+
+```R
+source("Scripts/auxotable_melted_merged.R")
+```
+
+###### Auxotrophic bacteria and dietary intake of amino acids
+
+```R
+source("AA_intake_popgen_auxos.R")
+```
+
 ### Further scripts that may be used in the future but are yet not displayed in the flowchart
 
 ### Completeness of bile acid metabolism pathways
