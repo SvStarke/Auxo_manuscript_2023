@@ -1,4 +1,4 @@
-
+########### Abundancies of auxotrophic bacteria in the gut ###########
 
 sub <- unique(dzhk_relabun$sample)
 relAA <- unique(Auxotrophy_2$Compound)

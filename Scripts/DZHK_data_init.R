@@ -11,7 +11,7 @@ library(rstatix)
 library(RaschSampler)
 library(Hmisc)
 library(PResiduals)
-sybil::SYBIL_SETTINGS("SOLVER","cplexAPI")
+#sybil::SYBIL_SETTINGS("SOLVER","cplexAPI")
 
 # get QC for MAGs
 completeness_cuttoff <- 85
