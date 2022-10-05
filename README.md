@@ -403,7 +403,7 @@ source("Scripts/auxotable_melted_merged.R")
 source("dzhk_metabolome.R")
 ```
 
-### 17) Metabolome levels and frequency of auxotrophic bacteria
+### 17) Influence of auxotrophic bacteria on the stability
 
 ###### Load models 
 
@@ -429,7 +429,7 @@ source("Scripts/auxotable_melted_merged.R")
 source("Popgen_stability.R")
 ```
 
-### 18) Metabolome levels and frequency of auxotrophic bacteria
+### 18) Intake of amino acids on the frequency of amino acid auxotrophic bacteria
 
 ###### Load models 
 
