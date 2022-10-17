@@ -42,8 +42,8 @@ Hamming_shannon <- ggplot(Div_hamming, aes(D.Shannon, avgHamming)) +
   ylab("Average Hamming distance") +
   theme(axis.text.x = element_text(colour="black")) +
   theme(axis.text.y = element_text(colour= "black")) +
-  theme(axis.title.y = element_text(size = 10, margin = margin(r = 10))) +
-  theme(axis.title.x = element_text(size = 10, margin = margin(t = 10))) 
+  theme(axis.title.y = element_text(size = 8, margin = margin(r = 10))) +
+  theme(axis.title.x = element_text(size = 8, margin = margin(t = 10))) 
 
 ggsave("output/plots/hamming_Shannon.pdf", plot = Hamming_shannon,
        width = 6, height = 5)
@@ -74,8 +74,8 @@ Hamming_numb <- ggplot(Hamming_numb_auxos, aes(V1, avgHamming,)) +
   ylab("Average Hamming distance") +
   theme(axis.text.x = element_text(colour="black")) +
   theme(axis.text.y = element_text(colour= "black")) +
-  theme(axis.title.y = element_text(size = 10, margin = margin(r = 10))) +
-  theme(axis.title.x = element_text(size = 10, margin = margin(t = 10))) 
+  theme(axis.title.y = element_text(size = 8, margin = margin(r = 10))) +
+  theme(axis.title.x = element_text(size = 8, margin = margin(t = 10))) 
 
 ggsave("output/plots/hamming_numb.pdf", plot = Hamming_numb,
        width = 6, height = 5)

@@ -22,8 +22,8 @@ div_auxos <- ggplot(dzhk_div_numb_auxos, aes(D.Shannon, V1)) +
   ylab("Abundance-weighted average of auxotrophies per MAG") +
   theme(axis.text.x = element_text(colour="black")) +
   theme(axis.text.y = element_text(colour= "black")) +
-  theme(axis.title.y = element_text(size = 10, margin = margin(r = 10))) +
-  theme(axis.title.x = element_text(size = 10, margin = margin(t = 10))) 
+  theme(axis.title.y = element_text(size = 8, margin = margin(r = 10))) +
+  theme(axis.title.x = element_text(size = 8, margin = margin(t = 10))) 
 div_auxos
 ggsave("output/plots/Numb_Auxos_Div.pdf", plot = div_auxos,
        width = 6, height = 5)

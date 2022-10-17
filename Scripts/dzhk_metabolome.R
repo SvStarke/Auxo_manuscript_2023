@@ -82,6 +82,19 @@ dt_auxo_serumMets[met_class == "Aminoacids Related", met_class:= "Amino Acids Re
 
 met_classes <- unique(dt_auxo_serumMets$met_class)
 
+###avoid abbrevations
+dt_auxo_serumMets1 <- dt_auxo_serumMets
+dt_auxo_serumMets[met =="Orn", met := "Ornithine"]
+dt_auxo_serumMets[met =="HCys", met := "Homocysteine"]
+dt_auxo_serumMets[met =="HArg", met := "Homoarginine"]
+dt_auxo_serumMets[met =="Cit", met := "Citrulline"]
+dt_auxo_serumMets[met =="Lac", met := "Lactic acid"]
+dt_auxo_serumMets[met =="HipAcid", met := "Hippuric acid"]
+dt_auxo_serumMets[met =="H1", met := "Hexoses"]
+dt_auxo_serumMets[met =="AconAcid", met := "Aconitic acid"]
+dt_auxo_serumMets1[met =="beta-Ala", met := "beta-Alanine"]
+
+### visualization
 met_DZHK <- ggplot(dt_auxo_serumMets[!(met_class %in% c("Triacylglycerols","Sphingolipids",
                                             "Glycerophospholipids","Ceramides",
                                             "Glycosylceramides",
@@ -97,10 +110,14 @@ met_DZHK <- ggplot(dt_auxo_serumMets[!(met_class %in% c("Triacylglycerols","Sphi
   labs(x = "Auxotrophy", y = "Metabolite",
        shape = expression(p[adj] < 0.05)) +
   theme_bw() +
+  labs(fill="Estimate") +
   theme(strip.background = element_blank(),
-        strip.text.y =  element_text(angle = 0, hjust = 0, colour = "black"),
-        axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1, colour = "black"),
-        axis.text.y = element_text(colour = "black")) 
+        strip.text.y =  element_text(angle = 0, hjust = 0, colour = "black", size = 8),
+        axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1, colour = "black", size = 8),
+        axis.text.y = element_text(colour = "black", size = 8)) +
+  theme(legend.text = element_text(size=7)) +
+  theme(legend.title = element_text(size=8)) 
+  
 met_DZHK
 ggsave("output/plots/metabolome_DHZK.pdf", plot = met_DZHK,
        width = 7, height = 10)

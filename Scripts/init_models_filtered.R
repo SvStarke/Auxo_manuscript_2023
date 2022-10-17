@@ -11,7 +11,7 @@ library(rstatix)
 library(RaschSampler)
 library(Hmisc)
 library(PResiduals)
-sybil::SYBIL_SETTINGS("SOLVER","cplexAPI")
+#sybil::SYBIL_SETTINGS("SOLVER","cplexAPI")
 
 
 Metadata <- fread("/mnt/nuuk/2021/HRGM/REPR_Genomes_metadata.tsv")

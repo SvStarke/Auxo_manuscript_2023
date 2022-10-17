@@ -164,12 +164,12 @@ fi6.1 +theme(plot.margin = unit(c(1,0.5,2,0.5), "cm")) +
   theme(legend.text = element_text(size=10),
         legend.title = element_text(size=8))
 install.packages()
-#library(png)
-#img <- readPNG()
+
 fi6 <- ggarrange(fi6.1,
                  labels = c("A"),
                  ncol=1, nrow= 1, common.legend = FALSE)
 fi6
+
 ggsave("output/plots/figure6_28.04.22.pdf", plot = fi6,
        width = 8, height = 3)
 
@@ -201,12 +201,12 @@ source("Scripts/diversity_Auxos.R")
 ###combine all figures in one figure
 fi7 <- ggarrange(ü, corr_health_div_plot,div_auxos, Hamming_shannon, ncol=1,
                    nrow=4, heights = c(1,1.3,1.1,1.1), widths= c(1,1,1,1),
-                 labels = c("A","B", "C", "D"), hjust = c(-0.5,-0.5, -0.5, -0.5), vjust = c(1,1,-0.5,1))
+                 labels = c("A","B", "C", "D"), hjust = c(-0.5,-0.5, -0.5, -0.5), vjust = c(1.5,1,-0.5,1))
 fi7
-fi7.1 <- ggarrange(fi7,met_DZHK, ncol = 2, nrow=1, widths = c(1,1.2), labels = "E",hjust = c(-41))
+fi7.1 <- ggarrange(fi7,met_DZHK, ncol = 2, nrow=1, widths = c(1.2,1.2), labels = "E",hjust = c(-45))
 fi7.1
 ggsave("output/plots/figure7_01.06.22_new_Abund_gut_DHZK.pdf", plot = fi7.1,
-      width = 12, height = 16)
+      width = 12, height = 15)
 
 
 
@@ -229,4 +229,16 @@ prop_all <- ggarrange(Asp, Asn, Leu,Ile,Glu,Gln,Val,Thr,Chor,Trp,Ser,Cys,Tyr,Phe
                       nrow=7, ncol = 3, common.legend = TRUE)
 ggsave("output/plots/suppfigure2_03.06.pdf", plot = prop_all,
        width = 10, height = 20)
+
+
+###supplementary material figure for intake of amino acids and frequency of auxotrophic bacteria
+
+nutr_F1F2_freq <- ggarrange(nutrition_popgen_F1, nutrition_popgen_F2,
+                            nrow =1, ncol=2, common.legend = TRUE,
+                            labels = c("A","B"))
+
+ggsave("output/plots/suppfigure_intakeAA_freqAuxos.pdf", plot=nutr_F1F2_freq,
+       width= 11, height=5)
+
+
 

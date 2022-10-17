@@ -151,22 +151,21 @@ corr_health_div_plot <- ggplot(corr_health_div_all[AA != "Gly"], aes(x = index,y
         legend.justification = 	0.5,
         axis.text.x = element_text(color = "black", angle = 90, hjust = 1, size = 8),
         axis.text.y = element_text(color = "black", size = 8)) +
-  theme(axis.title.y = element_text(size = 10,margin = margin(t =0, r = 10, b= 0, l = 0))) +
+  theme(axis.title.y = element_text(size = 8,margin = margin(t =0, r = 10, b= 0, l = 0))) +
   theme(axis.title.x = element_blank()) +
  scale_x_discrete("Health markers", labels = c("age" = "Age", "BMI" = "BMI", " D.Shannon" = "Diversity","hypertens" = "Hypertension", "sex" = "Sex", "TG" = "Triglycerids",
                                                 "Baso" = "Basophils", "Eos" = "Eosinophils", "Ery" = "Erythrocytes", "Hae" = "Haematocrit",
                                                 "LEU" = "Leucocytes", "Lymph" = "Lymphocytes", "Mono" = "Monocytes", "NEUT" = "Neutrophils", 
                                                 "Thr"="Thrombocytes")) +
   theme(panel.background = element_blank()) +
-  theme(legend.title = element_text(size=9)) +
+  theme(legend.title = element_text(size=8)) +
   theme(legend.text = element_text(size=7)) +
   facet_grid(. ~ parameter, scales = "free_x", space = "free_x") +
   theme(strip.background.x = element_rect(fill = "grey"))+
-  theme(strip.text.x = element_text(size=9)) +
+  theme(strip.text.x = element_text(size=8)) +
   labs(fill="Estimate") +
   theme(legend.position = "top",
         legend.justification = 	1) +
-  theme(legend.text = element_text(size=7)) +
   theme(panel.grid.major = element_blank())
 
 corr_health_div_plot + guides(shape = guide_legend(order = 1)) 
