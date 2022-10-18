@@ -541,7 +541,7 @@ source("Scripts/auxotable_melted_merged.R")
 source("Scripts/Nutrition_Auxos_FoCus.R")
 ```
 
-### 13) Frequency of auxotrophic bacteria in chronic inflammatory diseases (TrypCID)
+### Frequency of auxotrophic bacteria in chronic inflammatory diseases (TrypCID)
 
 ###### Load models (completeness >=85% and a contamination <=2)
 
