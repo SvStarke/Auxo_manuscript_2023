@@ -50,7 +50,7 @@ d1[padjust < 0.05, sign.label1 := "Padj <0.05"]
 d1
 
 d1 <- d1[AA != "Gly"]
-
+fwrite(d1, file = "/home/svenja/Documents/diversity_auxos_dzhk.csv")
 diversity_auxo <- ggplot(d1, aes(index, AA, fill = Estimate))+
   geom_tile() +
   labs(y = "", x = "Diseases", shape = "") +

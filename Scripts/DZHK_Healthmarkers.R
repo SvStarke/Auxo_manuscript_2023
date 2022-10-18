@@ -635,3 +635,5 @@ corr_health_plot
 ggsave("output/plots/dis_health_DHZK.pdf", plot = corr_health_plot,
        width = 7, height = 5)
 
+fwrite(corr_health, file = "/home/svenja/Documents/DZHK_freq_auxos_healthmarkers.csv")
+View(corr_health)

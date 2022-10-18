@@ -6,9 +6,8 @@ source("Scripts/init_models_filtered.R")
 
 source("Scripts/predict_auxos.R")
 
-View(Auxotroph)
+
 mat <- Auxotroph
-View(mat)
 auxomat <- na.omit(mat)
 nrow(auxomat)
 ctrl <- rsctrl(burn_in = 100, n_eff = 1000, step = 16, seed = 0, tfixed = FALSE)
@@ -56,12 +55,12 @@ for(aa1_ind in 1:(length(AAx)-1)) {
 a
 
 # merge the results of the rasch sampler and the occurence of auxotrophies together
-occurence3 <- occurence2[,c(4,5,7)]
-rasch_freq <- rasch_freq[,c(3,2,1)]
-all_freq <- merge(x = occurence3, y= rasch_freq, by.x= c("A1","A2"), by.y=c("AA1","AA2"))
-all_freq <- all_freq[complete.cases(all_freq),]
-all_freq[,log2FC := log2(Freq_all/freq)]
-all_freq
+# occurence3 <- occurence2[,c(4,5,7)]
+# rasch_freq <- rasch_freq[,c(3,2,1)]
+# all_freq <- merge(x = occurence3, y= rasch_freq, by.x= c("A1","A2"), by.y=c("AA1","AA2"))
+# all_freq <- all_freq[complete.cases(all_freq),]
+# all_freq[,log2FC := log2(Freq_all/freq)]
+# all_freq
 
 #####################      visualization    ####################################
 t <- ggplot(all_freq, aes(A1,A2, fill = log2FC)) +
@@ -112,16 +111,19 @@ for (i1 in  1:(length(AAx)-1)) {
     k <- k+1
   }
 }
-warnings()
+
 new_table_p <- rbindlist(tmp_pvalue_rasch)
 new_table_p[, padj := p.adjust(p.value, method = "fdr")]
 new_table_p[padj < 0.05, sign.label1 := "Padj < 0.05"]
 new_table_p[,log2FC := log2(obs_freq/exp_freq_median)]
 new_table_p
 
+###exclude glycine
 new_table_p <- new_table_p[A1 !="Gly"]
 new_table_p <- new_table_p[A2 !="Gly"]
-warnings()
+
+fwrite(new_table_p, file = "/home/svenja/Documents/Rasch_Sampler.csv")
+
 #####################      visualization    ####################################
 t <- ggplot(new_table_p, aes(A1,A2, fill = log2FC)) +
   geom_tile(color ="white", lwd= 0.5, linetype = 1.5) +

@@ -94,6 +94,7 @@ dt_auxo_serumMets[met =="H1", met := "Hexoses"]
 dt_auxo_serumMets[met =="AconAcid", met := "Aconitic acid"]
 dt_auxo_serumMets1[met =="beta-Ala", met := "beta-Alanine"]
 
+fwrite(dt_auxo_serumMets, file = "/home/svenja/Documents/metabolome_levels_auxo_freq.csv")
 ### visualization
 met_DZHK <- ggplot(dt_auxo_serumMets[!(met_class %in% c("Triacylglycerols","Sphingolipids",
                                             "Glycerophospholipids","Ceramides",
@@ -112,11 +113,13 @@ met_DZHK <- ggplot(dt_auxo_serumMets[!(met_class %in% c("Triacylglycerols","Sphi
   theme_bw() +
   labs(fill="Estimate") +
   theme(strip.background = element_blank(),
-        strip.text.y =  element_text(angle = 0, hjust = 0, colour = "black", size = 8),
-        axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1, colour = "black", size = 8),
-        axis.text.y = element_text(colour = "black", size = 8)) +
+        strip.text.y =  element_text(angle = 0, hjust = 0, colour = "black", size = 7),
+        axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1, colour = "black", size = 7),
+        axis.text.y = element_text(colour = "black", size = 7),
+        axis.title.x = element_text(size=8),
+        axis.title.y = element_text(size=8)) +
   theme(legend.text = element_text(size=7)) +
-  theme(legend.title = element_text(size=8)) 
+  theme(legend.title = element_text(size=7)) 
   
 met_DZHK
 ggsave("output/plots/metabolome_DHZK.pdf", plot = met_DZHK,
