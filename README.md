@@ -13,33 +13,8 @@ For getting the figures as a result, the scripts need to be ran in a specific or
 
 ![click here for an overview of the order for running the scripts](output/plots/Overview_Order_running_scripts.png)
 
-### 1) Correlation between number of auxotrophies and genome length
 
-##### Load models (Completeness >=85%, Contamination <=2)
-
-```R
-source("Scripts/init_models_filtered.R")
-```
-
-###### Predict auxotrophies
-
-```R
-source("Scripts/predict_auxos.R")
-```
-
-###### Add information about the genomes
-
-```R
-source("Scripts/auxotable_not_melted.R")
-```
-
-###### Correlation analysis for the genome length and the number of auxotrophies
-
-```R
-source("Scripts/Scatterplot_corr_Genomelength_Numbauxos.R")### 
-```
-
-### 2) Completeness of the amino acid biosynthesis pathways
+### 1) Completeness of the amino acid biosynthesis pathways
 
 ##### Load models (Completeness >=85%, Contamination <=2)
 
@@ -65,7 +40,7 @@ source("Scripts/auxotable_not_melted.R")
 source("Scripts/Completeness_pathways.R")
 ```
 
-### 3)Proportions of auxotrophic to prototrophic MAGs  per phylum
+### 2)Proportions of auxotrophic to prototrophic MAGs  per phylum
 
 ##### Load models (Completeness >=85%, Contamination <=2)
 
@@ -91,7 +66,7 @@ source("Scripts/auxotable_not_melted.R")
 source("Scripts/Auxo_Proto_data_per_phylum.R")
 ```
 
-### 4) Distribution of the number of auxotrophies per phylum
+### 3) Distribution of the number of auxotrophies per phylum
 
 ##### Load models (completeness >= 85% and contamination <=2)
 
@@ -117,7 +92,7 @@ source("Scripts/auxotable_not_melted.R")
 source("Scripts/number_auxo_per_phylum.R")
 ```
 
-### 5) Scatterplot about the correlation of the completeness and the found number of auxotrophies in all genomes
+### 4) Scatterplot about the correlation of the completeness and the found number of auxotrophies in all genomes
 
 ##### Load all models
 
@@ -143,7 +118,7 @@ source("Scripts/auxotable_not_melted.R")
 source("Scripts/Scatterplot_Corr_NumbAuxos_Completeness.R")
 ```
 
-### 6) Abundancies of amino acid auxotrophies
+### 5) Abundancies of amino acid auxotrophies
 
 ###### Load models (completeness >=85% and a contamination <=2)
 
@@ -169,7 +144,7 @@ source("Scripts/auxotable_melted_merged.R")
 source("Scripts/Abundancies.R")
 ```
 
-### 7) Fermentation products(e.g.SCFA)
+### 6) Fermentation by-products(e.g.SCFA)
 
 ###### Load models (completeness >=85% and a contamination <=2)
 
@@ -195,7 +170,7 @@ source("Scripts/auxotable_melted_merged.R")
 source("Scripts/byproduct_production.R")
 ```
 
-### 8) Effect of auxotrophic bacteria on the diversity of microbial communities
+### 7) Effect of auxotrophic bacteria on the diversity of microbial communities
 
 ###### Load models from DZHK cohorte
 
@@ -221,7 +196,7 @@ source("Scripts/auxotable_melted_merged.R")
 source("Scripts/diversity_Auxos.R")
 ```
 
-### 9) Association of auxotrophies with Health markers in DZHK cohorte
+### 8) Association of auxotrophies with Health markers in DZHK cohorte
 
 ###### Load models from DZHK cohorte
 
@@ -247,7 +222,7 @@ source("Scripts/auxotable_melted_merged.R")
 source("Scripts/DZHK_Healthmarkers.R")
 ```
 
-### 10) Abundancies of auxotrophic bacteria in DZHK cohorte
+### 9) Abundancies of auxotrophic bacteria in DZHK cohorte
 
 ###### Load models
 
@@ -273,7 +248,7 @@ source("Scripts/auxotable_melted_merged.R")
 source("Scripts/Abundancies_Gut_DZHK.R")
 ```
 
-### 11) Rasch Sampler
+### 10) Rasch Sampler
 
 ###### Load models() completeness >=85% and a contamination <=2)
 
@@ -293,7 +268,7 @@ source("Scripts/predict_auxos.R")
 source("Scripts/Rasch Sampler.R")
 ```
 
-### 12) Occurence of Auxotrophies together
+### 11) Occurence of Auxotrophies together
 
 ###### Load models() completeness >=85% and a contamination <=2)
 
@@ -313,32 +288,8 @@ source("Scripts/predict_auxos.R")
 source("Scripts/Occurence_Auxos_together.R")### 
 ```
 
-### 13) Frequency of auxotrophic bacteria in chronic inflammatory diseases (TrypCID)
 
-###### Load models (completeness >=85% and a contamination <=2)
-
-```R
-source("Scripts/init_models_filtered.R")
-```
-
-###### Predict auxotrophies
-
-```R
-source("Scripts/predict_auxos.R")
-```
-
-###### Add information about the genomes
-
-```R
-source("Scripts/auxotable_melted_merged.R")
-```
-
-###### Analyze association with diseases
-
-```R
-source("Scripts/TrypCID.R")
-```
-### 14) Correlation between  the number of auxotrophies and the diversity
+### 12) Correlation between  the number of auxotrophies and the diversity
 
 ###### Load models 
 
@@ -359,7 +310,7 @@ source("Scripts/predict_auxos.R")
 source("numb_auxos_div.R")
 ```
 
-### 15) Crossfeeding observations by calculating hamming distance
+### 13) Crossfeeding observations by calculating hamming distance
 
 ###### Load models 
 
@@ -380,7 +331,7 @@ source("Scripts/predict_auxos.R")
 source("hamming_distance.R")
 ```
 
-### 16) Metabolome levels and frequency of auxotrophic bacteria
+### 14) Metabolome levels and frequency of auxotrophic bacteria
 
 ###### Load models 
 
@@ -406,7 +357,7 @@ source("Scripts/auxotable_melted_merged.R")
 source("dzhk_metabolome.R")
 ```
 
-### 17) Influence of auxotrophic bacteria on the stability
+### 15) Influence of auxotrophic bacteria on the stability
 
 ###### Load models 
 
@@ -432,7 +383,7 @@ source("Scripts/auxotable_melted_merged.R")
 source("Popgen_stability.R")
 ```
 
-### 18) Intake of amino acids on the frequency of amino acid auxotrophic bacteria
+### 16) Intake of amino acids on the frequency of amino acid auxotrophic bacteria
 
 ###### Load models 
 
@@ -590,4 +541,29 @@ source("Scripts/auxotable_melted_merged.R")
 source("Scripts/Nutrition_Auxos_FoCus.R")
 ```
 
+### 13) Frequency of auxotrophic bacteria in chronic inflammatory diseases (TrypCID)
+
+###### Load models (completeness >=85% and a contamination <=2)
+
+```R
+source("Scripts/init_models_filtered.R")
+```
+
+###### Predict auxotrophies
+
+```R
+source("Scripts/predict_auxos.R")
+```
+
+###### Add information about the genomes
+
+```R
+source("Scripts/auxotable_melted_merged.R")
+```
+
+###### Analyze association with diseases
+
+```R
+source("Scripts/TrypCID.R")
+```
 
