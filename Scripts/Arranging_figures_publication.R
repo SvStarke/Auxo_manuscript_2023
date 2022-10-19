@@ -1,55 +1,5 @@
 ######################### arranging the figures for publication ################
-######figure 1 #############
-#done with Flowchartdesigner 3
 
-############# figure 2##########
-#ocurrence of auxotrophies together, abundance of amino acid auxotrophies in the gut, number of auxotrophies
-#run these scripts
-#number of auxotrophies
-#Load models (completeness >= 85% and contamination <=2)
-
-source("Scripts/init_models_filtered.R")
-
-#Predict auxotrophies
-
-source("Scripts/predict_auxos.R")
-
-#Add information about the genomes
-
-source("Scripts/auxotable_not_melted.R")
-
-#Analyze and visualize the distribution of the number of auxotrophies in every phylum
-
-source("Scripts/number_auxo_per_phylum.R")
-
-#abundance of auxotrophies
-
-source("Scripts/Scatterplot_corr_Genomelength_Numbauxos.R")
-
-# abundancies in HRGM
-#Add information about the genomes
-
-source("Scripts/auxotable_melted_merged.R")
-
-#Analyze amino acid auxotrophies
-# 
-# source("Scripts/Abundancies.R")
-# 
-# #### create figure ####
-# library(gridExtra)
-# library(cowplot)
-# library(ggplot2)
-# fi <- grid.arrange(arrangeGrob(pt,length_count, ncol=2),
-#              nrow=2,
-#              abun
-#              )
-# fi2 <- as_ggplot(fi) +
-#   draw_plot_label(label= c("A", "B","C"), size =12,
-#                   x = c(0,0.5,0), y = c(1, 1, 0.5))
-# fi2
-# 
-# ggsave("output/plots/figure2.pdf", plot = fi2,
-#        width = 10, height = 8)
 
 #################figure 3#################
 #Load models (completeness >= 85% and contamination <=2)
@@ -70,7 +20,7 @@ source("Scripts/Occurence_Auxos_together.R")
 
 #create figure
 fi3.1 <- ggarrange(o,t,
-                 labels = c("A","B"),
+                 labels = c("a","b"),
                  ncol=2, nrow= 1, common.legend = FALSE)
 fi3.1
 
@@ -78,7 +28,7 @@ ggsave("output/plots/figure3_18.07.22.pdf", plot = fi3.1,
        width = 9, height = 4.5)
 
 
-#################figure 4 #################
+################# supplementary figure 3 #################
 #Load models (completeness >= 85% and contamination <=2)
 
 source("Scripts/init_models_filtered.R")
@@ -97,7 +47,7 @@ source("Scripts/number_auxo_per_phylum.R")
 
 #create figure
 fi4 <- ggarrange(fi_or, ba_or, ac_or, pr_or, ba_fam,
-                 labels = c("A","","","", "B"),
+                 labels = c("a","","","", "b"),
                  ncol=1, nrow= 5, common.legend = FALSE,
                  heights = c(1,1,1,1), widths= c(1,1,1,1))
 fi4
@@ -105,7 +55,7 @@ fi4
 ggsave("output/plots/figure4_28.04.22.pdf", plot = fi4,
        width = 10, height = 14)
 
-################  figure 4 ####################################
+################ supplementary figure 4 ####################################
 #completeness of the pathways
 #Load models (Completeness >=85%, Contamination <=2)
 
@@ -125,7 +75,7 @@ source("Scripts/Completeness_pathways.R")
 
 #### create figure ###
 fi5 <- ggarrange(tr,hi,ch,se,le,il1,il2,il3,va,il4,il5,
-                 labels = c("A","B","C", "D","E"),
+                 labels = c("a","b","c", "d","e"),
                  hjust = c(-0.1,0.5,0.5,0.5,-0.1),
                  ncol=4, nrow= 3, common.legend = TRUE, legend = "bottom",
                  heights = c(1,1,1,1), widths= c(1,1,1,1))
@@ -135,7 +85,7 @@ ggsave("output/plots/figure5_28.04.22_new.pdf", plot = fi5,
        width = 9, height = 9)
 
 
-#################figure 6 #################
+#################figure 4 #################
 #### fermentation products
 #Analyze the production of by products with statistical analysis
 
@@ -156,25 +106,24 @@ fi6.1 <- ggplot(stat_BP_x_auxo[auxo.compound != "Gly"], aes(auxo.compound, by.pr
         legend.justification = 	1,
         axis.text.x = element_text(color = "black", angle = 45, hjust = 1, size = 9),
         axis.text.y = element_text(color = "black", size = 9)) +
-  theme(axis.title.y = element_text(margin = margin(t = 0, r = 10, b= 0, l = 0), face = "bold")) +
-  theme(axis.title.x = element_text(face = "bold", margin = margin(t = 10, r = 0, b= 0, l = 0))) +
+  theme(axis.title.y = element_text(margin = margin(t = 0, r = 10, b= 0, l = 0))) +
+  theme(axis.title.x = element_text(margin = margin(t = 10, r = 0, b= 0, l = 0))) +
   theme(panel.background = element_blank())
 
 fi6.1 +theme(plot.margin = unit(c(1,0.5,2,0.5), "cm")) +
   theme(legend.text = element_text(size=10),
         legend.title = element_text(size=8))
-install.packages()
 
 fi6 <- ggarrange(fi6.1,
-                 labels = c("A"),
+                 labels = c("a"),
                  ncol=1, nrow= 1, common.legend = FALSE)
 fi6
 
 ggsave("output/plots/figure6_28.04.22.pdf", plot = fi6,
-       width = 8, height = 3)
+       width = 6, height = 3)
 
 
-################# figure 7 ###########
+################# figure 5 ###########
 #Load models 
 
 source("Scripts/init_models_filtered.R")
@@ -201,9 +150,9 @@ source("Scripts/diversity_Auxos.R")
 ###combine all figures in one figure
 fi7 <- ggarrange(ü, corr_health_div_plot,div_auxos, Hamming_shannon, ncol=1,
                    nrow=4, heights = c(1,1.3,1.1,1.1), widths= c(1,1,1,1),
-                 labels = c("A","B", "C", "D"), hjust = c(-0.5,-0.5, -0.5, -0.5), vjust = c(1.5,1,-0.5,1))
+                 labels = c("a","b", "c", "d"), hjust = c(-0.5,-0.5, -0.5, -0.5), vjust = c(1.5,1,-0.5,1))
 fi7
-fi7.1 <- ggarrange(fi7,met_DZHK, ncol = 2, nrow=1, widths = c(1.2,1.2), labels = "E",hjust = c(-45))
+fi7.1 <- ggarrange(fi7,met_DZHK, ncol = 2, nrow=1, widths = c(1.2,1.2), labels = "e",hjust = c(-54))
 fi7.1
 ggsave("output/plots/figure7_01.06.22_new_Abund_gut_DHZK.pdf", plot = fi7.1,
       width = 12, height = 15)
@@ -231,11 +180,11 @@ ggsave("output/plots/suppfigure2_03.06.pdf", plot = prop_all,
        width = 10, height = 20)
 
 
-###supplementary material figure for intake of amino acids and frequency of auxotrophic bacteria
+###supplementary material figure 5
 
 nutr_F1F2_freq <- ggarrange(nutrition_popgen_F1, nutrition_popgen_F2,
                             nrow =1, ncol=2, common.legend = TRUE,
-                            labels = c("A","B"))
+                            labels = c("a","b"))
 
 ggsave("output/plots/suppfigure_intakeAA_freqAuxos.pdf", plot=nutr_F1F2_freq,
        width= 11, height=5)

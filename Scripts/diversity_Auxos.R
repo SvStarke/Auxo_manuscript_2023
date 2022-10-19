@@ -26,6 +26,10 @@ sumfreq <- aggregate(u$prop, by=list(sample=u$sample, AA=u$Compound), FUN=sum)
 divers_auxos <- merge(dzhk_diversity, sumfreq, by.x="sample", by.y="sample")
 divers_auxos <- data.table(divers_auxos)
 
+numb_samples <- dzhk_info$sample
+divers_auxos <- divers_auxos[divers_auxos$sample %in% numb_samples]
+
+
 ##### Shannon
 d <- list()
 k <- 1

@@ -13,3 +13,4 @@ Auxotrophy_2[, phylum := str_match(`GTDB Taxonomy`, "p__.*;c__")[,1]]
 Auxotrophy_2[, phylum := gsub("p__|;c__","", phylum)]
 Auxotrophy_2[, phylum := gsub("_C$","", phylum)]
 
+

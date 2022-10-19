@@ -54,35 +54,7 @@ for(aa1_ind in 1:(length(AAx)-1)) {
 
 a
 
-# merge the results of the rasch sampler and the occurence of auxotrophies together
-# occurence3 <- occurence2[,c(4,5,7)]
-# rasch_freq <- rasch_freq[,c(3,2,1)]
-# all_freq <- merge(x = occurence3, y= rasch_freq, by.x= c("A1","A2"), by.y=c("AA1","AA2"))
-# all_freq <- all_freq[complete.cases(all_freq),]
-# all_freq[,log2FC := log2(Freq_all/freq)]
-# all_freq
-
-#####################      visualization    ####################################
-t <- ggplot(all_freq, aes(A1,A2, fill = log2FC)) +
-  geom_tile(color ="white", lwd= 0.5, linetype = 1.5) +
-  scale_fill_gradient2(high = "#ca0020", mid = "white", low = "#0571b0") +
-  guides(fill = guide_colourbar(barwidth = 15, barheight = 1, title ="log2FoldChange",
-                                label = TRUE, ticks = FALSE)) +
-  theme(legend.position = "bottom") +
-  theme(axis.text.x = element_text(colour = "Black", size = 10, angle = 45, vjust = 0.5, hjust=0.5)) +
-  theme(axis.text.y = element_text(colour = "black", size = 10, vjust = 0.5, hjust=0.5)) +
-  theme(axis.title.x = element_text(colour = "Black", face = "bold", size = 10, margin = margin(5,0,0,0))) +
-  theme(axis.title.y = element_text(colour = "Black", face = "bold", size = 10, margin = margin(0,5,0,0))) +
-  theme(legend.title = element_text(colour = "black", size = 10, face = "bold", vjust = 1, margin = margin(0,10,1,0))) +
-  theme(legend.text = element_text(size=6)) +
-  xlab("Amino acid auxotrophy 1") +
-  ylab("Amino acid auxotrophy 2") + 
-  theme(panel.background = element_blank()) +
-  theme(plot.margin= margin(0.5,0.5,0.5,0.5, "cm"))
-t
-
-ggsave("output/plots/Rasch_Sampler.pdf", plot = t,
-       width = 5, height = 5)
+occurence3 <- occurence2[,c(4,5,7)]
 
 #########  new evaluation of the pvlaue  ###########
 
@@ -149,22 +121,6 @@ t
 
 ggsave("output/plots/Rasch_Sampler.pdf", plot = t,
        width = 5.5, height = 5)
-# View(new_table)
-# View(tmp_occu1)
-# i1 <- "Ser"
-# i2 <- "Chor"
-# 
-# a[[c("Ser","Chor")]]
-# a[[c(i1,i2)]]
-# nrow(a[["Met"]])
-# tet <- a$Met
-# nrow(a[a$Met])
-# res <- wilcox.test(all)
-# View(all_results)
-# occurence4 <- occurence3
-# occurence
-# occurence5$A2 <- NULL
-# occurence5$Freq_all <- NULL
-# test11 <- c(i1,i2)
-# colnames(occurence5) <- test11
+
+
 

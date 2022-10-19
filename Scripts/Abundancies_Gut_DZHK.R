@@ -23,12 +23,12 @@ for (subi in sub) {
 u <- rbindlist(p) 
 
 sumfreq <- aggregate(u$prop, by=list(sample=u$sample, AA=u$Compound), FUN=sum)
-
 sumfreq <- as.data.table(sumfreq)
 
 sumfreq[AA %in% c("Val","Met","Leu","Ile","Trp","Phe","Lys","His","Thr"), is.essential := "essential (human)"]
 sumfreq[is.na(is.essential), is.essential := "not essential (human)"]
-
+numb_samples <- dzhk_info$sample
+sumfreq <- sumfreq[sumfreq$sample %in% numb_samples]
 
 #boxplot
 ü <- ggplot(sumfreq[AA != "Gly"], aes(AA, x*100, fill = is.essential)) +

@@ -112,7 +112,7 @@ names(chor)[names(chor) == "ec"] <- "Enzymes"
 level_order <- c("4.2.1.10","1.1.1.25" ,"2.7.1.71","2.5.1.19","4.2.3.5/4.6.1.4")
 
 ##visualization completeness of the chor pathway with the right order
-ch <- ggplot(chor, aes(x =factor(ec, level = level_order), y =perc))+
+ch <- ggplot(chor, aes(x =factor(Enzymes, level = level_order), y =perc))+
   geom_bar(stat="identity", width=0.8, fill = "black") +
   ylab("Missing in auxotrophic microbiota[%]") +
   xlab("Enzymes") +
@@ -258,7 +258,7 @@ names(his)[names(his) == "ec"] <- "Enzymes"
 his <- his[-7,]
 
 ##visualization completeness of the chor pathway with the right order
-hi <- ggplot(his, aes(x =`ec`, y =perc))+
+hi <- ggplot(his, aes(x =Enzymes, y =perc))+
   geom_bar(stat="identity", width=0.8, fill = "black") +
   ylab("Missing in auxotrophic microbiota [%]") +
   xlab("Enzymes") +
@@ -284,7 +284,7 @@ models <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models/", IDs = relGenomes
 rxns <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models", file.type = "reactions", IDs = relGenomes)
 pwys <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models", file.type = "pathways", IDs = relGenomes)
 pwys_cov_Ile <- get_pathway_coverage(models,rxns,pwys, pathways.of.interest = c("ILEUSYN-PWY","PWY-5101","PWY-5103","PWY-5104","PWY-5108"))
-View(pwys_cov_Ile)
+
 
 #analyse only the isoleucine biosynthesis pathway from threonine
 pwys_cov_Ile <- get_pathway_coverage(models,rxns,pwys, pathways.of.interest = c("ILEUSYN-PWY"))
@@ -320,7 +320,7 @@ ile1$perc <- ile1$perc *100
 #for table delete these two rows because spotaneous
 names(ile1) [names(ile1) == "ec"] <- "Enzymes"
 ile1 <- ile1[order(pathway),]
-pro1
+
 ##visualization completeness of the ile pathway with the right order
 il1 <- ggplot(ile1, aes(x =Enzymes, y =perc, fill =factor(ifelse(Enzymes == "4.3.1.19/4.2.1.16", "not shared", "shared enzyme"))))+
   geom_bar(stat="identity", width=0.8) +
@@ -385,9 +385,9 @@ for (rxni in relrxns) {
   k <- k+1
 }
 ile <- rbindlist(Ile)
-#delete 6th and 7th row because that reactions are spontaenous(zero)
-ile <-ile[-c(6,7),]
-ile <- dplyr::mutate(ile, ID = row_number())
+# #delete 6th and 7th row because that reactions are spontaenous(zero)
+# ile <-ile[-c(6,7),]
+# ile <- dplyr::mutate(ile, ID = row_number())
 
 
 #prepare the visualization part
@@ -931,12 +931,10 @@ trp <- data.frame(trp_new)
 trp <- dplyr::mutate(trp, ID = row_number())
 trp$perc <- trp$perc *100
 names(trp)[names(trp) == "ec"] <- "Enzymes"
-
-
-trp_compl <- filter(pathway1, AA == "Tryptophan")
-
+trp <- trp[!duplicated(trp$Enzymes), ]
+trp
 ##visualization completeness of the trp pathway with the right order
-tr <- ggplot(trp, aes(x =`ec`, y =perc))+
+tr <- ggplot(trp, aes(x =Enzymes, y =perc))+
   geom_bar(width = 0.8, stat="identity", fill = "black") +
   ylab("Missing in auxotrophic microbiota [%]") +
   xlab("Enzymes") +
@@ -952,6 +950,7 @@ tr <- ggplot(trp, aes(x =`ec`, y =perc))+
   coord_cartesian(ylim=c(0,100)) +
   scale_x_discrete(limits = c("4.1.3.27","2.4.2.18","5.3.1.24","4.1.1.48","4.2.1.20","4.2.1.122","4.1.2.8"))
 tr
+
 ggsave("output/plots/Completeness_Trp_pathway.pdf", plot = tr,
        width =7, height = 5.5)
 

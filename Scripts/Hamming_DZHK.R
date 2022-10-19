@@ -3,9 +3,10 @@
 #–––––––––––––––––––––––––––––––––––––––#
 Auxotroph_tmp <- copy(Auxotroph)
 Auxotroph_tmp[which(is.na(Auxotroph), arr.ind = T)] <- 1
-View(Auxotroph)
 
 dzhk_relabun <- dzhk_relabun[dzhk_relabun$model %in% dzhk_rel_mags]
+numb_samples <- dzhk_info$sample
+dzhk_relabun <- dzhk_relabun[dzhk_relabun$sample %in% numb_samples]
 
 
 HammingDT <- list()

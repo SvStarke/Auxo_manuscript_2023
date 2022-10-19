@@ -26,6 +26,7 @@ colnames(popgen_F2) [2] <- "new_id"
 popgen_F2 <- popgen_F2[,c(1,2,19)]
 
 F1_F2 <- rbind(popgen_F2, popgen_F1)
+
 #View(popgen_F1)
 ##merge information about time points with sample info
 
@@ -34,7 +35,7 @@ popgen_data <- merge(F1_F2, popgen_samples, by.x= "newID", by.y="new_name")
 #delete sample ID with only  available information about one timepoint in original dataframe about samples
 popgen_data <- popgen_data[popgen_data$atlas_name != "S26" & popgen_data$atlas_name != "S38" & popgen_data$atlas_name!= "S66"]
 popgen_data
-
+# 
 ###calculate bray curtis dissimilarity between two time points
 popgen_mags_abun1 <- t(popgen_mags_abun1)
 popgen_mags_abun1 <- data.frame(popgen_mags_abun1)
@@ -44,66 +45,15 @@ popgen_mags_abun1$sample <- row.names(popgen_mags_abun1)
 test <- merge(popgen_mags_abun1, popgen_data, by.x= "sample", by.y = "atlas_name")
 test <- data.table(test)
 #View(test)
-
-##create a loop
+# 
+# ##create a loop
 popgen_data_names <- unique(test$SampleID)
 F1_names <- unique(popgen_F1$SampleID)
 F1_names <- F1_names[F1_names %in% popgen_data_names]
 F2_names <- unique(popgen_F2$SampleID)
 F2_names <- F2_names[F2_names %in% popgen_data_names]
 
-#View(test)
 
-k <- 1
-Bray_all <- list()
-for(F1 in F1_names) {
-  print(F1)
-  for(F2 in F2_names) {
-    tmp<- test[SampleID == F1 | SampleID == F2, ]
-
-    if(tmp$new_id[1] == tmp$new_id[2]) {
-      tmp2 <- tmp[,c(2:571)]
-      df2 <- mutate_all(tmp2, function(x) as.numeric(as.character(x)))
-      Bray_tmp <-vegdist(df2, method = "bray")
-      #Bray_tmp
-      Bray <- data.table(Sample = F1,
-                         Bray_distance = Bray_tmp)
-      Bray_all[[k]] <- Bray
-      k <- k+1
-     }
-  }
-}
-
-Bray_samples <- rbindlist(Bray_all)
-Bray_all
-View(Bray_samples)
-
-###get abundance weight average of auxotrophies
-
-##### number of auxotrophies and diversity
-Auxotrophy$count <- rowSums(Auxotrophy == 0)
-
-numb_auxos_popgen <- merge(Auxotrophy, popgen_relabun, by.x= "Genomes", by.y="model")
-numb_auxos_popgen <- data.table(numb_auxos_popgen)
-
-numb_auxos_popgen[is.na(count), count:= 0]
-
-new <- numb_auxos_popgen[ ,sum(count*prop), by = sample]
-tmp_popgen_div_numb_auxos <- merge(new, popgen_data, by.x="sample", by.y="atlas_name")
-
-#keep only auxotrophic data for F1 
-popgen_div_numb_auxos <- tmp_popgen_div_numb_auxos[tmp_popgen_div_numb_auxos$SampleID %in% F1_names]
-
-popgen_bray_numb_auxos <- merge(popgen_div_numb_auxos, Bray_samples, by.x="SampleID", by.y="Sample")
-
-
-##correlation analysis for stability
-cor.test(popgen_bray_numb_auxos$Bray_distance, popgen_bray_numb_auxos$V1, method = "spearman", exact = FALSE)
-
-
-
-
-####
 ####        Bray Curtis Distance with normalised abundance data             ####
 ##create a loop
 test2 <- merge(popgen_norm, popgen_data, by.x= "sample", by.y = "atlas_name")
@@ -133,9 +83,27 @@ for(F1 in F1_names) {
 Bray_samples2 <- rbindlist(Bray_all1)
 
 
+
+###get abundance weight average of auxotrophies
+
+##### number of auxotrophies and diversity
+Auxotrophy$count <- rowSums(Auxotrophy == 0)
+
+numb_auxos_popgen <- merge(Auxotrophy, popgen_relabun, by.x= "Genomes", by.y="model")
+numb_auxos_popgen <- data.table(numb_auxos_popgen)
+
+numb_auxos_popgen[is.na(count), count:= 0]
+
+new <- numb_auxos_popgen[ ,sum(count*prop), by = sample]
+tmp_popgen_div_numb_auxos <- merge(new, popgen_data, by.x="sample", by.y="atlas_name")
+
+#keep only auxotrophic data for F1 
+popgen_div_numb_auxos <- tmp_popgen_div_numb_auxos[tmp_popgen_div_numb_auxos$SampleID %in% F1_names]
+
 #merge diversity files and bray curtis based on normalized abundance data
 
 popgen_bray_numb_auxos2 <- merge(popgen_div_numb_auxos, Bray_samples2, by.x="SampleID", by.y="Sample")
+
 
 ##correlation analysis for stability
 cor.test(popgen_bray_numb_auxos2$Bray_distance, popgen_bray_numb_auxos2$V1, method = "spearman", exact = FALSE)

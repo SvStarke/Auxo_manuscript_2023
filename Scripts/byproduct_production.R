@@ -61,7 +61,7 @@ for(cpdi in relCompounds) {
       tmp_wicoxdat <- tmp_wicoxdat[, tmp_prod_rate := prod_rate] # neue Spalte erzeugen in der negative werte mit null ersetzt werden sollen
       tmp_wicoxdat <- tmp_wicoxdat[tmp_prod_rate < 0, tmp_prod_rate := 0] # ersetzen der neg. Werte mit 0
       
-      wilcox <- wilcox_test(tmp_prod_rate ~ Prototrophy, data = tmp_wicoxdat)
+      wilcox <- wilcox.test(tmp_prod_rate ~ Prototrophy, data = tmp_wicoxdat)
       mean <- tapply(tmp_wicoxdat$tmp_prod_rate, tmp_wicoxdat$Prototrophy, mean)
       median <- tapply(tmp_wicoxdat$tmp_prod_rate, tmp_wicoxdat$Prototrophy, median)
       new1 <- t(mean)
@@ -76,7 +76,7 @@ for(cpdi in relCompounds) {
                           auxo.compound = auxoi,
                           fisher.p = test_fish$p.value,
                           fisher.or = test_fish$estimate,
-                          wilcox.p = wilcox$p,
+                          wilcox.p = wilcox$p.value,
                           FC.log_median = FC_median,
                           FC.log_mean = FC_mean)
       
@@ -111,14 +111,14 @@ p <- ggplot(stat_BP_x_auxo[auxo.compound != "Gly"], aes(auxo.compound, by.produc
   theme(legend.position = "bottom",
         legend.justification = 	1,
         axis.text.x = element_text(color = "black", angle = 45, hjust = 1, size = 10),
-        axis.text.y = element_text(color = "black", size = 10)) +
+        axis.text.y = element_text(color = "black", size = 8)) +
   theme(axis.title.y = element_text(margin = margin(t = 0, r = 20, b= 0, l = 0))) +
   theme(axis.title.x = element_text(margin = margin(t = 20, r = 0, b= 0, l = 0))) +
   theme(panel.background = element_blank())
 
 p +theme(plot.margin = unit(c(1,0.5,2,0.5), "cm")) +
-  theme(legend.text = element_text(size=10),
-        legend.title = element_text(size=8))
+  theme(legend.text = element_text(size=8),
+        legend.title = element_text(size=6))
 
 
 ggsave("output/plots/Heatmap_auxo-X-byproducts_FoldChange_Fisher.pdf", plot = p,

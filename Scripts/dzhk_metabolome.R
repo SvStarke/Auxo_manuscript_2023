@@ -119,7 +119,8 @@ met_DZHK <- ggplot(dt_auxo_serumMets[!(met_class %in% c("Triacylglycerols","Sphi
         axis.title.x = element_text(size=8),
         axis.title.y = element_text(size=8)) +
   theme(legend.text = element_text(size=7)) +
-  theme(legend.title = element_text(size=7)) 
+  theme(legend.title = element_text(size=8)) 
+met_DZHK <- met_DZHK + guides(shape= "none")
   
 met_DZHK
 ggsave("output/plots/metabolome_DHZK.pdf", plot = met_DZHK,

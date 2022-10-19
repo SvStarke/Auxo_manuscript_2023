@@ -46,5 +46,5 @@ dzhk_info1 <- fread("/mnt/nuuk/2022/DZHK_MGX/sample_info/Metagenome_DZHK_NGS_EMG
 setnames(dzhk_info1, c("EMGE","sample"))
 dzhk_info2 <- fread("/mnt/nuuk/2022/DZHK_MGX/sample_info/DZHK_finaler_export_v5_mod.csv")
 dzhk_info <- merge(dzhk_info1,dzhk_info2)
-
+describe(dzhk_info2$EMGE)
 
