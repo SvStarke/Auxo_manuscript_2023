@@ -3,7 +3,7 @@
 ## Project idea
 
 We already know that humans are auxotrophic for some amino acids. We cannot synthesize these amino acids and cover our demand for these essential amino acids by diet. This incapability of organism to synthesize vital nutrients is called auxotrophy and results in a high dependency on the nutritional environment. However, the nuritional preferences of our human gut microbiome is still not known. This project is about finding out which kind of auxotrophies can be found in human gut microbiota and what is the influence of auxotrophic gut microbiota on the host health. Metagenomes from the HRGM cataologue are used for a general characterzation of auxotrophies in the human gut microbiome. The impact of auxotrophies on microbial ecology in the gut was analyzed with data from two cohorts based in Germany. Metabolic genome-scale models are reconstructed from genomic files with gapseq and the auxotrophies are predicted with metabolic modeling using flux-balance-analysis. The figure below supplies a visualization for the definition of auxotrophies and gives an overview about the workflow with the used datasets in the study.
-![click here for an overview of the order for running the scripts](output/plots/Definition_Auxo_readme.png)
+                ![click here for an overview of the order for running the scripts](output/plots/Definition_Auxo_readme.png)
 
 
 
