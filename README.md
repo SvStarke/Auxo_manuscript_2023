@@ -3,12 +3,13 @@
 ## Project idea
 
 We already know that humans are incapable to synthesize some amino acids. We cover our demand for these essential amino acids by diet. This incapability of organism to synthesize vital nutrients is called auxotrophy and results in a high dependency on the nutritional environment. However, little is known still about he nuritional preferences of our human gut microbiome. This project is about finding out which kind of auxotrophies can be found in the human gut microbiota and what is the influence of auxotrophies on the microbial ecology. 
-Genomes from the HRGM cataologue are used for a general characterzation of auxotrophies in the human gut microbiome. The impact of auxotrophies on microbial ecology in the gut was analyzed with data from two cohorts based in Germany. Metabolic genome-scale models are reconstructed from genome data with gapseq and the auxotrophies are predicted with metabolic modeling using flux-balance-analysis. The figure below supplies a visualization for the definition of auxotrophies and gives an overview about the workflow with the used datasets in the study(free available icons were taken from www.flaticon.com (creators: photo3idea_studio, Freepik, surang, Eucalyp, Voysla, juicy_fish, smashingstocks, SBTS2018)).
+Genomes from the HRGM cataologue are used for a general characterzation of auxotrophies in the human gut microbiome. The impact of auxotrophies on microbial ecology in the gut was analyzed with data from two cohorts based in Germany. Metabolic genome-scale models are reconstructed from genome data with gapseq and the auxotrophies are predicted with metabolic modeling using flux-balance-analysis. The figure below supplies a visualization for the definition of auxotrophies and gives an overview about the workflow with the used datasets in the study.
 
 <p align="center" width = "100%" >
   <img width = "100%" src="/output/plots/Definition_Auxo_readme.png" />
 </p>
 
+Free available icons were taken from www.flaticon.com (creators: photo3idea_studio, Freepik, surang, Eucalyp, Voysla, juicy_fish, smashingstocks, SBTS2018)).
 ## Instructions for running the scripts
 
 The following README-file gives an overview about the order of running the scripts. It always starts first with the loading of the models. It is recommended to clear the environment before loading a new dataset of models. The instructions in this README includes the analysis for all datasets. The code of every analysis and resulting figures can be found in this repository. An overview about the running order is given by the flowchart below. Each colorful line represents the order of scripts for every figure. Detailed instructions are given under the flowchart. The scripts can be run in R (4.1.2). Further information about the R packages can be found in the first "load models" Scripts. 
