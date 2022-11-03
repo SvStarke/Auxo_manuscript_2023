@@ -32,19 +32,17 @@ popgen_mags_abun <- t(read.table("/mnt/nuuk/2022/MR_popgen_MGX/atlas/median_cove
 popgen_mags_abun1 <- data.frame(popgen_mags_abun)
 popgen_mags_abun1$MAGs <- row.names(popgen_mags_abun1)
 
-##filtering rel abundany table for fitlered models
+##filtering rel abundancy table for fitlered models
 popgen_rel_mags <- data.frame(popgen_rel_mags)
 popgen_mags_abun1 <- merge(popgen_mags_abun1, popgen_rel_mags, by.x="MAGs", by.y="popgen_rel_mags")
 
 
 
-# Calculate realtive abundancy table
+# Calculate relative abundancy table
 popgen_relabun <- data.table(as.table(popgen_mags_abun))
 setnames(popgen_relabun, c("model","sample","prop"))
 popgen_rel_mags <- popgen_MAGQC[Completeness >= completeness_cuttoff & contamination_cutoff <= contamination_cutoff, `Bin Id`]
 popgen_relabun <- popgen_relabun[model %in% popgen_rel_mags]
 popgen_relabun[, prop := prop/sum(prop), by = sample]
 popgen_norm <- dcast(popgen_relabun, sample ~ model)
-
-
 

@@ -143,7 +143,13 @@ spear_Popgen_F1 <- rbindlist(spear_list)
 
 spear_Popgen_F1[, padj := p.adjust(pvalue, method = "fdr")]
 spear_Popgen_F1[padj < 0.05, sign.label1 := "P < 0.05"]
+##small changes for visualization
+spear_Popgen_F1$Intake_AA <- sub('.', '', spear_Popgen_F1$Intake_AA)
+spear_Popgen_F1$Intake_AA <- tolower(spear_Popgen_F1$Intake_AA)
+spear_Popgen_F1$Intake_AA  <- stringr::str_to_title(spear_Popgen_F1$Intake_AA)
 
+
+##visualization
 nutrition_popgen_F1 <- ggplot(spear_Popgen_F1[Auxo!="Gly"], aes(Auxo, Intake_AA, fill = rho)) +
   geom_tile() +
   geom_point(aes(shape = sign.label1)) +
@@ -184,6 +190,12 @@ spear_Popgen_F2 <- rbindlist(spear_list)
 spear_Popgen_F2[, padj := p.adjust(pvalue, method = "fdr")]
 spear_Popgen_F2[padj < 0.05, sign.label1 := "P < 0.05"]
 
+##small changes for visualization
+spear_Popgen_F2$Intake_AA <- sub('.', '', spear_Popgen_F2$Intake_AA)
+spear_Popgen_F2$Intake_AA <- tolower(spear_Popgen_F2$Intake_AA)
+spear_Popgen_F2$Intake_AA  <- stringr::str_to_title(spear_Popgen_F2$Intake_AA)
+
+## visualization
 nutrition_popgen_F2 <- ggplot(spear_Popgen_F2[Auxo != "Gly"], aes(Auxo, Intake_AA, fill = rho)) +
   geom_tile() +
   geom_point(aes(shape = sign.label1)) +
