@@ -36,7 +36,7 @@ source("Scripts/predict_auxos.R")
 source("Scripts/auxotable_not_melted.R")
 ```
 
-###### Analyze and then visualize the completeness of the amino acid biosynthesis pathways
+###### Analyze and visualize the completeness of the amino acid biosynthesis pathways
 
 ```R
 source("Scripts/Completeness_pathways.R")
@@ -62,7 +62,7 @@ source("Scripts/predict_auxos.R")
 source("Scripts/auxotable_not_melted.R")
 ```
 
-###### Analyze and then visualize the proportions of auxotrophic to prototrophic MAGs per phylum
+###### Analyze and  visualize the proportions of auxotrophic to prototrophic MAGs per phylum
 
 ```R
 source("Scripts/Auxo_Proto_data_per_phylum.R")
@@ -120,7 +120,7 @@ source("Scripts/auxotable_not_melted.R")
 source("Scripts/Scatterplot_Corr_NumbAuxos_Completeness.R")
 ```
 
-### 5) Abundancies of amino acid auxotrophies
+### 5) Abundancies of amino acid auxotrophies (HRGM)
 
 ###### Load models (completeness >=85% and a contamination <=2)
 
@@ -140,7 +140,7 @@ source("Scripts/predict_auxos.R")
 source("Scripts/auxotable_melted_merged.R")
 ```
 
-###### Analyze amino acid auxotrophies
+###### Analyze and visualize the abundance of amino acid auxotrophies
 
 ```R
 source("Scripts/Abundancies.R")
@@ -166,7 +166,7 @@ source("Scripts/predict_auxos.R")
 source("Scripts/auxotable_melted_merged.R")
 ```
 
-###### Analyze the production of by products with statistical analysis
+###### Analyze and visualize the production of by products with statistical analysis
 
 ```R
 source("Scripts/byproduct_production.R")
@@ -218,13 +218,13 @@ source("Scripts/predict_auxos.R")
 source("Scripts/auxotable_melted_merged.R")
 ```
 
-###### Analyze associations with and health markers
+###### Analyze and visualize associations health markers
 
 ```R
 source("Scripts/DZHK_Healthmarkers.R")
 ```
 
-### 9) Abundancies of auxotrophic bacteria in DZHK cohorte
+### 9) Frequencies of auxotrophic bacteria in DZHK cohorte
 
 ###### Load models
 
@@ -244,7 +244,7 @@ source("Scripts/predict_auxos.R")
 source("Scripts/auxotable_melted_merged.R")
 ```
 
-###### Get abundancies 
+###### Get frequencies and visualize  
 
 ```R
 source("Scripts/Abundancies_Gut_DZHK.R")
@@ -264,7 +264,7 @@ source("Scripts/init_models_filtered.R")
 source("Scripts/predict_auxos.R")
 ```
 
-###### Rasch sampler
+###### Rasch sampler analysis
 
 ```R
 source("Scripts/Rasch Sampler.R")
@@ -284,7 +284,7 @@ source("Scripts/init_models_filtered.R")
 source("Scripts/predict_auxos.R")
 ```
 
-###### Add information about the genomes
+###### Analyze and visualize co-occurencies of auxotrophies
 
 ```R
 source("Scripts/Occurence_Auxos_together.R")### 
@@ -353,7 +353,7 @@ source("Scripts/predict_auxos.R")
 source("Scripts/auxotable_melted_merged.R")
 ```
 
-###### Association between the frequency of auxotrophic bacteria and serum levels
+###### Association between the frequency of auxotrophic bacteria and serum metabolite levels
 
 ```R
 source("dzhk_metabolome.R")
