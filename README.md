@@ -2,7 +2,8 @@
 
 ## Project idea
 
-We already know that humans are auxotrophic for some amino acids. We cannot synthesize these amino acids and cover our demand for these essential amino acids by diet. This incapability of organism to synthesize vital nutrients is called auxotrophy and results in a high dependency on the nutritional environment. However, the nuritional preferences of our human gut microbiome is still not known. This project is about finding out which kind of auxotrophies can be found in human gut microbiota and what is the influence of auxotrophic gut microbiota on the host health. Metagenomes from the HRGM cataologue are used for a general characterzation of auxotrophies in the human gut microbiome. The impact of auxotrophies on microbial ecology in the gut was analyzed with data from two cohorts based in Germany. Metabolic genome-scale models are reconstructed from genomic files with gapseq and the auxotrophies are predicted with metabolic modeling using flux-balance-analysis. The figure below supplies a visualization for the definition of auxotrophies and gives an overview about the workflow with the used datasets in the study.
+We already know that humans are auxotrophic for some amino acids. We cannot synthesize these amino acids and cover our demand for these essential amino acids by diet. This incapability of organism to synthesize vital nutrients is called auxotrophy and results in a high dependency on the nutritional environment. However, little is known still about he nuritional preferences of our human gut microbiome. This project is about finding out which kind of auxotrophies can be found in the human gut microbiota and what is the influence of auxotrophihies on the microbial ecology. 
+Genomes from the HRGM cataologue are used for a general characterzation of auxotrophies in the human gut microbiome. The impact of auxotrophies on microbial ecology in the gut was analyzed with data from two cohorts based in Germany. Metabolic genome-scale models are reconstructed from genome data with gapseq and the auxotrophies are predicted with metabolic modeling using flux-balance-analysis. The figure below supplies a visualization for the definition of auxotrophies and gives an overview about the workflow with the used datasets in the study.
 
 <p align="center" width = "100%" >
   <img width = "100%" src="/output/plots/Definition_Auxo_readme.png" />
@@ -35,7 +36,7 @@ source("Scripts/predict_auxos.R")
 source("Scripts/auxotable_not_melted.R")
 ```
 
-###### Analyze and then visualize the completeness of the amino acid biosynthesis pathways
+###### Analyze and visualize the completeness of the amino acid biosynthesis pathways
 
 ```R
 source("Scripts/Completeness_pathways.R")
@@ -61,7 +62,7 @@ source("Scripts/predict_auxos.R")
 source("Scripts/auxotable_not_melted.R")
 ```
 
-###### Analyze and then visualize the proportions of auxotrophic to prototrophic MAGs per phylum
+###### Analyze and  visualize the proportions of auxotrophic to prototrophic MAGs per phylum
 
 ```R
 source("Scripts/Auxo_Proto_data_per_phylum.R")
@@ -119,7 +120,7 @@ source("Scripts/auxotable_not_melted.R")
 source("Scripts/Scatterplot_Corr_NumbAuxos_Completeness.R")
 ```
 
-### 5) Abundancies of amino acid auxotrophies
+### 5) Abundancies of amino acid auxotrophies (HRGM)
 
 ###### Load models (completeness >=85% and a contamination <=2)
 
@@ -139,7 +140,7 @@ source("Scripts/predict_auxos.R")
 source("Scripts/auxotable_melted_merged.R")
 ```
 
-###### Analyze amino acid auxotrophies
+###### Analyze and visualize the abundance of amino acid auxotrophies
 
 ```R
 source("Scripts/Abundancies.R")
@@ -165,7 +166,7 @@ source("Scripts/predict_auxos.R")
 source("Scripts/auxotable_melted_merged.R")
 ```
 
-###### Analyze the production of by products with statistical analysis
+###### Analyze and visualize the production of by products with statistical analysis
 
 ```R
 source("Scripts/byproduct_production.R")
@@ -217,13 +218,13 @@ source("Scripts/predict_auxos.R")
 source("Scripts/auxotable_melted_merged.R")
 ```
 
-###### Analyze associations with and health markers
+###### Analyze and visualize associations health markers
 
 ```R
 source("Scripts/DZHK_Healthmarkers.R")
 ```
 
-### 9) Abundancies of auxotrophic bacteria in DZHK cohorte
+### 9) Frequencies of auxotrophic bacteria in DZHK cohorte
 
 ###### Load models
 
@@ -243,7 +244,7 @@ source("Scripts/predict_auxos.R")
 source("Scripts/auxotable_melted_merged.R")
 ```
 
-###### Get abundancies 
+###### Get frequencies and visualize  
 
 ```R
 source("Scripts/Abundancies_Gut_DZHK.R")
@@ -263,7 +264,7 @@ source("Scripts/init_models_filtered.R")
 source("Scripts/predict_auxos.R")
 ```
 
-###### Rasch sampler
+###### Rasch sampler analysis
 
 ```R
 source("Scripts/Rasch Sampler.R")
@@ -283,7 +284,7 @@ source("Scripts/init_models_filtered.R")
 source("Scripts/predict_auxos.R")
 ```
 
-###### Add information about the genomes
+###### Analyze and visualize co-occurencies of auxotrophies
 
 ```R
 source("Scripts/Occurence_Auxos_together.R")### 
@@ -352,7 +353,7 @@ source("Scripts/predict_auxos.R")
 source("Scripts/auxotable_melted_merged.R")
 ```
 
-###### Association between the frequency of auxotrophic bacteria and serum levels
+###### Association between the frequency of auxotrophic bacteria and serum metabolite levels
 
 ```R
 source("dzhk_metabolome.R")
@@ -410,161 +411,4 @@ source("Scripts/auxotable_melted_merged.R")
 source("AA_intake_popgen_auxos.R")
 ```
 
-### Further scripts that may be used in the future but are yet not displayed in the flowchart
-
-### Completeness of bile acid metabolism pathways
-
-###### Load models and filter them to get only the models with a completeness >=85% and a contamination <=2
-
-```R
-source("Scripts/init_models_filtered.R")
-```
-
-###### Predict auxotrophies
-
-```R
-source("Scripts/predict_auxos.R")
-```
-
-###### Add information about the genomes
-
-```R
-source("Scripts/auxotable_melted_merged.R")
-```
-
-###### Analyze bile acid metabolism pathways with statistical analysis
-
-```R
-source("Scripts/bile_acid_metabolism_trp_auxo.R")
-```
-
-### H2S Production by trp auxotrophic microbiota
-
-###### Load models and filter them to get only the models with a completeness >=85% and a contamination <=2
-
-```R
-source("Scripts/init_models_filtered.R")
-```
-
-###### Predict auxotrophies
-
-```R
-source("Scripts/predict_auxos.R")
-```
-
-###### Add information about the genomes
-
-```R
-source("Scripts/auxotable_melted_merged.R")
-```
-
-###### Analyze H2S production with statistics
-
-```R
-source("Scripts/H2S_production_trp_auxo_statistics.R")
-```
-
-### Abundancies in the gut (FoCus cohorte)
-
-###### Load models (completeness >=85% and a contamination <=2)
-
-```R
-source("Scripts/init_models_filtered.R")
-```
-
-###### Predict auxotrophies
-
-```R
-source("Scripts/predict_auxos.R")
-```
-
-###### Add information about the genomes
-
-```R
-source("Scripts/auxotable_melted_merged.R")
-```
-
-###### Analyze the abundance of auxotrophies in the gut by data from the FoCus cohorte
-
-```R
-source("Scripts/Abundancies_gut.R")
-```
-
-### Associations of auxotrophic bacteria and diseases (FoCus cohorte)
-
-###### Load models (completeness >=85% and a contamination <=2)
-
-```R
-source("Scripts/init_models_filtered.R")
-```
-
-###### Predict auxotrophies
-
-```R
-source("Scripts/predict_auxos.R")
-```
-
-###### Add information about the genomes
-
-```R
-source("Scripts/auxotable_melted_merged.R")
-```
-
-###### Analyze associations with diseases or health factors(BMI, weight, age)
-
-```R
-source("Scripts/FoCus_new.R")
-```
-
-### Intake of amino acids and abundance of auxotrophic gut bacteria
-
-###### Load models() completeness >=85% and a contamination <=2)
-
-```R
-source("Scripts/init_models_filtered.R")
-```
-
-###### Predict auxotrophies
-
-```R
-source("Scripts/predict_auxos.R")
-```
-
-###### Add information about the genomes
-
-```R
-source("Scripts/auxotable_melted_merged.R")
-```
-
-###### Spearman correlation
-
-```R
-source("Scripts/Nutrition_Auxos_FoCus.R")
-```
-
-### Frequency of auxotrophic bacteria in chronic inflammatory diseases (TrypCID)
-
-###### Load models (completeness >=85% and a contamination <=2)
-
-```R
-source("Scripts/init_models_filtered.R")
-```
-
-###### Predict auxotrophies
-
-```R
-source("Scripts/predict_auxos.R")
-```
-
-###### Add information about the genomes
-
-```R
-source("Scripts/auxotable_melted_merged.R")
-```
-
-###### Analyze association with diseases
-
-```R
-source("Scripts/TrypCID.R")
-```
 
