@@ -174,7 +174,7 @@ source("Scripts/byproduct_production.R")
 
 ### 7) Effect of auxotrophic bacteria on the diversity of microbial communities
 
-###### Load models from DZHK cohorte
+###### Load models from discovery cohorte
 
 ```R
 source("Scripts/DZHK_data_init.R")
@@ -198,7 +198,7 @@ source("Scripts/auxotable_melted_merged.R")
 source("Scripts/diversity_Auxos.R")
 ```
 
-### 8) Association of auxotrophies with Health markers in DZHK cohorte
+### 8) Association of auxotrophies with Health markers in discovery cohorte
 
 ###### Load models from DZHK cohorte
 
@@ -224,7 +224,7 @@ source("Scripts/auxotable_melted_merged.R")
 source("Scripts/DZHK_Healthmarkers.R")
 ```
 
-### 9) Frequencies of auxotrophic bacteria in DZHK cohorte
+### 9) Frequencies of auxotrophic bacteria in discovery cohorte
 
 ###### Load models
 
