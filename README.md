@@ -9,7 +9,8 @@ Genomes from the HRGM cataologue are used for a general characterzation of auxot
   <img width = "100%" src="/output/plots/Definition_Auxo_readme.png" />
 </p>
 
-Free available icons were taken from www.flaticon.com (creators: photo3idea_studio, Freepik, surang, Eucalyp, Voysla, juicy_fish, smashingstocks, SBTS2018)).
+Free available icons were taken from www.flaticon.com (creators: photo3idea_studio, Freepik, surang, Eucalyp, Voysla, juicy_fish, smashingstocks, SBTS2018).
+
 ## Instructions for running the scripts
 
 The following README-file gives an overview about the order of running the scripts. It always starts first with the loading of the models. It is recommended to clear the environment before loading a new dataset of models. The instructions in this README includes the analysis for all datasets. The code of every analysis and resulting figures can be found in this repository. An overview about the running order is given by the flowchart below. Each colorful line represents the order of scripts for every figure. Detailed instructions are given under the flowchart. The scripts can be run in R (4.1.2). Further information about the R packages can be found in the first "load models" Scripts. 
