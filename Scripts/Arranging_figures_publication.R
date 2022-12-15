@@ -157,7 +157,14 @@ fi7.1
 ggsave("output/plots/figure7_01.06.22_new_Abund_gut_DHZK.pdf", plot = fi7.1,
       width = 12, height = 15)
 
-
+######## figure 6
+fi8 <- ggarrange(stability, stability_Hamming, 
+                 ncol=2,
+                 nrow=1, 
+                 labels = c("a","b"))
+fi8
+ggsave("output/plots/Stability_AuxosHamming.pdf", plot = fi8,
+       width = 9.5, height = 5)
 
 #partial spearman correlation and abundance of amino acid auxotrophies in the gut 
 # fi7 <- ggarrange(b, linear_health,dis_health, ncol=3,

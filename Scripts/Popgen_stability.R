@@ -113,7 +113,7 @@ stability <- ggplot(popgen_bray_numb_auxos2, aes(V1, Bray_distance)) +
   geom_point() +
   geom_smooth(method=lm) +
   theme_bw() +
-  xlab("Abundance-weighted average \n of auxotrophies per MAG") +
+  xlab("Abundance-weighted average of auxotrophies per MAG") +
   ylab("Bray Curtis distance") +
   theme(axis.text.x = element_text(colour="black")) +
   theme(axis.text.y = element_text(colour= "black")) +
