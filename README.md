@@ -423,7 +423,7 @@ source("Scripts/predict_auxos.R")
 ###### Add information about the genomes
 
 ```R
-source("Scripts/Popgen_stability.R")")
+source("Scripts/Popgen_stability.R")
 ```
 
 ###### Auxotrophic bacteria and dietary intake of amino acids
