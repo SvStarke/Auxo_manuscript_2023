@@ -32,7 +32,7 @@ HammingDT <- rbindlist(HammingDT)
 
 ###Popgen_stability Scripts
 
-source("Scripts/Popgen_stability.R")
+#source("Scripts/Popgen_stability.R")
 
 Stability_hamming <- merge(HammingDT, popgen_bray_numb_auxos2, by.x= "sample", by.y="sample")
 
