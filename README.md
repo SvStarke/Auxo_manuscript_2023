@@ -306,7 +306,7 @@ source("Scripts/DZHK_data_init.R")
 ```R
 source("Scripts/predict_auxos.R")
 ```
-###### Load all scripts from flow number 8 
+###### Load all scripts from flow number 7 
 
 ###### Correlation analysis
 
