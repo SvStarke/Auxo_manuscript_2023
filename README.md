@@ -298,7 +298,7 @@ source("Scripts/Occurence_Auxos_together.R")###
 ###### Load models 
 
 ```R
-source("Scripts/DZHK_data_init.R.R")
+source("Scripts/DZHK_data_init.R")
 ```
 
 ###### Predict auxotrophies
@@ -319,7 +319,7 @@ source("numb_auxos_div.R")
 ###### Load models 
 
 ```R
-source("Scripts/DZHK_data_init.R.R")
+source("Scripts/DZHK_data_init.R")
 ```
 
 ###### Predict auxotrophies
@@ -340,7 +340,7 @@ source("hamming_distance.R")
 ###### Load models 
 
 ```R
-source("Scripts/DZHK_data_init.R.R")
+source("Scripts/DZHK_data_init.R")
 ```
 
 ###### Predict auxotrophies
@@ -366,7 +366,7 @@ source("dzhk_metabolome.R")
 ###### Load models 
 
 ```R
-source("Scripts/DZHK_data_init.R.R")
+source("Scripts/Popgen_data_init.R")
 ```
 
 ###### Predict auxotrophies
@@ -375,16 +375,10 @@ source("Scripts/DZHK_data_init.R.R")
 source("Scripts/predict_auxos.R")
 ```
 
-###### Add information about the genomes
-
-```R
-source("Scripts/auxotable_melted_merged.R")
-```
-
 ###### Auxotrophic bacteria and stability 
 
 ```R
-source("Popgen_stability.R")
+source("Scripts/Popgen_stability.R")
 ```
 
 ### 16) Intake of amino acids on the frequency of amino acid auxotrophic bacteria
@@ -392,7 +386,7 @@ source("Popgen_stability.R")
 ###### Load models 
 
 ```R
-source("Scripts/DZHK_data_init.R.R")
+source("Scripts/Popgen_data_init.R")
 ```
 
 ###### Predict auxotrophies
@@ -412,5 +406,29 @@ source("Scripts/auxotable_melted_merged.R")
 ```R
 source("AA_intake_popgen_auxos.R")
 ```
+### 17) Hamming distance and stability (Popgen Cohorte)
 
+###### Load models 
+
+```R
+source("Scripts/Popgen_data_init.R")
+```
+
+###### Predict auxotrophies
+
+```R
+source("Scripts/predict_auxos.R")
+```
+
+###### Add information about the genomes
+
+```R
+source("Scripts/Popgen_stability.R")")
+```
+
+###### Auxotrophic bacteria and dietary intake of amino acids
+
+```R
+source("Scripts/Distance_Stability.R")
+```
 
