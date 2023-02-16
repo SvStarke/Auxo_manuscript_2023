@@ -56,7 +56,7 @@ a
 
 occurence3 <- occurence2[,c(4,5,7)]
 
-#########  new evaluation of the pvlaue  ###########
+#########  new evaluation of the pvalue  ###########
 
 nsim <- 1000
 
@@ -74,7 +74,9 @@ for (i1 in  1:(length(AAx)-1)) {
     #tmp_occu1 <- data.table(tmp_occu)
     #colnames(tmp_occu1) <- "perc"
     mu_occu <- occurence3[occurence3$A1 == AA1 & occurence3$A2 == AA2, Freq_all]
-    pvalue <- (sum(tmp_occu >= abs(mu_occu)) + sum(tmp_occu <= -abs(mu_occu)))/nsim
+    mean_bs <- mean(tmp_occu)
+    tmp_centered  <- tmp_occu-mean_bs
+    pvalue <- (1+ sum(abs(tmp_centered) >= abs(mu_occu-mean_bs)))/(nsim+1)
     tmp_p <- data.table(A1 = AA1, A2 = AA2,
                              p.value = pvalue, 
                              obs_freq = mu_occu, 
@@ -85,14 +87,15 @@ for (i1 in  1:(length(AAx)-1)) {
 }
 
 new_table_p <- rbindlist(tmp_pvalue_rasch)
+###exclude glycine
+new_table_p <- new_table_p[A1 !="Gly"]
+new_table_p <- new_table_p[A2 !="Gly"]
 new_table_p[, padj := p.adjust(p.value, method = "fdr")]
 new_table_p[padj < 0.05, sign.label1 := "Padj < 0.05"]
 new_table_p[,log2FC := log2(obs_freq/exp_freq_median)]
 new_table_p
 
-###exclude glycine
-new_table_p <- new_table_p[A1 !="Gly"]
-new_table_p <- new_table_p[A2 !="Gly"]
+
 
 fwrite(new_table_p, file = "/home/svenja/Documents/Rasch_Sampler.csv")
 
