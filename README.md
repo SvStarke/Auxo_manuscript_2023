@@ -254,7 +254,7 @@ source("Scripts/Abundancies_Gut_DZHK.R")
 
 ### 10) Rasch Sampler
 
-###### Load models() completeness >=85% and a contamination <=2)
+###### Load models(completeness >=85% and a contamination <=2)
 
 ```R
 source("Scripts/init_models_filtered.R")
@@ -265,16 +265,21 @@ source("Scripts/init_models_filtered.R")
 ```R
 source("Scripts/predict_auxos.R")
 ```
+###### Analyze and visualize co-occurencies of auxotrophies
+
+```R
+source("Scripts/Occurence_Auxos_together.R") 
+```
 
 ###### Rasch sampler analysis
 
 ```R
-source("Scripts/Rasch Sampler.R")
+source("Scripts/Rasch_Sampler.R")
 ```
 
 ### 11) Occurence of Auxotrophies together
 
-###### Load models() completeness >=85% and a contamination <=2)
+###### Load models(completeness >=85% and a contamination <=2)
 
 ```R
 source("Scripts/init_models_filtered.R")
@@ -289,7 +294,7 @@ source("Scripts/predict_auxos.R")
 ###### Analyze and visualize co-occurencies of auxotrophies
 
 ```R
-source("Scripts/Occurence_Auxos_together.R")### 
+source("Scripts/Occurence_Auxos_together.R") 
 ```
 
 
