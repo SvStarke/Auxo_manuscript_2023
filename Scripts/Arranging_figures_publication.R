@@ -20,7 +20,7 @@ source("Scripts/Occurence_Auxos_together.R")
 
 #create figure
 fi3.1 <- ggarrange(o,t,
-                 labels = c("a","b"),
+                 labels = c("A","B"),
                  ncol=2, nrow= 1, common.legend = FALSE)
 fi3.1
 
@@ -115,7 +115,7 @@ fi6.1 +theme(plot.margin = unit(c(1,0.5,2,0.5), "cm")) +
         legend.title = element_text(size=8))
 
 fi6 <- ggarrange(fi6.1,
-                 labels = c("a"),
+                 labels = c("A"),
                  ncol=1, nrow= 1, common.legend = FALSE)
 fi6
 
@@ -126,7 +126,7 @@ ggsave("output/plots/figure6_28.04.22.pdf", plot = fi6,
 ################# figure 5 ###########
 #Load models 
 
-source("Scripts/init_models_filtered.R")
+source("Scripts/DZHK_data_init.R")
 
 #Predict auxotrophies
 
@@ -138,7 +138,7 @@ source("Scripts/auxotable_melted_merged.R")
 
 #Analyze associations with diseases or health factors(BMI, weight, age)
 
-source("Scripts/DZHK_healthmarkers.R")
+source("Scripts/DZHK_Healthmarkers.R")
 
 #Analyze associations with diseases or health factors(BMI, weight, age)
 
@@ -147,12 +147,23 @@ source("Scripts/Abundancies_Gut_DZHK.R")
 ###diversity and frequency of auxos
 source("Scripts/diversity_Auxos.R")
 
+###number of auxos and diversity
+source("Scripts/numb_auxos_div_DZHK.R")
+
+###number of auxos and hamming distance
+source("Scripts/Hamming_DZHK.R")
+
+###metabolomics and auxos
+source("Scripts/init_dzhk_metabolome_analysis.R")
+source("Scripts/dzhk_metabolome.R")
+
+
 ###combine all figures in one figure
 fi7 <- ggarrange(ü, corr_health_div_plot,div_auxos, Hamming_shannon, ncol=1,
                    nrow=4, heights = c(1,1.3,1.1,1.1), widths= c(1,1,1,1),
-                 labels = c("a","b", "c", "d"), hjust = c(-0.5,-0.5, -0.5, -0.5), vjust = c(1.5,1,-0.5,1))
+                 labels = c("A","B", "C", "D"), hjust = c(-0.5,-0.5, -0.5, -0.5), vjust = c(1.5,1,-0.5,1))
 fi7
-fi7.1 <- ggarrange(fi7,met_DZHK, ncol = 2, nrow=1, widths = c(1.2,1.2), labels = "e",hjust = c(-54))
+fi7.1 <- ggarrange(fi7,met_DZHK, ncol = 2, nrow=1, widths = c(1.2,1.2), labels = "E",hjust = c(-45))
 fi7.1
 ggsave("output/plots/figure7_01.06.22_new_Abund_gut_DHZK.pdf", plot = fi7.1,
       width = 12, height = 15)
@@ -161,7 +172,7 @@ ggsave("output/plots/figure7_01.06.22_new_Abund_gut_DHZK.pdf", plot = fi7.1,
 fi8 <- ggarrange(stability, stability_Hamming, 
                  ncol=2,
                  nrow=1, 
-                 labels = c("a","b"))
+                 labels = c("A","B"))
 fi8
 ggsave("output/plots/Stability_AuxosHamming.pdf", plot = fi8,
        width = 9.5, height = 5)

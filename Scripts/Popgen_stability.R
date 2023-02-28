@@ -125,81 +125,81 @@ ggsave("output/plots/stability_auxos.pdf", plot = stability,
        width = 4, height = 4)
 
 
-###############           Jaccard distance              ################
-
-##create a loop
-test3 <- merge(popgen_norm, popgen_data, by.x= "sample", by.y = "atlas_name")
-test3 <- data.table(test3)
-
-#View(test2)
-
-k <- 1
-Jac_all <- list()
-for(F1 in F1_names) {
-  print(F1)
-  for(F2 in F2_names) {
-    tmp4<- test2[SampleID == F1 | SampleID == F2, ]
-    
-    if(tmp4$new_id[1] == tmp4$new_id[2]) {
-      tmp5 <- tmp4[,c(2:571)]
-      df4 <- mutate_all(tmp5, function(x) as.numeric(as.character(x)))
-      Jac_tmp <-vegdist(df4, method = "jaccard")
-      #Bray_tmp
-      Jac <- data.table(Sample = F1,
-                          Jac_distance = Jac_tmp)
-      Jac_all[[k]] <- Jac
-      k <- k+1
-    }
-  }
-}
-
-Jac_samples <- rbindlist(Jac_all)
-
-
-#merge diversity files and bray curtis based on normalized abundance data
-
-x<- merge(popgen_div_numb_auxos, Jac_samples, by.x="SampleID", by.y="Sample")
-
-##correlation analysis for stability
-cor.test(x$Jac_distance, x$V1, method = "spearman", exact = FALSE)
-
-### new column with information about timepoints
-tmp_popgen_div_numb_auxos[, Time := gsub("^.{9}", "", SampleID)]
-df <- tmp_popgen_div_numb_auxos
-
-###create new dataframe for visualization of F1 and F2
-F1 <- df[Time == "F1"]
-F1 <- F1$V1
-F2 <- df[Time == "F2"]
-F2 <- F2$V1
-F1F2 <- cbind(F1, F2)
-F1F2 <- data.frame(F1F2)
-
-
-
-corr_F1F2 <- ggplot(F1F2, aes(F1, F2))+
-  geom_point() +
-  geom_smooth() +
-  xlab("Abundance-weighted average of auxotrophies per MAG at F1")+
-  ylab("Abundance-weighted average of auxotrophies per MAG at F2") +
-  theme(panel.background = element_rect(fill="white", colour= "white")) +
-  theme(axis.line = element_line(size=0.2))
-
-corr_F1F2.2 <-ggplot(F1F2, aes(F1, F2))+
-  geom_point() +
-  xlab("Abundance-weighted average of auxotrophies per MAG at F1")+
-  ylab("Abundance-weighted average of auxotrophies per MAG at F2") +
-  theme(panel.background = element_rect(fill="white", colour= "white")) +
-  theme(axis.line = element_line(size=0.2))
-
-cor.test(F1F2$F1, F1F2$F2, method = "spearman")
-
-ggsave("output/plots/F1F2_with_line.pdf", plot = corr_F1F2,
-       width = 6, height = 5)
-
-ggsave("output/plots/F1F2without_line.pdf", plot = corr_F1F2.2,
-       width = 6, height = 5)
-
+# ###############           Jaccard distance              ################
+# 
+# ##create a loop
+# test3 <- merge(popgen_norm, popgen_data, by.x= "sample", by.y = "atlas_name")
+# test3 <- data.table(test3)
+# 
+# #View(test2)
+# 
+# k <- 1
+# Jac_all <- list()
+# for(F1 in F1_names) {
+#   print(F1)
+#   for(F2 in F2_names) {
+#     tmp4<- test2[SampleID == F1 | SampleID == F2, ]
+#     
+#     if(tmp4$new_id[1] == tmp4$new_id[2]) {
+#       tmp5 <- tmp4[,c(2:571)]
+#       df4 <- mutate_all(tmp5, function(x) as.numeric(as.character(x)))
+#       Jac_tmp <-vegdist(df4, method = "jaccard")
+#       #Bray_tmp
+#       Jac <- data.table(Sample = F1,
+#                           Jac_distance = Jac_tmp)
+#       Jac_all[[k]] <- Jac
+#       k <- k+1
+#     }
+#   }
+# }
+# 
+# Jac_samples <- rbindlist(Jac_all)
+# 
+# 
+# #merge diversity files and bray curtis based on normalized abundance data
+# 
+# x<- merge(popgen_div_numb_auxos, Jac_samples, by.x="SampleID", by.y="Sample")
+# 
+# ##correlation analysis for stability
+# cor.test(x$Jac_distance, x$V1, method = "spearman", exact = FALSE)
+# 
+# ### new column with information about timepoints
+# tmp_popgen_div_numb_auxos[, Time := gsub("^.{9}", "", SampleID)]
+# df <- tmp_popgen_div_numb_auxos
+# 
+# ###create new dataframe for visualization of F1 and F2
+# F1 <- df[Time == "F1"]
+# F1 <- F1$V1
+# F2 <- df[Time == "F2"]
+# F2 <- F2$V1
+# F1F2 <- cbind(F1, F2)
+# F1F2 <- data.frame(F1F2)
+# 
+# 
+# 
+# corr_F1F2 <- ggplot(F1F2, aes(F1, F2))+
+#   geom_point() +
+#   geom_smooth() +
+#   xlab("Abundance-weighted average of auxotrophies per MAG at F1")+
+#   ylab("Abundance-weighted average of auxotrophies per MAG at F2") +
+#   theme(panel.background = element_rect(fill="white", colour= "white")) +
+#   theme(axis.line = element_line(size=0.2))
+# 
+# corr_F1F2.2 <-ggplot(F1F2, aes(F1, F2))+
+#   geom_point() +
+#   xlab("Abundance-weighted average of auxotrophies per MAG at F1")+
+#   ylab("Abundance-weighted average of auxotrophies per MAG at F2") +
+#   theme(panel.background = element_rect(fill="white", colour= "white")) +
+#   theme(axis.line = element_line(size=0.2))
+# 
+# cor.test(F1F2$F1, F1F2$F2, method = "spearman")
+# 
+# ggsave("output/plots/F1F2_with_line.pdf", plot = corr_F1F2,
+#        width = 6, height = 5)
+# 
+# ggsave("output/plots/F1F2without_line.pdf", plot = corr_F1F2.2,
+#        width = 6, height = 5)
+# 
 
 
 

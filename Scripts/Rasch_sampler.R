@@ -85,7 +85,7 @@ for (i1 in  1:(length(AAx)-1)) {
     k <- k+1
   }
 }
-
+warnings()
 new_table_p <- rbindlist(tmp_pvalue_rasch)
 ###exclude glycine
 new_table_p <- new_table_p[A1 !="Gly"]
