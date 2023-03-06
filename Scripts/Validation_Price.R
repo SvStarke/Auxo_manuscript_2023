@@ -50,6 +50,11 @@ Price_Vali
 ggsave("output/plots/Price_Val.pdf", plot = Price_Vali,
        width = 6,height =4)
 
+##number of organism with at least one amino acid auxotrophy
+Auxotrophy$count <- rowSums(Auxotrophy == 0)
+
+nrow(Auxotrophy[Auxotrophy$count !=0])
+
 #validation of loop
 (nrow(Auxotrophy_2[Auxotrophy_2$Prototrophy == 1 & Auxotrophy_2$Compound == "Trp"]))
   
