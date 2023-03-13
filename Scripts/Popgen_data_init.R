@@ -13,7 +13,7 @@ library(rstatix)
 library(RaschSampler)
 library(Hmisc)
 library(PResiduals)
-#sybil::SYBIL_SETTINGS("SOLVER","cplexAPI")
+sybil::SYBIL_SETTINGS("SOLVER","cplexAPI")
 
 
 # get QC for MAGs
@@ -23,7 +23,6 @@ contamination_cutoff <- 2
 popgen_MAGQC <- fread("/mnt/nuuk/2022/MR_popgen_MGX/atlas/completeness.tsv")
 popgen_rel_mags <- popgen_MAGQC[Completeness >= completeness_cuttoff & contamination_cutoff <= contamination_cutoff, `Bin Id`]
 ### load models
-
 
 models <- fetch_model_collection("/mnt/nuuk/2022/MR_popgen_MGX/models/",
                                  IDs = popgen_rel_mags)
