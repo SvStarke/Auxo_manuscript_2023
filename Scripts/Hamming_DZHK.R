@@ -44,7 +44,8 @@ Hamming_shannon <- ggplot(Div_hamming, aes(D.Shannon, avgHamming)) +
   theme(axis.text.x = element_text(colour="black")) +
   theme(axis.text.y = element_text(colour= "black")) +
   theme(axis.title.y = element_text(size = 8, margin = margin(r = 10))) +
-  theme(axis.title.x = element_text(size = 8, margin = margin(t = 10))) 
+  theme(axis.title.x = element_text(size = 8, margin = margin(t = 10))) +
+  stat_cor(method = "spearman")
 
 ggsave("output/plots/hamming_Shannon.pdf", plot = Hamming_shannon,
        width = 6, height = 5)

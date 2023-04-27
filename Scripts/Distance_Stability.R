@@ -41,7 +41,7 @@ cor.test(Stability_hamming$Bray_distance, Stability_hamming$avgHamming, method =
 ##visualization
 stability_Hamming <- ggplot(Stability_hamming, aes(avgHamming, Bray_distance)) +
   geom_point() +
-  geom_smooth(method=lm) +
+  geom_smooth(method=lm, se = FALSE) +
   theme_bw() +
   xlab("Average Hamming distance") +
   ylab("Bray Curtis distance") +

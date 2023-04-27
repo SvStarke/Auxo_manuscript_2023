@@ -203,7 +203,7 @@ ggsave("output/plots/suppfigure2_03.06.pdf", plot = prop_all,
 nutr_F1F2_freq <- ggarrange(nutrition_popgen_F1, nutrition_popgen_F2,
                             nrow =1, ncol=2, common.legend = TRUE,
                             legend = c("bottom"),
-                            labels = c("a","b"))
+                            labels = c("A","B"))
 
 ggsave("output/plots/suppfigure_intakeAA_freqAuxos.pdf", plot=nutr_F1F2_freq,
        width= 11, height=5)
