@@ -174,6 +174,7 @@ fi8 <- ggarrange(stability, stability_Hamming,
                  nrow=1, 
                  labels = c("A","B"))
 fi8
+# test
 ggsave("output/plots/Stability_AuxosHamming.pdf", plot = fi8,
        width = 9.5, height = 5)
 
