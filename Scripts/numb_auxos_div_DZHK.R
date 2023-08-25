@@ -16,15 +16,15 @@ cor.test(dzhk_div_numb_auxos$D.Shannon, dzhk_div_numb_auxos$V1, method = "spearm
 
 ###visualization
 div_auxos <- ggplot(dzhk_div_numb_auxos, aes(D.Shannon, V1)) +
-  geom_point() +
-  geom_smooth(method=lm) +
+  geom_smooth(method=lm, col = "black") +
+  geom_point(shape = 21) +
   theme_bw() +
   xlab("Shannon diversity") +
-  ylab("Abundance-weighted average of auxotrophies per MAG") +
+  ylab("Abundance-weighted average\nof auxotrophies") +
   theme(axis.text.x = element_text(colour="black")) +
   theme(axis.text.y = element_text(colour= "black")) +
-  theme(axis.title.y = element_text(size = 8, margin = margin(r = 10))) +
-  theme(axis.title.x = element_text(size = 8, margin = margin(t = 10))) +
+  theme(axis.title.y = element_text( margin = margin(r = 10))) +
+  theme(axis.title.x = element_text( margin = margin(t = 10))) +
   stat_cor(method = "spearman")
 div_auxos
 ggsave("output/plots/Numb_Auxos_Div.pdf", plot = div_auxos,

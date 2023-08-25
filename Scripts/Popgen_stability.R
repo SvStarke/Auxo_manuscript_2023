@@ -7,11 +7,11 @@ source("Scripts/predict_auxos.R")
 
 ##prepare data table about meta information
 ##load info about all samples
-popgen_samples <- fread("/mnt/nuuk/2022/MR_popgen_MGX/atlas/atlas_samples.csv")
+popgen_samples <- fread("data/mgx_abundances/atlas_samples.csv")
 popgen_samples$new_name <- sub("-L001|-L002", "", popgen_samples$Full_Name)
 #View(popgen_samples)
 ##load first timepoint
-popgen_F1 <- fread("/mnt/nuuk/2022/MR_popgen_MGX/meta/1.metadata1.tsv")
+popgen_F1 <- fread("data/meta/1.metadata1.tsv")
 popgen_F1$newID <- sub("$", "_F1", popgen_F1$new_id)
 #head(popgen_F1)
 #colnames(popgen_F1)
@@ -19,7 +19,7 @@ popgen_F1$newID <- sub("$", "_F1", popgen_F1$new_id)
 popgen_F1 <- popgen_F1[,c(1,2,20)]
 
 ##load second timepoint
-popgen_F2 <- fread("/mnt/nuuk/2022/MR_popgen_MGX/meta/1.metadata2.tsv")
+popgen_F2 <- fread("data/meta/1.metadata2.tsv")
 popgen_F2$newID <- sub("$", "_F2", popgen_F2$new_id)
 colnames(popgen_F2) [2] <- "new_id"
 
@@ -37,12 +37,12 @@ popgen_data <- popgen_data[popgen_data$atlas_name != "S26" & popgen_data$atlas_n
 popgen_data
 # 
 ###calculate bray curtis dissimilarity between two time points
-popgen_mags_abun1 <- t(popgen_mags_abun1)
-popgen_mags_abun1 <- data.frame(popgen_mags_abun1)
-popgen_mags_abun1$sample <- row.names(popgen_mags_abun1)
+popgen_hrgm_abun1 <- t(popgen_hrgm_abun1)
+popgen_hrgm_abun1 <- data.frame(popgen_hrgm_abun1)
+popgen_hrgm_abun1$sample <- row.names(popgen_hrgm_abun1)
 
 #View(popgen_mags_abun1)
-test <- merge(popgen_mags_abun1, popgen_data, by.x= "sample", by.y = "atlas_name")
+test <- merge(popgen_hrgm_abun1, popgen_data, by.x= "sample", by.y = "atlas_name")
 test <- data.table(test)
 #View(test)
 # 
@@ -66,7 +66,6 @@ for(F1 in F1_names) {
   print(F1)
   for(F2 in F2_names) {
     tmp3<- test2[SampleID == F1 | SampleID == F2, ]
-    
     if(tmp3$new_id[1] == tmp3$new_id[2]) {
       tmp4 <- tmp3[,c(2:571)]
       df3 <- mutate_all(tmp4, function(x) as.numeric(as.character(x)))
@@ -109,16 +108,17 @@ popgen_bray_numb_auxos2 <- merge(popgen_div_numb_auxos, Bray_samples2, by.x="Sam
 cor.test(popgen_bray_numb_auxos2$Bray_distance, popgen_bray_numb_auxos2$V1, method = "spearman", exact = FALSE)
 
 ##visualization
-stability <- ggplot(popgen_bray_numb_auxos2, aes(V1, Bray_distance)) +
-  geom_point() +
-  geom_smooth(method=lm) +
+stability <- ggplot(popgen_bray_numb_auxos2, aes(V1, 1-Bray_distance)) +
+  geom_smooth(method=lm, col = "black") +
+  geom_point(shape = 21) +
   theme_bw() +
-  xlab("Abundance-weighted average of auxotrophies per MAG") +
-  ylab("Bray Curtis distance") +
+  xlab("Abundance-weighted average of auxotrophies") +
+  ylab("1 - Bray Curtis distance") +
   theme(axis.text.x = element_text(colour="black")) +
   theme(axis.text.y = element_text(colour= "black")) +
   theme(axis.title.y = element_text(size = 12, margin = margin(r = 10))) +
-  theme(axis.title.x = element_text(size = 12, margin = margin(t = 10))) 
+  theme(axis.title.x = element_text(size = 12, margin = margin(t = 10))) +
+  stat_cor(method = "spearman")
 stability
 
 ggsave("output/plots/stability_auxos.pdf", plot = stability,
@@ -205,25 +205,25 @@ ggsave("output/plots/stability_auxos.pdf", plot = stability,
 
 
 ####       ordered F1 and F2 plot ##############
-sel_order <- 
-  df %>% 
-  filter(Time == "F1") %>% 
-  arrange(desc(V1)) %>% 
-  mutate(new_id = factor(new_id))
-
-
-order_stability <- df %>% 
-  mutate(new_id = factor(new_id, levels = sel_order$new_id, ordered = TRUE)) %>% 
-  ggplot(aes(x = new_id, y = V1), group = new_id) +
-  geom_point(aes(colour = Time)) +
-  xlab("Samples") +
-  ylab("Abundance-weighted average of auxotrophies per MAG") +
-  theme(axis.text.x = element_blank()) +
-  labs(colour = "Timepoint") +
-  guides(fill=guide_legend(title="Timepoints")) +
-  theme(panel.background = element_rect(fill="white", colour= "white")) +
-  theme(axis.line = element_line(size=0.2))
-
-order_stability 
-ggsave("output/plots/order_stabilityx.pdf", plot = order_stability,
-       width = 10, height = 5)
+# sel_order <- 
+#   df %>% 
+#   filter(Time == "F1") %>% 
+#   arrange(desc(V1)) %>% 
+#   mutate(new_id = factor(new_id))
+# 
+# 
+# order_stability <- df %>% 
+#   mutate(new_id = factor(new_id, levels = sel_order$new_id, ordered = TRUE)) %>% 
+#   ggplot(aes(x = new_id, y = V1), group = new_id) +
+#   geom_point(aes(colour = Time)) +
+#   xlab("Samples") +
+#   ylab("Abundance-weighted average of auxotrophies per MAG") +
+#   theme(axis.text.x = element_blank()) +
+#   labs(colour = "Timepoint") +
+#   guides(fill=guide_legend(title="Timepoints")) +
+#   theme(panel.background = element_rect(fill="white", colour= "white")) +
+#   theme(axis.line = element_line(size=0.2)) 
+# 
+# order_stability 
+# ggsave("output/plots/order_stabilityx.pdf", plot = order_stability,
+#        width = 10, height = 5)

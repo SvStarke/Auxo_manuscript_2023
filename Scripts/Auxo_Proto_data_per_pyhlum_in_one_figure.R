@@ -37,7 +37,7 @@ p <- ggplot(prop_all_phyla, aes(phylum, perc)) +
   theme(legend.text = element_text(size = 12, colour = "black")) 
 p
 
-ggsave("/Users/Svenja/Desktop/Auxos_Proto_prop.pdf", plot = p,
+ggsave("output/plots/Auxos_Proto_prop.pdf", plot = p,
        width = 7, height = 5)
   
 
@@ -398,22 +398,22 @@ Asn <- ggplot(prop[AA == "Asn"], aes(phylum,perc)) +
   ggtitle("Asparagine") +
   theme(title = element_text(size=8, colour = "black", face ="bold"))
 
-Chor <- ggplot(prop[AA == "Chor"], aes(phylum,perc)) +
-  geom_bar(stat = "identity", aes(fill = Status)) +
-  ylab("Proportion of MAGs") +
-  scale_fill_manual(values = c('#fdd0a2','#fdae6b')) +
-  theme(legend.position = "none") +
-  theme(panel.background = element_rect(fill="white", colour= "white")) +
-  theme(axis.text.x = element_text(size = 8, angle = 50, colour = "black", hjust = 1, margin = margin(0,0,0,0))) +
-  theme(axis.text.y = element_text(size = 8, colour = "black")) +
-  theme(axis.title.x = element_blank()) +
-  theme(axis.ticks = element_blank())+
-  theme(axis.title.y = element_text(colour = "Black", face = "bold", size = 8, margin = margin(0,10,0,0))) +
-  theme(legend.title = element_text(colour = "black", size = 8, face = "bold",  vjust = 1, margin = margin(10,5,5,0))) +
-  theme(legend.text = element_text(size = 8, colour = "black")) +
-  ggtitle("Chorismate") +
-  theme(title = element_text(size=8, colour = "black", face ="bold"))
-Chor
+# Chor <- ggplot(prop[AA == "Chor"], aes(phylum,perc)) +
+#   geom_bar(stat = "identity", aes(fill = Status)) +
+#   ylab("Proportion of MAGs") +
+#   scale_fill_manual(values = c('#fdd0a2','#fdae6b')) +
+#   theme(legend.position = "none") +
+#   theme(panel.background = element_rect(fill="white", colour= "white")) +
+#   theme(axis.text.x = element_text(size = 8, angle = 50, colour = "black", hjust = 1, margin = margin(0,0,0,0))) +
+#   theme(axis.text.y = element_text(size = 8, colour = "black")) +
+#   theme(axis.title.x = element_blank()) +
+#   theme(axis.ticks = element_blank())+
+#   theme(axis.title.y = element_text(colour = "Black", face = "bold", size = 8, margin = margin(0,10,0,0))) +
+#   theme(legend.title = element_text(colour = "black", size = 8, face = "bold",  vjust = 1, margin = margin(10,5,5,0))) +
+#   theme(legend.text = element_text(size = 8, colour = "black")) +
+#   ggtitle("Chorismate") +
+#   theme(title = element_text(size=8, colour = "black", face ="bold"))
+# Chor
 
 
 
@@ -423,36 +423,36 @@ plot1
 ggsave("output/plots/plot1_proportions.pdf", plot = plot1,
        width = 6, height = 6)
 
-plot2 <- ggarrange(Leu, Val,
+plot2 <- ggarrange(Leu, Val,Ser, Ile,
                    ncol=2, nrow= 2)
 plot2
 ggsave("output/plots/plot2_proportions.pdf", plot = plot2,
        width = 6, height = 6)
 
-plot3 <- ggarrange(Chor, Trp, Tyr, Phe,
+plot3 <- ggarrange(Trp, Tyr, Phe,Met,
                    ncol=2, nrow= 2)
 plot3
 ggsave("output/plots/plot3_proportions.pdf", plot = plot3,
        width = 6, height = 6)
 
-plot4 <- ggarrange(Ser,Met,
-                   ncol=2, nrow= 2)
-plot4
-ggsave("output/plots/plot4_proportions.pdf", plot = plot4,
-       width = 6, height = 6)
+# plot4 <- ggarrange(Ser,Ile,
+#                     nrow= 2, ncol=2)
+# plot4
+# ggsave("output/plots/plot4_proportions.pdf", plot = plot4,
+#        width = 6, height = 6)
 
 plot5 <- ggarrange(Lys, Arg, Pro, His,
-                   ncol=2, nrow= 2, common.legend = TRUE, legend = "none")
+                   nrow= 2, ncol=2, common.legend = TRUE, legend = "none")
 plot5
 ggsave("output/plots/plot5_proportions.pdf", plot = plot5,
        width = 6, height = 6)
+# 
+# plot6 <- ggarrange(Ala,
+#                    ncol=1, nrow= 2, common.legend = TRUE, legend = "bottom")
+# 
+# plot6
 
-plot6 <- ggarrange(Ala,Ile,
-                   ncol=2, nrow= 2, common.legend = TRUE, legend = "bottom")
-
-plot6
-
-plot7 <- ggarrange(Thr, Cys,
+plot7 <- ggarrange(Thr, Cys,Ala,
                    ncol=2, nrow= 2, common.legend = TRUE, legend = "bottom")
 plot7
 ggsave("output/plots/ala_proportions.pdf", plot = Ala,

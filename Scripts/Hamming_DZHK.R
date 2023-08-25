@@ -4,7 +4,7 @@
 Auxotroph_tmp <- copy(Auxotroph)
 Auxotroph_tmp[which(is.na(Auxotroph), arr.ind = T)] <- 1
 
-dzhk_relabun <- dzhk_relabun[dzhk_relabun$model %in% dzhk_rel_mags]
+dzhk_relabun <- dzhk_relabun[dzhk_relabun$model %in% rel_models]
 numb_samples <- dzhk_info$sample
 dzhk_relabun <- dzhk_relabun[dzhk_relabun$sample %in% numb_samples]
 
@@ -36,15 +36,15 @@ Div_hamming <- merge(HammingDT, dzhk_diversity, by.x= "sample", by.y="sample")
 
 ###### visualization ###########
 Hamming_shannon <- ggplot(Div_hamming, aes(D.Shannon, avgHamming)) +
-  geom_point() +
-  geom_smooth(method=lm) +
+  geom_smooth(method=lm, col = "black") +
+  geom_point(shape = 21) +
   theme_bw() +
   xlab("Shannon diversity") +
-  ylab("Average Hamming distance") +
+  ylab("Average\nHamming distance") +
   theme(axis.text.x = element_text(colour="black")) +
   theme(axis.text.y = element_text(colour= "black")) +
-  theme(axis.title.y = element_text(size = 8, margin = margin(r = 10))) +
-  theme(axis.title.x = element_text(size = 8, margin = margin(t = 10))) +
+  theme(axis.title.y = element_text(margin = margin(r = 10))) +
+  theme(axis.title.x = element_text(margin = margin(t = 10))) +
   stat_cor(method = "spearman")
 
 ggsave("output/plots/hamming_Shannon.pdf", plot = Hamming_shannon,
@@ -72,7 +72,7 @@ Hamming_numb <- ggplot(Hamming_numb_auxos, aes(V1, avgHamming,)) +
   geom_point() +
   geom_smooth(method=lm) +
   theme_bw() +
-  xlab("Abundance-weighted average of auxotrophies per MAG") +
+  xlab("Abundance-weighted average of auxotrophies") +
   ylab("Average Hamming distance") +
   theme(axis.text.x = element_text(colour="black")) +
   theme(axis.text.y = element_text(colour= "black")) +

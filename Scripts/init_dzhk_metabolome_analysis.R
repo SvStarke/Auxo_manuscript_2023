@@ -5,14 +5,21 @@ library(MicrobiomeGS2)
 completeness_cuttoff <- 85
 contamination_cutoff <- 2
 
-# get QC for MAGs
-dzhk_MAGQC <- fread("/mnt/nuuk/2022/DZHK_MGX/atlas/completeness.tsv")
-dzhk_rel_mags <- dzhk_MAGQC[Completeness >= completeness_cuttoff & contamination_cutoff <= contamination_cutoff, `Bin Id`]
+# load HRGM model data
+Metadata <- fread("data/REPR_Genomes_metadata.tsv")
+
+# abundance data
+dzhk_hrgm_abun <- t(read.table("data/mgx_abundances/dzhk_abun.csv"))
+
+rel_models <- intersect(names(which(apply(dzhk_hrgm_abun,1, function(x) any(x > 0)))),
+                        Metadata[`Completeness (%)`>= completeness_cuttoff & `Contamination (%)` <= contamination_cutoff, `HRGM name`])
+
+dzhk_hrgm_abun <- dzhk_hrgm_abun[rel_models,]
 
 # Predict auxotrophies
-dzhk_models <- fetch_model_collection("/mnt/nuuk/2022/DZHK_MGX/models/",
-                                      IDs = dzhk_rel_mags)
-dzhk_auxos <- predict_auxotrophies(dzhk_models)
+dzhk_models <- fetch_model_collection("/mnt/nuuk/2022/HRGM/models/",
+                                      IDs = rel_models)
+dzhk_auxos <- predict_auxotrophies(dzhk_models, min.growth = 1e-12, min.growth.fraction = 1e-12)
 dzhk_auxos <- lapply(dzhk_auxos, FUN = function(x) {
   tmp <- data.table(aa = names(x),
                     prototrophy = x)
@@ -20,27 +27,27 @@ dzhk_auxos <- lapply(dzhk_auxos, FUN = function(x) {
 dzhk_auxos <- rbindlist(dzhk_auxos, idcol = "model")
 dzhk_auxos[is.na(prototrophy), prototrophy := 1]
 
-# load median coverage of MAGs
-dzhk_mag_abun <- fread("/mnt/nuuk/2022/DZHK_MGX/atlas/median_coverage_genomes.tsv")
-setnames(dzhk_mag_abun, "V1","sample")
-dzhk_mag_abun <- melt(dzhk_mag_abun, id.vars = "sample", variable.name = "model", value.name = "cov")
-dzhk_mag_abun <- dzhk_mag_abun[model %in% dzhk_rel_mags]
-dzhk_mag_abun[, cov.norm := cov/sum(cov), by = "sample"]
+# Calculate realtive abundancy table
+dzhk_relabun <- data.table(as.table(dzhk_hrgm_abun))
+setnames(dzhk_relabun, c("model","sample","prop"))
+dzhk_relabun <- dzhk_relabun[model %in% rel_models]
+dzhk_relabun[, prop := prop/sum(prop), by = sample]
+
 
 # calculate auxotrophie abundancies
 dzhk_auxofreq <- list()
-for(spl_i in unique(dzhk_mag_abun$sample)) {
-  tmp <- copy(dzhk_mag_abun[sample == spl_i])
+for(spl_i in unique(dzhk_relabun$sample)) {
+  tmp <- copy(dzhk_relabun[sample == spl_i])
   tmp <- merge(tmp, dzhk_auxos)
   
-  dzhk_auxofreq[[spl_i]] <- tmp[, .(protofreq = sum(cov.norm*prototrophy)), by = .(sample, aa)]
+  dzhk_auxofreq[[spl_i]] <- tmp[, .(protofreq = sum(prop*prototrophy)), by = .(sample, aa)]
 }
 dzhk_auxofreq <- rbindlist(dzhk_auxofreq)
 
 # add meta info (DZHK)
-dzhk_spl_info <- merge(fread("/mnt/nuuk/2022/DZHK_MGX/sample_info/Metagenome_DZHK_NGS_EMGE_sampleID_delete_EMGE173.tsv",
+dzhk_spl_info <- merge(fread("data/meta/Metagenome_DZHK_NGS_EMGE_sampleID_delete_EMGE173.tsv",
                              header = FALSE, col.names = c("EMGE","sample")),
-                       fread("/mnt/nuuk/2022/DZHK_MGX/sample_info/DZHK_finaler_export_v5_mod.csv"),
+                       fread("data/meta/DZHK_finaler_export_v5_mod.tsv"),
                        by = "EMGE")
 
 dzhk_auxofreq <- merge(dzhk_auxofreq, dzhk_spl_info[, .(EMGE, sample)])
@@ -72,3 +79,4 @@ rm(.Random.seed, envir=globalenv())
 dzhk_metabolome <- cbind(BCdat$sample_meas[,.(EMGE = `Sample Identification`)],
                          dat_impute$ximp)
 setkey(dzhk_metabolome,"EMGE")
+

@@ -74,8 +74,8 @@ source("Scripts/auxotable_not_melted.R")
 source("Scripts/Completeness_pathways.R")
 
 #### create figure ###
-fi5 <- ggarrange(tr,hi,ch,se,le,il1,il2,il3,va,il4,il5,
-                 labels = c("a","b","c", "d","e"),
+fi5 <- ggarrange(tr,hi,se,le,il1,il2,il3,va,il4,il5,
+                 labels = c("A","B","C", "D","E"),
                  hjust = c(-0.1,0.5,0.5,0.5,-0.1),
                  ncol=4, nrow= 3, common.legend = TRUE, legend = "bottom",
                  heights = c(1,1,1,1), widths= c(1,1,1,1))
@@ -163,10 +163,10 @@ fi7 <- ggarrange(ü, corr_health_div_plot,div_auxos, Hamming_shannon, ncol=1,
                    nrow=4, heights = c(1,1.3,1.1,1.1), widths= c(1,1,1,1),
                  labels = c("A","B", "C", "D"), hjust = c(-0.5,-0.5, -0.5, -0.5), vjust = c(1.5,1,-0.5,1))
 fi7
-fi7.1 <- ggarrange(fi7,met_DZHK, ncol = 2, nrow=1, widths = c(1.2,1.2), labels = "E",hjust = c(-45))
+fi7.1 <- ggarrange(fi7,met_DZHK, ncol = 2, nrow=1, widths = c(1.2,1.2), labels = "E",hjust = c(-53))
 fi7.1
 ggsave("output/plots/figure7_01.06.22_new_Abund_gut_DHZK.pdf", plot = fi7.1,
-      width = 12, height = 15)
+      width = 14, height = 15)
 
 ######## figure 6
 fi8 <- ggarrange(stability, stability_Hamming, 
@@ -174,8 +174,12 @@ fi8 <- ggarrange(stability, stability_Hamming,
                  nrow=1, 
                  labels = c("A","B"))
 fi8
+# test2
 ggsave("output/plots/Stability_AuxosHamming.pdf", plot = fi8,
        width = 9.5, height = 5)
+
+# ggsave("output/plots/Stability_AuxosHamming_poster.pdf", plot = fi8,
+#        width = 16, height = 5)
 
 #partial spearman correlation and abundance of amino acid auxotrophies in the gut 
 # fi7 <- ggarrange(b, linear_health,dis_health, ncol=3,
@@ -188,11 +192,11 @@ ggsave("output/plots/Stability_AuxosHamming.pdf", plot = fi8,
 
 ###### supplementary material figure 2 ######
 
-prop_all <- ggarrange(plot1,plot2,plot3,plot4,plot5,plot6,
-                           nrow=3, ncol = 2, common.legend = TRUE)
+prop_all <- ggarrange(plot1,plot2,plot3,plot5,
+                           nrow=2, ncol = 2, common.legend = TRUE)
 prop_all
 
-prop_all <- ggarrange(Asp, Asn, Leu,Ile,Glu,Gln,Val,Thr,Chor,Trp,Ser,Cys,Tyr,Phe,Met,Gly,Lys,Arg, Ala,Pro,His,
+prop_all <- ggarrange(Asp, Asn, Leu,Ile,Glu,Gln,Val,Thr,Trp,Ser,Cys,Tyr,Phe,Met,Gly,Lys,Arg, Ala,Pro,His,
                       nrow=7, ncol = 3, common.legend = TRUE)
 ggsave("output/plots/suppfigure2_03.06.pdf", plot = prop_all,
        width = 10, height = 20)

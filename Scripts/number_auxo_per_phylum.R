@@ -22,7 +22,7 @@ numb$abun <- numb$table / numb$countall * 100
 
 
 
-'#feedde','#fdd0a2','#fdae6b','#fd8d3c','#f16913','#d94801'
+#'#feedde','#fdd0a2','#fdae6b','#fd8d3c','#f16913','#d94801'
 #Firmicutes
 fi <- ggplot(numb[phylum == "Firmicutes"], aes (count,abun, fill = "#fdae6b")) +
   geom_bar(stat = "identity") +

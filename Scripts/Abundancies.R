@@ -89,7 +89,7 @@ Abun_HRGM <- ggplot(Freq_auxos, aes(AA,percentage, fill = is.essential)) +
   xlab("Amino acids") +
   guides(fill =guide_legend(title="Essentiality (human)")) +
   #theme_minimal() +
-  theme(legend.position = "right") +
+  theme(legend.position = "none") +
   theme(axis.line = element_line(size=0.2)) +
   theme(panel.background = element_rect(fill="white", colour= "white")) +
   theme(axis.text.x = element_text(size = 16, angle = 45, colour = "black", hjust = 1, margin = margin(10,0,0,0))) +
@@ -99,7 +99,9 @@ Abun_HRGM <- ggplot(Freq_auxos, aes(AA,percentage, fill = is.essential)) +
   theme(legend.title = element_text(colour = "black", size = 16,  vjust = 1, margin = margin(10,5,5,0))) +
   theme(legend.text = element_text(size = 16, colour = "black")) +
   coord_cartesian() +
-  scale_fill_manual(values = c("#8c2d04",'#fdae6b'))
+  scale_fill_manual(values = c("#000000",'#b2b2b2')) +
+  facet_grid(.~ is.essential, scales = "free_x", space = "free_x") +
+  theme(strip.text.x = element_text(size =16))
 Abun_HRGM
 
 ggsave("output/plots/Abundancies_HRGM_18.07.22.pdf", plot = Abun_HRGM,

@@ -2,11 +2,11 @@
 #Arginine
 #get arginine auxotrophic genomes
 relGenomes <- Auxo_info[Arg == 0, `Genomes`]
-models <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models/", IDs = relGenomes)
-rxns <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models", file.type = "reactions", IDs = relGenomes)
-pwys <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models", file.type = "pathways", IDs = relGenomes)
+models <- fetch_model_collection("/mnt/nuuk/2022/HRGM/models/", IDs = relGenomes)
+rxns <- fetch_model_collection("/mnt/nuuk/2022/HRGM/models", file.type = "reactions", IDs = relGenomes)
+pwys <- fetch_model_collection("/mnt/nuuk/2022/HRGM/models", file.type = "pathways", IDs = relGenomes)
 pwys_cov_Arg <- get_pathway_coverage(models,rxns,pwys, pathways.of.interest = c("ARGSYNBSUB-PWY","PWY-5154"))
-View(pwys_cov_Arg)
+#View(pwys_cov_Arg)
 relrxns <- unique(pwys_cov_Arg$rxn.metacyc)
 #relpathway <- unique(pwys_cov_Arg$pathway.name)
 Arg <- list()
@@ -47,9 +47,9 @@ remove(arg1)
 
 #Asparagine
 relGenomes <- Auxo_info[Asn == 0, `Genomes`]
-models <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models/", IDs = relGenomes)
-rxns <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models", file.type = "reactions", IDs = relGenomes)
-pwys <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models", file.type = "pathways", IDs = relGenomes)
+models <- fetch_model_collection("/mnt/nuuk/2022/HRGM/models/", IDs = relGenomes)
+rxns <- fetch_model_collection("/mnt/nuuk/2022/HRGM/models", file.type = "reactions", IDs = relGenomes)
+pwys <- fetch_model_collection("/mnt/nuuk/2022/HRGM/models", file.type = "pathways", IDs = relGenomes)
 pwys_cov_Asn <- get_pathway_coverage(models,rxns,pwys, pathways.of.interest = c("ASPARAGINE-BIOSYNTHESIS","ASPARAGINESYN-PWY"))
 relrxns <- unique(pwys_cov_Asn$rxn.metacyc)
 #relpathway <- unique(pwys_cov_Asn$pathway.name)
@@ -79,64 +79,64 @@ names(asn1)[names(asn1) == "ec"] <- "Enzymes"
 asn1$perc <- asn1$perc *100
 asn1 <- asn1[order(pathway),]
 
-#Chorismate
-relGenomes <- Auxo_info[Chor == 0, `Genomes`]
-models <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models/", IDs = relGenomes)
-rxns <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models", file.type = "reactions", IDs = relGenomes)
-pwys <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models", file.type = "pathways", IDs = relGenomes)
-pwys_cov_Chor <- get_pathway_coverage(models,rxns,pwys, pathways.of.interest = c("PWY-6163"))
-relrxns <- unique(pwys_cov_Chor$rxn.metacyc)
-Chor <- list()
-k <- 1
-for (rxni in relrxns) {
-  Chorperc <- nrow(pwys_cov_Chor[pwys_cov_Chor$rxn.metacyc == rxni & pwys_cov_Chor$prediction == "FALSE"& pwys_cov_Chor$spontaneous == "FALSE"]) / nrow(pwys_cov_Chor[pwys_cov_Chor$rxn.metacyc == rxni])
-  chorperc <- data.frame(Chorperc)
-  colnames(chorperc) <- "perc"
-  chorperc$rxn <- rxni
-  chorperc$AA <- "Chorismate"
-  Chor[[k]] <- chorperc
-  k <- k+1
-}
-chor <- rbindlist(Chor)
-chor <- dplyr::mutate(chor, ID = row_number())
-
-#prepare the visualization part
-chorperce <- pwys_cov_Chor[ pwys_cov_Chor$model == "HRGM_Genome_0003",]
-chorperc <- chorperce[,c(2,3,5)]
-distinct(chorperc)
-chor <- merge(chorperc, chor, by.x="rxn.metacyc",by.y = "rxn")
-chor_new <- distinct(chor)
-chor <- data.frame(chor_new)
-chor$perc <- chor$perc *100
-names(chor)[names(chor) == "ec"] <- "Enzymes"
-level_order <- c("4.2.1.10","1.1.1.25" ,"2.7.1.71","2.5.1.19","4.2.3.5/4.6.1.4")
-
-##visualization completeness of the chor pathway with the right order
-ch <- ggplot(chor, aes(x =factor(Enzymes, level = level_order), y =perc))+
-  geom_bar(stat="identity", width=0.8, fill = "black") +
-  ylab("Missing in auxotrophic microbiota[%]") +
-  xlab("Enzymes") +
-  ggtitle("Chorismate biosynthesis") +
-  theme(title = element_text(size = 6, face="bold")) +
-  theme(axis.line = element_line(size=0.2, colour = "black")) +
-  theme(panel.background = element_rect(fill="white", colour= "white")) +
-  theme(axis.title.y = element_text(colour = "black", size = 6, face = "bold", margin = margin(0,10,0,0)))+
-  theme(axis.title.x = element_text(colour = "black", size = 6, face = "bold", margin = margin(10,0,0,0))) +
-  theme(axis.text.x = element_text(size=6, colour = "black", hjust = 1,  angle = 45, margin = margin(10,0,0,0))) +
-  theme(axis.text.y = element_text(size = 6, colour = "black")) +
-  theme(plot.margin= margin(0.5,0.5,0.5,0.5, "cm")) +
-  coord_cartesian(ylim=c(0,100)) +
-  scale_x_discrete("Enzymes", labels = c("4.2.1.10" = "4.2.1.10","1.1.1.25" = "1.1.1.25","2.7.1.71"="2.7.1.71","2.5.1.19"="2.5.1.19","4.2.3.5/4.6.1.4" = "4.2.1.3.5/\n4.6.1.4"))
-
-ch
-ggsave("output/plots/Completeness_Chor_pathway.pdf", plot = ch,
-       width =7, height = 5.5)
+# #Chorismate
+# relGenomes <- Auxo_info[Chor == 0, `Genomes`]
+# models <- fetch_model_collection("/mnt/nuuk/2022/HRGM/models/", IDs = relGenomes)
+# rxns <- fetch_model_collection("/mnt/nuuk/2022/HRGM/models", file.type = "reactions", IDs = relGenomes)
+# pwys <- fetch_model_collection("/mnt/nuuk/2022/HRGM/models", file.type = "pathways", IDs = relGenomes)
+# pwys_cov_Chor <- get_pathway_coverage(models,rxns,pwys, pathways.of.interest = c("PWY-6163"))
+# relrxns <- unique(pwys_cov_Chor$rxn.metacyc)
+# Chor <- list()
+# k <- 1
+# for (rxni in relrxns) {
+#   Chorperc <- nrow(pwys_cov_Chor[pwys_cov_Chor$rxn.metacyc == rxni & pwys_cov_Chor$prediction == "FALSE"& pwys_cov_Chor$spontaneous == "FALSE"]) / nrow(pwys_cov_Chor[pwys_cov_Chor$rxn.metacyc == rxni])
+#   chorperc <- data.frame(Chorperc)
+#   colnames(chorperc) <- "perc"
+#   chorperc$rxn <- rxni
+#   chorperc$AA <- "Chorismate"
+#   Chor[[k]] <- chorperc
+#   k <- k+1
+# }
+# chor <- rbindlist(Chor)
+# chor <- dplyr::mutate(chor, ID = row_number())
+# 
+# #prepare the visualization part
+# chorperce <- pwys_cov_Chor[ pwys_cov_Chor$model == "HRGM_Genome_0003",]
+# chorperc <- chorperce[,c(2,3,5)]
+# distinct(chorperc)
+# chor <- merge(chorperc, chor, by.x="rxn.metacyc",by.y = "rxn")
+# chor_new <- distinct(chor)
+# chor <- data.frame(chor_new)
+# chor$perc <- chor$perc *100
+# names(chor)[names(chor) == "ec"] <- "Enzymes"
+# level_order <- c("4.2.1.10","1.1.1.25" ,"2.7.1.71","2.5.1.19","4.2.3.5/4.6.1.4")
+# 
+# ##visualization completeness of the chor pathway with the right order
+# ch <- ggplot(chor, aes(x =factor(Enzymes, level = level_order), y =perc))+
+#   geom_bar(stat="identity", width=0.8, fill = "black") +
+#   ylab("Missing in auxotrophic microbiota[%]") +
+#   xlab("Enzymes") +
+#   ggtitle("Chorismate biosynthesis") +
+#   theme(title = element_text(size = 6, face="bold")) +
+#   theme(axis.line = element_line(size=0.2, colour = "black")) +
+#   theme(panel.background = element_rect(fill="white", colour= "white")) +
+#   theme(axis.title.y = element_text(colour = "black", size = 6, face = "bold", margin = margin(0,10,0,0)))+
+#   theme(axis.title.x = element_text(colour = "black", size = 6, face = "bold", margin = margin(10,0,0,0))) +
+#   theme(axis.text.x = element_text(size=6, colour = "black", hjust = 1,  angle = 45, margin = margin(10,0,0,0))) +
+#   theme(axis.text.y = element_text(size = 6, colour = "black")) +
+#   theme(plot.margin= margin(0.5,0.5,0.5,0.5, "cm")) +
+#   coord_cartesian(ylim=c(0,100)) +
+#   scale_x_discrete("Enzymes", labels = c("4.2.1.10" = "4.2.1.10","1.1.1.25" = "1.1.1.25","2.7.1.71"="2.7.1.71","2.5.1.19"="2.5.1.19","4.2.3.5/4.6.1.4" = "4.2.1.3.5/\n4.6.1.4"))
+# 
+# ch
+# ggsave("output/plots/Completeness_Chor_pathway.pdf", plot = ch,
+#        width =7, height = 5.5)
 
 #Cysteine
 relGenomes <- Auxo_info[Cys == 0, `Genomes`]
-models <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models/", IDs = relGenomes)
-rxns <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models", file.type = "reactions", IDs = relGenomes)
-pwys <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models", file.type = "pathways", IDs = relGenomes)
+models <- fetch_model_collection("/mnt/nuuk/2022/HRGM/models/", IDs = relGenomes)
+rxns <- fetch_model_collection("/mnt/nuuk/2022/HRGM/models", file.type = "reactions", IDs = relGenomes)
+pwys <- fetch_model_collection("/mnt/nuuk/2022/HRGM/models", file.type = "pathways", IDs = relGenomes)
 pwys_cov_Cys <- get_pathway_coverage(models,rxns,pwys, pathways.of.interest = c("PWY-7870","CYSTSYN-PWY","HOMOCYSDEGR-PWY"))
 relrxns <- unique(pwys_cov_Cys$rxn.metacyc)
 Cys <- list()
@@ -153,7 +153,7 @@ for (rxni in relrxns) {
 cys <- rbindlist(Cys)
 cys <- filter(cys, perc !=0)
 cys <- dplyr::mutate(cys, ID = row_number())
-View(pwys_cov_Cys)
+#View(pwys_cov_Cys)
 
 #prepare the visualization part
 cysperce <- pwys_cov_Cys[pwys_cov_Cys$model == "HRGM_Genome_0003",]
@@ -167,9 +167,9 @@ cys1 <- cys1[order(pathway),]
 
 #Glutamine
 relGenomes <- Auxo_info[Gln == 0, `Genomes`]
-models <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models/", IDs = relGenomes)
-rxns <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models", file.type = "reactions", IDs = relGenomes)
-pwys <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models", file.type = "pathways", IDs = relGenomes)
+models <- fetch_model_collection("/mnt/nuuk/2022/HRGM/models/", IDs = relGenomes)
+rxns <- fetch_model_collection("/mnt/nuuk/2022/HRGM/models", file.type = "reactions", IDs = relGenomes)
+pwys <- fetch_model_collection("/mnt/nuuk/2022/HRGM/models", file.type = "pathways", IDs = relGenomes)
 pwys_cov_Gln <- get_pathway_coverage(models,rxns,pwys, pathways.of.interest = c("GLNSYN-PWY"))
 relrxns <- unique(pwys_cov_Gln$rxn.metacyc)
 Gln <- list()
@@ -197,9 +197,9 @@ gln1 <- gln1[order(pathway),]
 
 #Glycine
 relGenomes <- Auxo_info[Gly == 0, `Genomes`]
-models <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models/", IDs = relGenomes)
-rxns <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models", file.type = "reactions", IDs = relGenomes)
-pwys <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models", file.type = "pathways", IDs = relGenomes)
+models <- fetch_model_collection("/mnt/nuuk/2022/HRGM/models/", IDs = relGenomes)
+rxns <- fetch_model_collection("/mnt/nuuk/2022/HRGM/models", file.type = "reactions", IDs = relGenomes)
+pwys <- fetch_model_collection("/mnt/nuuk/2022/HRGM/models", file.type = "pathways", IDs = relGenomes)
 pwys_cov_Gly <- get_pathway_coverage(models,rxns,pwys, pathways.of.interest = c("GLYSYN-ALA-PWY","GLYSYN-PWY","GLYSYN-THR-PWY"))
 relrxns <- unique(pwys_cov_Gly$rxn.metacyc)
 Gly <- list()
@@ -227,9 +227,9 @@ gly1 <- gly1[order(pathway),]
 
 #Histidine
 relGenomes <- Auxo_info[His == 0, `Genomes`]
-models <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models/", IDs = relGenomes)
-rxns <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models", file.type = "reactions", IDs = relGenomes)
-pwys <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models", file.type = "pathways", IDs = relGenomes)
+models <- fetch_model_collection("/mnt/nuuk/2022/HRGM/models/", IDs = relGenomes)
+rxns <- fetch_model_collection("/mnt/nuuk/2022/HRGM/models", file.type = "reactions", IDs = relGenomes)
+pwys <- fetch_model_collection("/mnt/nuuk/2022/HRGM/models", file.type = "pathways", IDs = relGenomes)
 pwys_cov_His <- get_pathway_coverage(models,rxns,pwys, pathways.of.interest = c("HISTSYN-PWY"))
 relrxns <- unique(pwys_cov_His$rxn.metacyc)
 His <- list()
@@ -280,9 +280,9 @@ ggsave("output/plots/Completeness_His_pathway.pdf", plot = hi,
 
 #Isoleucine
 relGenomes <- Auxo_info[Ile == 0, `Genomes`]
-models <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models/", IDs = relGenomes)
-rxns <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models", file.type = "reactions", IDs = relGenomes)
-pwys <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models", file.type = "pathways", IDs = relGenomes)
+models <- fetch_model_collection("/mnt/nuuk/2022/HRGM/models/", IDs = relGenomes)
+rxns <- fetch_model_collection("/mnt/nuuk/2022/HRGM/models", file.type = "reactions", IDs = relGenomes)
+pwys <- fetch_model_collection("/mnt/nuuk/2022/HRGM/models", file.type = "pathways", IDs = relGenomes)
 pwys_cov_Ile <- get_pathway_coverage(models,rxns,pwys, pathways.of.interest = c("ILEUSYN-PWY","PWY-5101","PWY-5103","PWY-5104","PWY-5108"))
 
 
@@ -451,7 +451,7 @@ ile3 <- merge(ileperc, ile, by.x="rxn.metacyc",by.y = "rxn")
 ile_new3 <- distinct(ile3)
 ile3 <- data.frame(ile_new3)
 ile3$perc <- ile3$perc *100
-View(pwys_cov_Ile)
+#View(pwys_cov_Ile)
 names(ile3) [names(ile3) == "ec"] <- "Enzymes"
 ###fill in missing gaps with ec numbers
 ile3[7,2] = "2.6.1.-"
@@ -505,7 +505,7 @@ ile4 <- merge(ileperc, ile, by.x="rxn.metacyc",by.y = "rxn")
 ile_new4 <- distinct(ile4)
 ile4 <- data.frame(ile_new4)
 ile4$perc <- ile4$perc *100
-View(pwys_cov_Ile)
+#View(pwys_cov_Ile)
 names(ile4) [names(ile4) == "ec"] <- "Enzymes"
 level_order_il4 <-c("6.2.1.17","1.2.7.7","2.2.1.6/4.1.3.18","1.1.1.383","4.2.1.9","2.6.1.42")
 ###fill in missing gaps with ec numbers
@@ -588,9 +588,9 @@ ggsave("output/plots/Completeness_Ile_pathway.pdf", plot = il5,
 
 #Leucine
 relGenomes <- Auxo_info[Leu == 0, `Genomes`]
-models <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models/", IDs = relGenomes)
-rxns <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models", file.type = "reactions", IDs = relGenomes)
-pwys <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models", file.type = "pathways", IDs = relGenomes)
+models <- fetch_model_collection("/mnt/nuuk/2022/HRGM/models/", IDs = relGenomes)
+rxns <- fetch_model_collection("/mnt/nuuk/2022/HRGM/models", file.type = "reactions", IDs = relGenomes)
+pwys <- fetch_model_collection("/mnt/nuuk/2022/HRGM/models", file.type = "pathways", IDs = relGenomes)
 pwys_cov_Leu <- get_pathway_coverage(models,rxns,pwys, pathways.of.interest = c("LEUSYN-PWY"))
 relrxns <- unique(pwys_cov_Leu$rxn.metacyc)
 Leu<- list()
@@ -674,11 +674,11 @@ ggsave("output/plots/Institutsk_Completeness_Leu_pathway.pdf", plot = le_inst,
 
 #Lysine
 relGenomes <- Auxo_info[Lys == 0, `Genomes`]
-models <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models/", IDs = relGenomes)
-rxns <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models", file.type = "reactions", IDs = relGenomes)
-pwys <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models", file.type = "pathways", IDs = relGenomes)
+models <- fetch_model_collection("/mnt/nuuk/2022/HRGM/models/", IDs = relGenomes)
+rxns <- fetch_model_collection("/mnt/nuuk/2022/HRGM/models", file.type = "reactions", IDs = relGenomes)
+pwys <- fetch_model_collection("/mnt/nuuk/2022/HRGM/models", file.type = "pathways", IDs = relGenomes)
 pwys_cov_Lys <- get_pathway_coverage(models,rxns,pwys, pathways.of.interest = c("PWY-2941", "PWY-2942", "PWY-3081","PWY-5097","DAPLYSINESYN-PWY"))
-View(pwys_cov_Lys)
+#View(pwys_cov_Lys)
 relrxns <- unique(pwys_cov_Lys$rxn.metacyc)
 Lys <- list()
 k <- 1
@@ -708,9 +708,9 @@ lys1 <-lys1[order(pathway),]
 
 #Methionine
 relGenomes <- Auxo_info[Met == 0, `Genomes`]
-models <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models/", IDs = relGenomes)
-rxns <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models", file.type = "reactions", IDs = relGenomes)
-pwys <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models", file.type = "pathways", IDs = relGenomes)
+models <- fetch_model_collection("/mnt/nuuk/2022/HRGM/models/", IDs = relGenomes)
+rxns <- fetch_model_collection("/mnt/nuuk/2022/HRGM/models", file.type = "reactions", IDs = relGenomes)
+pwys <- fetch_model_collection("/mnt/nuuk/2022/HRGM/models", file.type = "pathways", IDs = relGenomes)
 pwys_cov_Met <- get_pathway_coverage(models,rxns,pwys, pathways.of.interest = c("PWY-7977","HOMOSER-METSYN-PWY"))
 relrxns <- unique(pwys_cov_Met$rxn.metacyc)
 Met <- list()
@@ -741,9 +741,9 @@ met1 <-met1[order(pathway),]
 
 #Phenylalanine
 relGenomes <- Auxo_info[Phe == 0, `Genomes`]
-models <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models/", IDs = relGenomes)
-rxns <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models", file.type = "reactions", IDs = relGenomes)
-pwys <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models", file.type = "pathways", IDs = relGenomes)
+models <- fetch_model_collection("/mnt/nuuk/2022/HRGM/models/", IDs = relGenomes)
+rxns <- fetch_model_collection("/mnt/nuuk/2022/HRGM/models", file.type = "reactions", IDs = relGenomes)
+pwys <- fetch_model_collection("/mnt/nuuk/2022/HRGM/models", file.type = "pathways", IDs = relGenomes)
 pwys_cov_Phe <- get_pathway_coverage(models,rxns,pwys, pathways.of.interest = c("PHESYN","PWY-3462"))
 relrxns <- unique(pwys_cov_Phe$rxn.metacyc)
 Phe <- list()
@@ -774,11 +774,11 @@ phe1 <-phe1[order(pathway),]
 
 #Proline
 relGenomes <- Auxo_info[Pro == 0, `Genomes`]
-models <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models/", IDs = relGenomes)
-rxns <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models", file.type = "reactions", IDs = relGenomes)
-pwys <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models", file.type = "pathways", IDs = relGenomes)
+models <- fetch_model_collection("/mnt/nuuk/2022/HRGM/models/", IDs = relGenomes)
+rxns <- fetch_model_collection("/mnt/nuuk/2022/HRGM/models", file.type = "reactions", IDs = relGenomes)
+pwys <- fetch_model_collection("/mnt/nuuk/2022/HRGM/models", file.type = "pathways", IDs = relGenomes)
 pwys_cov_Pro <- get_pathway_coverage(models,rxns,pwys, pathways.of.interest = c("PROSYN-PWY","PWY-4981"))
-View(pwys_cov_Pro)
+#View(pwys_cov_Pro)
 relrxns <- unique(pwys_cov_Pro$rxn.metacyc)
 Pro <- list()
 k <- 1
@@ -808,9 +808,9 @@ pro1 <-pro[order(pathway),]
 
 #Serine
 relGenomes <- Auxo_info[Ser == 0, `Genomes`]
-models <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models/", IDs = relGenomes)
-rxns <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models", file.type = "reactions", IDs = relGenomes)
-pwys <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models", file.type = "pathways", IDs = relGenomes)
+models <- fetch_model_collection("/mnt/nuuk/2022/HRGM/models/", IDs = relGenomes)
+rxns <- fetch_model_collection("/mnt/nuuk/2022/HRGM/models", file.type = "reactions", IDs = relGenomes)
+pwys <- fetch_model_collection("/mnt/nuuk/2022/HRGM/models", file.type = "pathways", IDs = relGenomes)
 pwys_cov_Ser <- get_pathway_coverage(models,rxns,pwys, pathways.of.interest = c("SERSYN-PWY"))
 relrxns <- unique(pwys_cov_Ser$rxn.metacyc)
 Ser <- list()
@@ -862,9 +862,9 @@ ggsave("output/plots/Completeness_Ser_pathway.pdf", plot = se,
 
 #Threonine
 relGenomes <- Auxo_info[Thr == 0, `Genomes`]
-models <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models/", IDs = relGenomes)
-rxns <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models", file.type = "reactions", IDs = relGenomes)
-pwys <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models", file.type = "pathways", IDs = relGenomes)
+models <- fetch_model_collection("/mnt/nuuk/2022/HRGM/models/", IDs = relGenomes)
+rxns <- fetch_model_collection("/mnt/nuuk/2022/HRGM/models", file.type = "reactions", IDs = relGenomes)
+pwys <- fetch_model_collection("/mnt/nuuk/2022/HRGM/models", file.type = "pathways", IDs = relGenomes)
 pwys_cov_Thr <- get_pathway_coverage(models,rxns,pwys, pathways.of.interest = c("HOMOSER-THRESYN-PWY","THRBIOSYN-GS"))
 relrxns <- unique(pwys_cov_Thr$rxn.metacyc)
 Thr <- list()
@@ -895,9 +895,9 @@ thr <- thr[order(thr$pathway), ]
 
 #Tryptophan
 relGenomes <- Auxo_info[Trp == 0, `Genomes`]
-models <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models/", IDs = relGenomes)
-rxns <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models", file.type = "reactions", IDs = relGenomes)
-pwys <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models", file.type = "pathways", IDs = relGenomes)
+models <- fetch_model_collection("/mnt/nuuk/2022/HRGM/models/", IDs = relGenomes)
+rxns <- fetch_model_collection("/mnt/nuuk/2022/HRGM/models", file.type = "reactions", IDs = relGenomes)
+pwys <- fetch_model_collection("/mnt/nuuk/2022/HRGM/models", file.type = "pathways", IDs = relGenomes)
 pwys_cov_Trp <- get_pathway_coverage(models,rxns,pwys, pathways.of.interest = c("TRPSYN-PWY","TRPSYN-PWY2"))
 
 # identify genomes WITH 4.2.1.20
@@ -922,11 +922,11 @@ for (rxni in relrxns) {
 trp <- rbindlist(Trp)
 remove(Trp)
 #prepare the visualization part
-trpperce <- pwys_cov_Trp[pwys_cov_Trp$model == "HRGM_Genome_0094",]
+trpperce <- pwys_cov_Trp[pwys_cov_Trp$model == "HRGM_Genome_0006",]
 trpperc <- trpperce[,c(2,3,5)]
 distinct(trpperc)
-trp <- merge(trpperc, trp, by.x="rxn.metacyc",by.y = "rxn")
-trp_new <- distinct(trp)
+trp1 <- merge(trpperc, trp, by.x="rxn.metacyc",by.y = "rxn")
+trp_new <- distinct(trp1)
 trp <- data.frame(trp_new)
 trp <- dplyr::mutate(trp, ID = row_number())
 trp$perc <- trp$perc *100
@@ -957,9 +957,9 @@ ggsave("output/plots/Completeness_Trp_pathway.pdf", plot = tr,
 
 #Tyrosine
 relGenomes <- Auxo_info[Tyr == 0, `Genomes`]
-models <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models/", IDs = relGenomes)
-rxns <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models", file.type = "reactions", IDs = relGenomes)
-pwys <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models", file.type = "pathways", IDs = relGenomes)
+models <- fetch_model_collection("/mnt/nuuk/2022/HRGM/models/", IDs = relGenomes)
+rxns <- fetch_model_collection("/mnt/nuuk/2022/HRGM/models", file.type = "reactions", IDs = relGenomes)
+pwys <- fetch_model_collection("/mnt/nuuk/2022/HRGM/models", file.type = "pathways", IDs = relGenomes)
 pwys_cov_Tyr <- get_pathway_coverage(models,rxns,pwys, pathways.of.interest = c("PWY-3461","PWY-6120","TYRSYN"))
 relrxns <- unique(pwys_cov_Tyr$rxn.metacyc)
 Tyr <- list()
@@ -990,9 +990,9 @@ names(tyr)[names(tyr) == "ec"] <- "Enzymes"
 
 #Valine
 relGenomes <- Auxo_info[Val == 0, `Genomes`]
-models <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models/", IDs = relGenomes)
-rxns <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models", file.type = "reactions", IDs = relGenomes)
-pwys <- fetch_model_collection("/mnt/nuuk/2021/HRGM/models", file.type = "pathways", IDs = relGenomes)
+models <- fetch_model_collection("/mnt/nuuk/2022/HRGM/models/", IDs = relGenomes)
+rxns <- fetch_model_collection("/mnt/nuuk/2022/HRGM/models", file.type = "reactions", IDs = relGenomes)
+pwys <- fetch_model_collection("/mnt/nuuk/2022/HRGM/models", file.type = "pathways", IDs = relGenomes)
 pwys_cov_Val <- get_pathway_coverage(models,rxns,pwys, pathways.of.interest = c("VALSYN-PWY"))
 relrxns <- unique(pwys_cov_Val$rxn.metacyc)
 Val <- list()
@@ -1035,7 +1035,7 @@ va <- ggplot(val, aes(x = factor(Enzymes, levels = level_order_val), y =perc))+
   theme(axis.text.y = element_text(size = 6, colour = "black")) +
   theme(plot.margin= margin(0.5,0.5,0.5,0.5, "cm")) +
   coord_cartesian(ylim=c(0,100)) +
-  scale_x_discrete("Valine pathway",labels= c("2.2.1.6/4.1.3.18" ="2.2.1.6/\n4.1.3.18","1.1.1.86/1.1.1.89"= "1.1.1.86/\n1.1.1.89","4.2.1.9" = "4.2.1.9", "2.6.1.42" = "2.6.1.42")) +
+  scale_x_discrete("Enzymes",labels= c("2.2.1.6/4.1.3.18" ="2.2.1.6/\n4.1.3.18","1.1.1.86/1.1.1.89"= "1.1.1.86/\n1.1.1.89","4.2.1.9" = "4.2.1.9", "2.6.1.42" = "2.6.1.42")) +
   theme(legend.text = element_text(size=6))  +
   theme(legend.title = element_text(size=6))
 va

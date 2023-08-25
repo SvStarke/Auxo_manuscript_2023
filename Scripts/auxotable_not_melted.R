@@ -1,7 +1,7 @@
 ##################    create a dataframe with genome infos #####################
 #merged but not melted
 #read metadata file with information about the genomes
-Metadata <- fread("/mnt/nuuk/2021/HRGM/REPR_Genomes_metadata.tsv")
+Metadata <- fread("data/REPR_Genomes_metadata.tsv")
 
 #count = of rows
 Auxotrophy$count <- rowSums(Auxotrophy == 0)
@@ -57,10 +57,10 @@ Auxotrophy_13[, family := str_match(`GTDB Taxonomy`, "f__.*;g__")[,1]]
 Auxotrophy_13[, family := gsub("f__|;g__","", family)]
 Auxotrophy_13[, genus := str_match(`GTDB Taxonomy`, "g__.*;s__")[,1]]
 Auxotrophy_13[, genus := gsub("g__|;s__","", genus)]
-Auxotrophy_13[, species := str_match(`GTDB Taxonomy`, "s__")[,1]]
-Auxotrophy_13[, species := gsub("s__|","", species)]
+Auxotrophy_13[, species := str_match(`GTDB Taxonomy`, "s__.*")[,1]]
+Auxotrophy_13[, species := gsub("s__|","",species)]
 
-
+#fwrite(Auxotrophy_13, file ="output/files/HRGM_auxotrophy_prediction.csv", sep = ",")
 
 
 

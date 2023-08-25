@@ -54,7 +54,7 @@ d1[padjust < 0.05, sign.label1 := "Padj <0.05"]
 d1
 
 d1 <- d1[AA != "Gly"]
-fwrite(d1, file = "/home/svenja/Documents/diversity_auxos_dzhk.csv")
+#fwrite(d1, file = "/home/svenja/Documents/diversity_auxos_dzhk.csv")
 diversity_auxo <- ggplot(d1, aes(index, AA, fill = Estimate))+
   geom_tile() +
   labs(y = "", x = "Diseases", shape = "") +
@@ -149,24 +149,24 @@ corr_health_div_plot <- ggplot(corr_health_div_all[AA != "Gly"], aes(x = index,y
   labs(y = "Auxotrophy", x = "", shape = "")+
   geom_point(aes(shape = sign.label1), size = 1) +
   scale_fill_gradient2(high = "#b2182b", mid = "white", low = "#2166ac") +
-  scale_shape_manual(values = 8, na.translate = FALSE) +
+  scale_shape_manual(values = 19, na.translate = FALSE) +
   theme_minimal() +
   theme(legend.position = "right",
         legend.justification = 	0.5,
-        axis.text.x = element_text(color = "black", angle = 90, hjust = 1, size = 8),
-        axis.text.y = element_text(color = "black", size = 8)) +
-  theme(axis.title.y = element_text(size = 8,margin = margin(t =0, r = 10, b= 0, l = 0))) +
+        axis.text.x = element_text(color = "black", angle = 90, hjust = 1),
+        axis.text.y = element_text(color = "black")) +
+  theme(axis.title.y = element_text(margin = margin(t =0, r = 10, b= 0, l = 0))) +
   theme(axis.title.x = element_blank()) +
  scale_x_discrete("Health markers", labels = c("age" = "Age", "BMI" = "BMI", " D.Shannon" = "Diversity","hypertens" = "Hypertension", "sex" = "Sex", "TG" = "Triglycerids",
                                                 "Baso" = "Basophils", "Eos" = "Eosinophils", "Ery" = "Erythrocytes", "Hae" = "Haematocrit",
                                                 "LEU" = "Leucocytes", "Lymph" = "Lymphocytes", "Mono" = "Monocytes", "NEUT" = "Neutrophils", 
                                                 "Thr"="Thrombocytes")) +
   theme(panel.background = element_blank()) +
-  theme(legend.title = element_text(size=8)) +
-  theme(legend.text = element_text(size=7)) +
+  #theme(legend.title = element_text(size=8)) +
+  #theme(legend.text = element_text(size=7)) +
   facet_grid(. ~ parameter, scales = "free_x", space = "free_x") +
   theme(strip.background.x = element_rect(fill = "grey"))+
-  theme(strip.text.x = element_text(size=8)) +
+  #theme(strip.text.x = element_text(size=8)) +
   labs(fill="Estimate") +
   theme(legend.position = "top",
         legend.justification = 	1) +

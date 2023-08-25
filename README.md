@@ -1,9 +1,9 @@
-# Metabolic modeling of Auxotrophies in the human gut microbiota
+# Amino acid auxotrophies in human gut bacteria are linked to higher microbiome diversity and long-term stability
 
 ## Project idea
 
-We already know that humans are incapable to synthesize some amino acids. We cover our demand for these essential amino acids by diet. This incapability of organism to synthesize vital nutrients is called auxotrophy and results in a high dependency on the nutritional environment. However, little is known still about he nuritional preferences of our human gut microbiome. This project is about finding out which kind of auxotrophies can be found in the human gut microbiota and what is the influence of auxotrophies on the microbial ecology. 
-Genomes from the HRGM cataologue are used for a general characterzation of auxotrophies in the human gut microbiome. The impact of auxotrophies on microbial ecology in the gut was analyzed with data from two cohorts based in Germany. Metabolic genome-scale models are reconstructed from genome data with gapseq and the auxotrophies are predicted with metabolic modeling using flux-balance-analysis. The figure below supplies a visualization for the definition of auxotrophies and gives an overview about the workflow with the used datasets in the study.
+We already know that humans are incapable to synthesize some amino acids. We cover our demand for these essential amino acids by diet. This incapability of organism to synthesize essential nutrients is called auxotrophy and results in a high dependency on the nutritional environment. However, little is still known  about the nuritional preferences of our human gut microbiome. This project is about the abundance of amino acid auxotrophies in the human gut microbiota and their influence on microbial ecology. 
+Genomes from the HRGM catalogue (doi: 10.1186/s13073-021-00950-7) are used for general characterization of auxotrophies in the human gut microbiome. The impact of auxotrophies on microbial ecology in the gut was analyzed with data from three cohorts. Metabolic models are reconstructed from genomes with gapseq (doi: 10.1186/s13059-021-02295-1) and the auxotrophies are predicted with genome-scale metabolic modeling using flux-balance-analysis. The figure below supplies a visualization for the definition of auxotrophies (A) and gives an overview of the study workflow (B).
 
 <p align="center" width = "100%" >
   <img width = "100%" src="/output/plots/Definition_Auxo_readme.png" />
@@ -13,7 +13,7 @@ Free available icons were taken from www.flaticon.com (creators: photo3idea_stud
 
 ## Instructions for running the scripts
 
-The following README-file gives an overview about the order of running the scripts. It always starts first with the loading of the models. It is recommended to clear the environment before loading a new dataset of models. The instructions in this README includes the analysis for all datasets. The code of every analysis and resulting figures can be found in this repository. An overview about the running order is given by the flowchart below. Each colorful line represents the order of scripts for every figure. Detailed instructions are given under the flowchart. The scripts can be run in R (4.1.2). Further information about the R packages can be found in the first "load models" Scripts. 
+The following README-file gives an overview about the running order of scripts. First, information about the metadata is loaded. It is recommended to clear the environment before loading a new dataset. The instructions in this README includes the analysis for all datasets. The code of every analysis and resulting figures can be found in this repository. An overview about the running order is given by the flowchart below. Each colorful line represents the order of scripts for every figure. Detailed instructions are given under the flowchart. The scripts can be run in R (4.1.2). Further information about the R packages can be found in the first "load models" Scripts. 
 
 ![click here for an overview of the order for running the scripts](output/plots/Overview_Order_running_scripts.png)
 
@@ -366,24 +366,12 @@ source("Scripts/auxotable_melted_merged.R")
 source("dzhk_metabolome.R")
 ```
 
-### 15) Influence of auxotrophic bacteria on the stability
+### 15) Influence of auxotrophic bacteria on  stability
 
-###### Load models 
-
-```R
-source("Scripts/Popgen_data_init.R")
-```
-
-###### Predict auxotrophies
+The workflow in the following script calculates the distribution of auxotrophies in the two longitudinal cohorts (Chen *et al.* 2021 (a.k.a. Lifelines), and *Troci et al.* 2022(a.k.a. Popgen)).
 
 ```R
-source("Scripts/predict_auxos.R")
-```
-
-###### Auxotrophic bacteria and stability 
-
-```R
-source("Scripts/Popgen_stability.R")
+source("stability.R")
 ```
 
 ### 16) Intake of amino acids on the frequency of amino acid auxotrophic bacteria

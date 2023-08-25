@@ -11,40 +11,43 @@ library(rstatix)
 library(RaschSampler)
 library(Hmisc)
 library(PResiduals)
-#sybil::SYBIL_SETTINGS("SOLVER","cplexAPI")
+sybil::SYBIL_SETTINGS("SOLVER","cplexAPI")
 
 # get QC for MAGs
 completeness_cuttoff <- 85
 contamination_cutoff <- 2
 
-dzhk_MAGQC <- fread("/mnt/nuuk/2022/DZHK_MGX/atlas/completeness.tsv")
-dzhk_rel_mags <- dzhk_MAGQC[Completeness >= completeness_cuttoff & contamination_cutoff <= contamination_cutoff, `Bin Id`]
-###models
+# load HRGM model data
+Metadata <- fread("data/REPR_Genomes_metadata.tsv")
 
-models <- fetch_model_collection("/mnt/nuuk/2022/DZHK_MGX/models/",
-                                      IDs = dzhk_rel_mags)
+# abundance data
+dzhk_hrgm_abun <- t(read.table("data/mgx_abundances/dzhk_abun.csv"))
 
-# Read bundancy table for DZHK (not yet normalalised)
-dzhk_mags_abun <- t(read.table("/mnt/nuuk/2022/DZHK_MGX/atlas/median_coverage_genomes.tsv"))
+rel_models <- intersect(names(which(apply(dzhk_hrgm_abun,1, function(x) any(x > 0)))),
+                        Metadata[`Completeness (%)`>= completeness_cuttoff & `Contamination (%)` <= contamination_cutoff, `HRGM name`])
 
-# Calculate alpha-Diversity metrics
-dzhk_diversity <- data.table(sample = colnames(dzhk_mags_abun),
-                             D.Shannon = diversity(dzhk_mags_abun, MARGIN = 2),
-                             D.Simpson = diversity(dzhk_mags_abun, MARGIN = 2, index = "simpson"),
-                             D.invSimpson = diversity(dzhk_mags_abun, MARGIN = 2, index = "invsimpson"),
-                             D.richness = specnumber(dzhk_mags_abun, MARGIN = 2)) 
+dzhk_hrgm_abun <- dzhk_hrgm_abun[rel_models,]
 
-# Calculate realtive abundancy table
-dzhk_relabun <- data.table(as.table(dzhk_mags_abun))
+dzhk_diversity <- data.table(sample = colnames(dzhk_hrgm_abun),
+                             D.Shannon = diversity(dzhk_hrgm_abun, MARGIN = 2),
+                             D.Simpson = diversity(dzhk_hrgm_abun, MARGIN = 2, index = "simpson"),
+                             D.invSimpson = diversity(dzhk_hrgm_abun, MARGIN = 2, index = "invsimpson"),
+                             D.richness = specnumber(dzhk_hrgm_abun, MARGIN = 2))
+
+
+## Calculate realtive abundancy table
+dzhk_relabun <- data.table(as.table(dzhk_hrgm_abun))
 setnames(dzhk_relabun, c("model","sample","prop"))
-dzhk_relabun <- dzhk_relabun[model %in% dzhk_rel_mags]
+dzhk_relabun <- dzhk_relabun[model %in% rel_models]
 dzhk_relabun[, prop := prop/sum(prop), by = sample]
 
+# load models
+models <- fetch_model_collection("/mnt/nuuk/2022/HRGM/models/", # /mnt/nuuk/2022/DZHK_MGX/models/
+                                 IDs = rel_models)
 
 # Load sample meta information
-dzhk_info1 <- fread("/mnt/nuuk/2022/DZHK_MGX/sample_info/Metagenome_DZHK_NGS_EMGE_sampleID_delete_EMGE173.tsv", header = F)
+dzhk_info1 <- fread("data/meta/Metagenome_DZHK_NGS_EMGE_sampleID_delete_EMGE173.tsv", header = F)
 setnames(dzhk_info1, c("EMGE","sample"))
-dzhk_info2 <- fread("/mnt/nuuk/2022/DZHK_MGX/sample_info/DZHK_finaler_export_v5_mod.csv")
+dzhk_info2 <- fread("data/meta/DZHK_finaler_export_v5_mod.tsv")
 dzhk_info <- merge(dzhk_info1,dzhk_info2)
-describe(dzhk_info2$EMGE)
-
+#describe(dzhk_info2$EMGE)

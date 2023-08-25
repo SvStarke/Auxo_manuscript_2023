@@ -3,9 +3,11 @@
 Auxotroph_tmp <- copy(Auxotroph)
 Auxotroph_tmp[which(is.na(Auxotroph), arr.ind = T)] <- 1
 
-popgen_relabun <- popgen_relabun[popgen_relabun$model %in% popgen_rel_mags]
+popgen_relabun <- popgen_relabun[popgen_relabun$model %in% rel_models]
 #numb_samples <- dzhk_info$sample
 #dzhk_relabun <- dzhk_relabun[dzhk_relabun$sample %in% numb_samples]
+
+
 
 
 HammingDT <- list()
@@ -39,16 +41,17 @@ Stability_hamming <- merge(HammingDT, popgen_bray_numb_auxos2, by.x= "sample", b
 cor.test(Stability_hamming$Bray_distance, Stability_hamming$avgHamming, method = "spearman", exact = FALSE)
 
 ##visualization
-stability_Hamming <- ggplot(Stability_hamming, aes(avgHamming, Bray_distance)) +
-  geom_point() +
-  geom_smooth(method=lm, se = FALSE) +
+stability_Hamming <- ggplot(Stability_hamming, aes(avgHamming, 1- Bray_distance)) +
+  geom_smooth(method=lm, col = "black") +
+  geom_point(shape = 21) +
   theme_bw() +
   xlab("Average Hamming distance") +
-  ylab("Bray Curtis distance") +
+  ylab("1-Bray Curtis distance") +
   theme(axis.text.x = element_text(colour="black")) +
   theme(axis.text.y = element_text(colour= "black")) +
   theme(axis.title.y = element_text(size = 12, margin = margin(r = 10))) +
-  theme(axis.title.x = element_text(size = 12, margin = margin(t = 10))) 
+  theme(axis.title.x = element_text(size = 12, margin = margin(t = 10))) +
+  stat_cor(method = "spearman")
 stability_Hamming
 
 ggsave("output/plots/stability_hamming.pdf", plot = stability_Hamming,

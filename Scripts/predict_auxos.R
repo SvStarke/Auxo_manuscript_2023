@@ -1,6 +1,6 @@
 #Predict Auxotrophies
 
-model.auxo <- predict_auxotrophies(models)
+model.auxo <- predict_auxotrophies(models, min.growth = 1e-12, min.growth.fraction = 1e-12)
 
 Auxotrophie <- data.frame(model.auxo)
 # head(Auxotrophie) 

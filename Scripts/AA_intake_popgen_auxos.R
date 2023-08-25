@@ -2,7 +2,7 @@
 
 ### read data table of nutritional analysis   ###
 
-nutr_data_popgen <- fread("/mnt/nuuk/2022/MR_popgen_MGX/meta/11.food.groups.nutrients.f1.f2.tsv")
+nutr_data_popgen <- fread("data/meta/11.food.groups.nutrients.f1.f2.tsv")
 
 ####calculate energy-%
 nutr_data_popgen[,c(6:28)] <- nutr_data_popgen[,c(6:28)] * 17
@@ -60,7 +60,7 @@ sumfreq <- aggregate(u$prop, by=list(sample=u$sample, AA=u$Compound), FUN=sum)
 
 
 ###prepare data for merging
-popgen_F1 <- fread("/mnt/nuuk/2022/MR_popgen_MGX/meta/1.metadata1.tsv")
+popgen_F1 <- fread("data/meta/1.metadata1.tsv")
 popgen_F1$newID <- sub("$", "_F1", popgen_F1$new_id)
 #head(popgen_F1)
 #colnames(popgen_F1)
@@ -68,7 +68,7 @@ popgen_F1$newID <- sub("$", "_F1", popgen_F1$new_id)
 popgen_F1 <- popgen_F1[,c(1,2,20)]
 
 ##load second timepoint
-popgen_F2 <- fread("/mnt/nuuk/2022/MR_popgen_MGX/meta/1.metadata2.tsv")
+popgen_F2 <- fread("data/meta/1.metadata2.tsv")
 popgen_F2$newID <- sub("$", "_F2", popgen_F2$new_id)
 colnames(popgen_F2) [2] <- "new_id"
 
@@ -77,7 +77,7 @@ popgen_F2 <- popgen_F2[,c(1,2,19)]
 F1_F2 <- rbind(popgen_F2, popgen_F1)
 #View(popgen_F1)
 ##merge information about time points with sample info
-popgen_samples <- fread("/mnt/nuuk/2022/MR_popgen_MGX/atlas/atlas_samples.csv")
+popgen_samples <- fread("data/MR_popgen_MGX/atlas/atlas_samples.csv")
 popgen_samples$new_name <- sub("-L001|-L002", "", popgen_samples$Full_Name)
 popgen_data <- merge(F1_F2, popgen_samples, by.x= "newID", by.y="new_name")
 #View(popgen_data)
